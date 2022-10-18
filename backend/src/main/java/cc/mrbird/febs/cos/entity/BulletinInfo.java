@@ -52,5 +52,13 @@ public class BulletinInfo implements Serializable {
      */
     private String publisher;
 
+    /**
+     * 上下架（0.下架 1.发布）
+     */
+    private Integer rackUp;
 
+    /**
+     * 消息类型（1.画报 2.导购 3.新盘发布）
+     */
+    private Integer type;
 }

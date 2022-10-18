@@ -32,7 +32,7 @@ public class BulletinInfoController {
      */
     @GetMapping("/page")
     public R page(Page<BulletinInfo> page, BulletinInfo bulletinInfo) {
-        return R.ok();
+        return R.ok(bulletinInfoService.getBulletinByPage(page, bulletinInfo));
     }
 
     /**
