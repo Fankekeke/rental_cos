@@ -60,9 +60,9 @@
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.content }}
+                {{ record.address }}
               </template>
-              {{ record.content.slice(0, 30) }} ...
+              {{ record.address.slice(0, 30) }} ...
             </a-tooltip>
           </template>
         </template>
@@ -88,8 +88,8 @@
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import communityAdd from './communityAdd'
-import communityEdit from './communityEdit'
+import communityAdd from './CommunityAdd'
+import communityEdit from './CommunityEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
@@ -130,48 +130,71 @@ export default {
     }),
     columns () {
       return [{
-        title: '标题',
-        dataIndex: 'title',
-        scopedSlots: { customRender: 'titleShow' },
-        width: 300
+        title: '小区名称',
+        dataIndex: 'communityName'
       }, {
-        title: '小区内容',
-        dataIndex: 'content',
-        scopedSlots: { customRender: 'contentShow' },
-        width: 600
+        title: '小区地址',
+        dataIndex: 'address',
+        scopedSlots: { customRender: 'contentShow' }
       }, {
-        title: '发布时间',
-        dataIndex: 'createDate',
+        title: '小区所在',
+        dataIndex: 'province',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text
+            return row.province + row.city + row.area
           } else {
             return '- -'
           }
         }
       }, {
-        title: '消息类型',
-        dataIndex: 'type',
+        title: '物业类型',
+        dataIndex: 'propertyType',
         customRender: (text, row, index) => {
           switch (text) {
             case 1:
-              return <a-tag>画报</a-tag>
+              return <a-tag>公寓住宅</a-tag>
             case 2:
-              return <a-tag>导购</a-tag>
+              return <a-tag>xxx</a-tag>
             case 3:
-              return <a-tag>新盘发布</a-tag>
+              return <a-tag>xxxx</a-tag>
             default:
               return '- -'
           }
         }
       }, {
-        title: '上传人',
-        dataIndex: 'publisher',
+        title: '总建面积',
+        dataIndex: 'totalConstructionArea',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text
+            return text + '㎡'
           } else {
             return '- -'
+          }
+        }
+      }, {
+        title: '统一供暖',
+        dataIndex: 'unifiedHeating',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag color="green">是</a-tag>
+            case 2:
+              return <a-tag color="pink">否</a-tag>
+            default:
+              return '- -'
+          }
+        }
+      }, {
+        title: '供水供电',
+        dataIndex: 'waterSupply',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag>民用</a-tag>
+            case 2:
+              return <a-tag>商用</a-tag>
+            default:
+              return '- -'
           }
         }
       }, {

@@ -32,7 +32,7 @@ public class CommunityInfoController {
      */
     @GetMapping("/page")
     public R page(Page<CommunityInfo> page, CommunityInfo communityInfo) {
-        return R.ok();
+        return R.ok(communityInfoService.selectCommunityPage(page, communityInfo));
     }
 
     /**
@@ -43,6 +43,8 @@ public class CommunityInfoController {
      */
     @PostMapping
     public R save(CommunityInfo communityInfo) {
+        communityInfo.setCode("CMUT-" + System.currentTimeMillis());
+        communityInfo.setDelFlag(0);
         communityInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(communityInfoService.save(communityInfo));
     }

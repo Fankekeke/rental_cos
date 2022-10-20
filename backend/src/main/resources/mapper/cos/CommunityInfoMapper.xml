@@ -75,6 +75,6 @@
         SELECT <include refid="baseResult"/> FROM community_info ci
         WHERE 1 = 1
         <include refid="baseParam"/>
-        ORDER ci.create_date DESC
+        ORDER BY ci.create_date DESC
     </select>
 </mapper>
