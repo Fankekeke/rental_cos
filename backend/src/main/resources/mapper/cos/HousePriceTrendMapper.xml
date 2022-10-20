@@ -2,8 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.HousePriceTrendMapper">
 
+    <sql id="baseResult">
+        pt.id,
+        pt.community_code AS communityCode,
+        pt.house_price AS housePrice,
+        pt.create_date AS createDate
+    </sql>
+
+    <sql id="baseParam">
+        <if test="housePriceTrend.communityCode != null and housePriceTrend.communityCode != ''">
+            AND pt.community_code = #{housePriceTrend.communityCode}
+        </if>
+    </sql>
+
     <!-- 分页获取房价走势信息 -->
     <select id="selectPriceTrendPage" resultType="java.util.LinkedHashMap">
-
+        SELECT <include refid="baseResult"/> FROM house_price_trend pt
+        WHERE 1 = 1
+        <include refid="baseParam"/>
+        ORDER pt.create_date DESC
     </select>
 </mapper>

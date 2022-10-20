@@ -2,8 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.HouseInfoMapper">
 
+    <sql id="baseResult">
+        hi.id,
+        hi.code,
+        hi.address,
+        hi.province,
+        hi.city,
+        hi.area,
+        hi.longitude,
+        hi.latitude,
+        hi.indoor_map AS indoorMap,
+        hi.house_plan,
+        hi.environment_map AS environmentMap,
+        hi.room_number,
+        hi.living_room_number AS livingRoomNumber,
+        hi.bathroom_number AS bathroomNumber,
+        hi.room_size AS roomSize,
+        hi.floor,
+        hi.decoration_type AS decorationType,
+        hi.house_type AS houseType,
+        hi.towards,
+        hi.property_overview AS propertyOverview,
+        hi.tags,
+        hi.community_code AS communityCode,
+        hi.owner_code AS ownerCode,
+        hi.del_flag AS del_flag,
+        hi.create_date AS createDate
+    </sql>
+
+    <sql id="baseParam">
+        <if test="houseInfo.address != null and houseInfo.address != ''">
+            AND hi.code LIKE CONCAT('%',#{houseInfo.address},'%')
+        </if>
+        <if test="houseInfo.province != null and houseInfo.province != ''">
+            AND hi.province LIKE CONCAT('%',#{houseInfo.province},'%')
+        </if>
+        <if test="houseInfo.city != null and houseInfo.city != ''">
+            AND hi.city LIKE CONCAT('%',#{houseInfo.city},'%')
+        </if>
+        <if test="houseInfo.area != null and houseInfo.area != ''">
+            AND hi.area LIKE CONCAT('%',#{houseInfo.area},'%')
+        </if>
+        <if test="houseInfo.decorationType != null">
+            AND hi.decoration_type = #{houseInfo.decorationType}
+        </if>
+        <if test="houseInfo.houseType != null">
+            AND hi.house_type = #{houseInfo.houseType}
+        </if>
+        <if test="houseInfo.communityCode != null and houseInfo.communityCode != ''">
+            AND hi.community_code = #{houseInfo.communityCode}
+        </if>
+    </sql>
+
     <!-- 分页获取房屋信息 -->
     <select id="selectHousePage" resultType="java.util.LinkedHashMap">
-
+        SELECT <include refid="baseResult"/> FROM house_info hi
+        WHERE 1 = 1
+        <include refid="baseParam"/>
+        ORDER ci.create_date DESC
     </select>
 </mapper>
