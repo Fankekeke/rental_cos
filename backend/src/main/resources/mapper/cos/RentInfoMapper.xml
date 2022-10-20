@@ -2,6 +2,62 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.RentInfoMapper">
 
+    <sql id="baseResult">
+        ri.id,
+        ri.title,
+        ri.house_code,
+        ri.room_type,
+        ri.rent_price,
+        ri.rent_remark,
+        ri.rental_request,
+        ri.room_pictures,
+        ri.has_television,
+        ri.has_air_conditioner,
+        ri.has_wardrobe,
+        ri.has_bed,
+        ri.has_bathroom,
+        ri.has_door_lock,
+        ri.has_balcony,
+        ri.has_heating,
+        ri.has_refrigerator,
+        ri.has_washing_machine,
+        ri.has_water_heater,
+        ri.has_broadband,
+        ri.has_sofa,
+        ri.has_range_hood,
+        ri.has_gas_stoves,
+        ri.has_cook,
+        ri.flag,
+        ri.create_date
+    </sql>
+
+    <sql id="baseParam">
+        <if test="rentInfo.title != null and rentInfo.title != ''">
+            AND ri.title LIKE CONCAT('%',#{rentInfo.title},'%')
+        </if>
+        <if test="rentInfo.hasTelevision != null">
+            AND ri.has_television = #{rentInfo.hasTelevision}
+        </if>
+        <if test="rentInfo.hasAirConditioner != null">
+            AND ri.has_air_conditioner = #{rentInfo.hasAirConditioner}
+        </if>
+        <if test="rentInfo.hasWardrobe != null">
+            AND ri.has_wardrobe = #{rentInfo.hasWardrobe}
+        </if>
+        <if test="rentInfo.hasBed != null">
+            AND ri.has_bed = #{rentInfo.hasBed}
+        </if>
+        <if test="rentInfo.hasBathroom != null">
+            AND ri.has_bathroom = #{rentInfo.hasBathroom}
+        </if>
+        <if test="rentInfo.hasDoorLock != null">
+            AND ri.has_door_lock = #{rentInfo.hasDoorLock}
+        </if>
+        <if test="rentInfo.hasDoorLock != null">
+            AND ri.has_door_lock = #{rentInfo.hasDoorLock}
+        </if>
+    </sql>
+
     <!-- 分页获取出租信息信息 -->
     <select id="selectRentPage" resultType="java.util.LinkedHashMap">
 

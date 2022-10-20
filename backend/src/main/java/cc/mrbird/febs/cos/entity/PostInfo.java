@@ -33,6 +33,11 @@ public class PostInfo implements Serializable {
     private String userCode;
 
     /**
+     *
+     */
+    private String title;
+
+    /**
      * 帖子类型（1.小区 2.租房 3.出售）
      */
     private Integer postType;
