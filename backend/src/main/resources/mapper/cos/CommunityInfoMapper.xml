@@ -31,7 +31,8 @@
         ci.city,
         ci.area,
         ci.longitude,
-        ci.latitude
+        ci.latitude,
+        ci.remark
     </sql>
 
     <sql id="baseParam">

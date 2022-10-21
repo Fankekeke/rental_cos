@@ -154,9 +154,9 @@ export default {
             case 1:
               return <a-tag>公寓住宅</a-tag>
             case 2:
-              return <a-tag>xxx</a-tag>
+              return <a-tag>商业物业</a-tag>
             case 3:
-              return <a-tag>xxxx</a-tag>
+              return <a-tag>工业物业</a-tag>
             default:
               return '- -'
           }
@@ -167,6 +167,16 @@ export default {
         customRender: (text, row, index) => {
           if (text !== null) {
             return text + '㎡'
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '所属商圈',
+        dataIndex: 'businessDistrict',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
           } else {
             return '- -'
           }

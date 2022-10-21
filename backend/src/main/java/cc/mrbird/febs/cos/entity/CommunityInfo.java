@@ -169,5 +169,8 @@ public class CommunityInfo implements Serializable {
      */
     private BigDecimal latitude;
 
-
+    /**
+     * 备注
+     */
+    private String remark;
 }

@@ -324,8 +324,6 @@ export default {
                 this.stayAddress = rs.surroundingPois.address
               }
             }
-
-            this.form.getFieldDecorator('address')
             let obj = {}
             obj['address'] = this.stayAddress
             obj['longitude'] = localPoint.lng
