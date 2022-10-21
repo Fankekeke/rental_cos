@@ -20,19 +20,30 @@ import java.util.List;
 @RequestMapping("/cos/community-info")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CommunityInfoController {
-    
+
     private final ICommunityInfoService communityInfoService;
 
     /**
      * 分页获取小区信息
      *
-     * @param page 分页对象
+     * @param page          分页对象
      * @param communityInfo 小区信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<CommunityInfo> page, CommunityInfo communityInfo) {
         return R.ok(communityInfoService.selectCommunityPage(page, communityInfo));
+    }
+
+    /**
+     * 远程获取小区信息
+     *
+     * @param name 小区信息
+     * @return 结果
+     */
+    @GetMapping("/remote/{name}")
+    public R remoteCommunity(@PathVariable(value = "name", required = false) String name) {
+        return R.ok(communityInfoService.remoteCommunity(name));
     }
 
     /**

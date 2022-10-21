@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author FanK
@@ -21,4 +22,12 @@ public interface CommunityInfoMapper extends BaseMapper<CommunityInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectCommunityPage(Page<CommunityInfo> page, @Param("communityInfo") CommunityInfo communityInfo);
+
+    /**
+     * 远程获取小区信息
+     *
+     * @param name 小区信息
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> remoteCommunity(@Param("name") String name);
 }

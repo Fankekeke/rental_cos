@@ -2,8 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.ReplyInfoMapper">
 
+    <sql id="baseResult">
+        id,
+        user_code,
+        post_id,
+        content,
+        del_flag,
+        create_date
+    </sql>
+
+    <sql id="baseParam">
+        <if test="replyInfo.userCode != null and replyInfo.userCode != ''">
+            AND ri.user_code = #{replyInfo.userCode}
+        </if>
+        <if test="replyInfo.postId != null and replyInfo.postId != ''">
+            AND ri.post_id = #{replyInfo.postId}
+        </if>
+        <if test="replyInfo.content != null and replyInfo.content != ''">
+            AND ri.content LIKE CONCAT('%',#{replyInfo.content},'%')
+        </if>
+    </sql>
+
     <!-- 分页获取帖子回复消息信息 -->
     <select id="selectReplyPage" resultType="java.util.LinkedHashMap">
-
+        SELECT <include refid="baseResult"/> FROM rent_info ri
+        WHERE 1 = 1
+        <include refid="baseParam"/>
+        ORDER ri.create_date DESC
     </select>
 </mapper>
