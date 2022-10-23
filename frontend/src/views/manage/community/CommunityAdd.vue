@@ -198,26 +198,8 @@
         <a-divider orientation="left">
           <span style="font-size: 13px">选择地区</span>
         </a-divider>
-        <a-col :span="4">
-          <a-form-item label='所属省'>
-            <a-input v-decorator="[
-            'province'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='所属市'>
-            <a-input v-decorator="[
-            'city'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='所属区域'>
-            <a-input v-decorator="[
-            'area'
-            ]"/>
-          </a-form-item>
+        <a-col :span="8">
+          <a-cascader :options="options" :fieldNames="{label: 'title', value: 'title', children: 'children'}" placeholder="Please select" @change="onChange" />
         </a-col>
 
         <a-col :span="24"></a-col>
@@ -290,10 +272,33 @@ export default {
       previewImage: '',
       localPoint: {},
       stayAddress: '',
-      childrenDrawer: false
+      childrenDrawer: false,
+      options: [],
+      province: '',
+      city: '',
+      area: ''
     }
   },
+  mounted() {
+    this.getCity()
+  },
   methods: {
+    getCity () {
+      this.$get('/cos/sys-city/cityChild').then((r) => {
+        this.options = r.data.data.children
+      })
+    },
+    onChange(value) {
+      if (value && value.length === 2) {
+        this.city = value[0]
+        this.area = value[1]
+      }
+      if (value && value.length === 3) {
+        this.province = value[0]
+        this.city = value[1]
+        this.area = value[2]
+      }
+    },
     handleCancel () {
       this.previewVisible = false
     },
@@ -351,6 +356,9 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           this.loading = true
+          values.province = this.province
+          values.city = this.city
+          values.area = this.area
           this.$post('/cos/community-info', {
             ...values
           }).then((r) => {

@@ -198,32 +198,8 @@
         <a-divider orientation="left">
           <span style="font-size: 13px">选择地区</span>
         </a-divider>
-        <a-col :span="4">
-          <a-form-item label='所属省'>
-            <a-auto-complete
-              v-model="province"
-              :data-source="provinceDataSource"
-              @search="onSearch"
-            />
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='所属市'>
-            <a-auto-complete
-              v-model="city"
-              :data-source="cityDataSource"
-              @search="onSearch"
-            />
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='所属区域'>
-            <a-auto-complete
-              v-model="area"
-              :data-source="areaDataSource"
-              @search="onSearch"
-            />
-          </a-form-item>
+        <a-col :span="8">
+          <a-cascader :options="options" v-model="defaultValue" :fieldNames="{label: 'title', value: 'title', children: 'children'}" placeholder="Please select" @change="onChange" />
         </a-col>
 
         <a-col :span="24"></a-col>
@@ -298,15 +274,33 @@ export default {
       localPoint: {},
       stayAddress: '',
       childrenDrawer: false,
+      options: [],
       province: '',
-      provinceDataSource: [],
-      city: [],
-      cityDataSource: [],
-      area: [],
-      areaDataSource: []
+      city: '',
+      area: '',
+      defaultValue: []
     }
   },
+  mounted() {
+    this.getCity()
+  },
   methods: {
+    getCity () {
+      this.$get('/cos/sys-city/cityChild').then((r) => {
+        this.options = r.data.data.children
+      })
+    },
+    onChange(value) {
+      if (value && value.length === 2) {
+        this.city = value[0]
+        this.area = value[1]
+      }
+      if (value && value.length === 3) {
+        this.province = value[0]
+        this.city = value[1]
+        this.area = value[2]
+      }
+    },
     provinceSearch (searchText) {
       this.provinceDataSource = !searchText ? [] : [searchText, searchText.repeat(2), searchText.repeat(3)];
     },
@@ -413,10 +407,23 @@ export default {
           obj[key] = community[key]
         }
       })
+      setTimeout(() => {
+        if (obj['province']) {
+          this.defaultValue.push(obj['province'])
+        }
+        if (obj['city']) {
+          this.defaultValue.push(obj['city'])
+        }
+        if (obj['area']) {
+          this.defaultValue.push(obj['area'])
+        }
+        console.log(this.defaultValue)
+      }, 200)
       this.form.setFieldsValue(obj)
     },
     reset () {
       this.loading = false
+      this.defaultValue = []
       this.form.resetFields()
     },
     onClose () {
@@ -426,6 +433,9 @@ export default {
     handleSubmit () {
       this.form.validateFields((err, values) => {
         values.id = this.rowId
+        values.province = this.province
+        values.city = this.city
+        values.area = this.area
         if (!err) {
           this.loading = true
           this.$put('/cos/community-info', {

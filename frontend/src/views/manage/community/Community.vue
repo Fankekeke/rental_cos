@@ -67,6 +67,7 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
+          <a-icon type="folder-open" @click="view(record)" title="查 看" style="margin-right: 15px"></a-icon>
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
         </template>
       </a-table>
@@ -83,6 +84,11 @@
       @success="handlecommunityEditSuccess"
       :communityEditVisiable="communityEdit.visiable">
     </community-edit>
+    <community-view
+      @close="handlecommunityViewClose"
+      :communityShow="communityView.visiable"
+      :communityData="communityView.data">
+    </community-view>
   </a-card>
 </template>
 
@@ -92,11 +98,12 @@ import communityAdd from './CommunityAdd'
 import communityEdit from './CommunityEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
+import CommunityView from "./CommunityView";
 moment.locale('zh-cn')
 
 export default {
   name: 'community',
-  components: {communityAdd, communityEdit, RangeDate},
+  components: {CommunityView, communityAdd, communityEdit, RangeDate},
   data () {
     return {
       advanced: false,
@@ -120,6 +127,10 @@ export default {
         showQuickJumper: true,
         showSizeChanger: true,
         showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`
+      },
+      communityView: {
+        visiable: false,
+        data: null
       },
       userList: []
     }
@@ -218,6 +229,9 @@ export default {
     this.fetch()
   },
   methods: {
+    handlecommunityViewClose () {
+      this.communityView.visiable = false
+    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
@@ -234,6 +248,10 @@ export default {
       this.communityAdd.visiable = false
       this.$message.success('新增小区成功')
       this.search()
+    },
+    view (row) {
+      this.communityView.data = row
+      this.communityView.visiable = true
     },
     edit (record) {
       this.$refs.communityEdit.setFormValues(record)
