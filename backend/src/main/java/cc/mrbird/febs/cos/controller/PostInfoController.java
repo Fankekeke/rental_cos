@@ -20,19 +20,30 @@ import java.util.List;
 @RequestMapping("/cos/post-info")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PostInfoController {
-    
+
     private final IPostInfoService postInfoService;
 
     /**
      * 分页获取发帖记录信息
      *
-     * @param page 分页对象
+     * @param page     分页对象
      * @param postInfo 发帖记录信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<PostInfo> page, PostInfo postInfo) {
         return R.ok();
+    }
+
+    /**
+     * 根据贴子ID获取回复信息
+     *
+     * @param postId 帖子ID
+     * @return 结果
+     */
+    @GetMapping("/reply")
+    public R replyInfoByPostId(@RequestParam Integer postId) {
+        return R.ok(postInfoService.replyInfoByPostId(postId));
     }
 
     /**

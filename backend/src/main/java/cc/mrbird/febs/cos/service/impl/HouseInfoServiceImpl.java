@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author FanK
@@ -26,5 +27,16 @@ public class HouseInfoServiceImpl extends ServiceImpl<HouseInfoMapper, HouseInfo
     @Override
     public IPage<LinkedHashMap<String, Object>> selectHousePage(Page<HouseInfo> page, HouseInfo houseInfo) {
         return baseMapper.selectHousePage(page, houseInfo);
+    }
+
+    /**
+     * 远程调用房屋信息
+     *
+     * @param ownerCode 业主编号
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> remoteHouse(String ownerCode) {
+        return baseMapper.remoteHouse(ownerCode);
     }
 }

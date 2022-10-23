@@ -20,19 +20,29 @@ import java.util.List;
 @RequestMapping("/cos/house-info")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class HouseInfoController {
-    
+
     private final IHouseInfoService houseInfoService;
 
     /**
      * 分页获取房屋信息
      *
-     * @param page 分页对象
+     * @param page      分页对象
      * @param houseInfo 房屋信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<HouseInfo> page, HouseInfo houseInfo) {
-        return R.ok();
+        return R.ok(houseInfoService.selectHousePage(page, houseInfo));
+    }
+
+    /**
+     * 远程调用房屋信息
+     *
+     * @param ownerCode 业主编号
+     * @return 结果
+     */
+    public R remoteHouse(@RequestParam(value = "ownerCode", required = false) String ownerCode) {
+        return R.ok(houseInfoService.remoteHouse(ownerCode));
     }
 
     /**
