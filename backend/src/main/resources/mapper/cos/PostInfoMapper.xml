@@ -29,4 +29,67 @@
         <include refid="baseParam"/>
         ORDER pi.create_date DESC
     </select>
+
+    <!-- 根据贴子ID获取回复信息 -->
+    <select id="replyInfoByPostId" resultType="java.util.LinkedHashMap">
+        SELECT
+        ri.id,
+        ri.user_id AS userId,
+        ri.content,
+        ri.create_date AS createDate,
+        ui.user_name AS userName,
+        ui.avatar
+        FROM
+        reply_info ri
+        LEFT JOIN user_info ui ON ( ui.id = ri.user_id )
+        WHERE
+        1 = 1
+        AND ri.post_id = #{ postId }
+        ORDER BY
+        ui.create_date DESC
+    </select>
+
+    <!-- 获取贴子信息 -->
+    <select id="getPostList" resultType="java.util.LinkedHashMap">
+        SELECT
+        <include refid="baseResult"/>,
+        ui.user_name AS userName,
+        ui.avatar,
+        COUNT(ri.post_id) replyNum
+        FROM
+        post_info pi
+        LEFT JOIN user_info ui ON ( pi.user_id = ui.id )
+        LEFT JOIN reply_info ri ON ( ri.post_id = pi.id )
+        WHERE
+        1 = 1
+        GROUP BY pi.id
+    </select>
+
+    <!-- 根据贴子编号获取详细信息 -->
+    <select id="getPostInfoById" resultType="java.util.LinkedHashMap">
+        SELECT
+        <include refid="baseResult"/>,
+        ui.user_name AS userName,
+        ui.avatar
+        FROM
+        post_info pi
+        LEFT JOIN user_info ui ON ( pi.user_id = ui.id )
+        WHERE
+        pi.id = #{postId}
+    </select>
+
+    <!-- 获取热门贴子信息 -->
+    <select id="getPostListHot" resultType="java.util.LinkedHashMap">
+        SELECT
+        <include refid="baseResult"/>,
+        ui.user_name AS userName,
+        ui.avatar
+        FROM
+        post_info pi
+        LEFT JOIN user_info ui ON ( pi.user_id = ui.id )
+        WHERE
+        1 = 1
+        ORDER BY pi.create_date DESC
+        LIMIT 4
+    </select>
 </mapper>

@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author FanK
@@ -26,5 +27,50 @@ public class PostInfoServiceImpl extends ServiceImpl<PostInfoMapper, PostInfo> i
     @Override
     public IPage<LinkedHashMap<String, Object>> selectPostPage(Page<PostInfo> page, PostInfo postInfo) {
         return baseMapper.selectPostPage(page, postInfo);
+    }
+
+    /**
+     * 根据贴子ID获取回复信息
+     *
+     * @param postId 贴子ID
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> replyInfoByPostId(Integer postId) {
+        return baseMapper.replyInfoByPostId(postId);
+    }
+
+    /**
+     * 获取贴子信息
+     *
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> getPostList() {
+        return baseMapper.getPostList();
+    }
+
+    /**
+     * 根据贴子编号获取详细信息
+     *
+     * @param postId 贴子ID
+     * @return 结果
+     */
+    @Override
+    public LinkedHashMap<String, Object> getPostInfoById(Integer postId) {
+        LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+        result.put("postInfo", baseMapper.getPostInfoById(postId));
+        result.put("replyInfo", baseMapper.replyInfoByPostId(postId));
+        return result;
+    }
+
+    /**
+     * 获取热门贴子信息
+     *
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> getPostListHot() {
+        return baseMapper.getPostListHot();
     }
 }
