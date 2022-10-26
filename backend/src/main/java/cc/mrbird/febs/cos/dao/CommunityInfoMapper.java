@@ -30,4 +30,12 @@ public interface CommunityInfoMapper extends BaseMapper<CommunityInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> remoteCommunity(@Param("name") String name);
+
+    /**
+     * 根据小区编号获取租房信息
+     *
+     * @param code 小区编号
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectHouseRentByCode(@Param("code") String code);
 }

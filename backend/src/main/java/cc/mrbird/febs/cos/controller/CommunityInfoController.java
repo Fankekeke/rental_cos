@@ -82,4 +82,25 @@ public class CommunityInfoController {
         return R.ok(communityInfoService.removeByIds(ids));
     }
 
+    /**
+     * 根据小区编号获取房屋信息
+     *
+     * @param code 小区编号
+     * @return 结果
+     */
+    @GetMapping("/house/{code}")
+    public R selectHouseByCode(@PathVariable("code") String code) {
+        return R.ok(communityInfoService.selectHouseByCode(code));
+    }
+
+    /**
+     * 根据小区编号获取租房信息
+     *
+     * @param code 小区编号
+     * @return 结果
+     */
+    @GetMapping("/rent/{code}")
+    public R selectHouseRentByCode(@PathVariable("code") String code) {
+        return R.ok(communityInfoService.selectHouseRentByCode(code));
+    }
 }

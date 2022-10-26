@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.HouseInfo;
 import cc.mrbird.febs.cos.service.IHouseInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +78,16 @@ public class HouseInfoController {
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(houseInfoService.removeByIds(ids));
+    }
+
+    /**
+     * 获取房屋详细信息
+     *
+     * @param code 房屋编号
+     * @return 结果
+     */
+    @GetMapping("/{code}")
+    public R detail(@PathVariable("code") String code) {
+        return R.ok(houseInfoService.getOne(Wrappers.<HouseInfo>lambdaQuery().eq(HouseInfo::getCode, code)));
     }
 }

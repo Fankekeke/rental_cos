@@ -1,6 +1,7 @@
 package cc.mrbird.febs.cos.service;
 
 import cc.mrbird.febs.cos.entity.CommunityInfo;
+import cc.mrbird.febs.cos.entity.HouseInfo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -30,4 +31,20 @@ public interface ICommunityInfoService extends IService<CommunityInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> remoteCommunity(String name);
+
+    /**
+     * 根据小区编号获取房屋信息
+     *
+     * @param code 小区编号
+     * @return 结果
+     */
+    List<HouseInfo> selectHouseByCode(String code);
+
+    /**
+     * 根据小区编号获取租房信息
+     *
+     * @param code 小区编号
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectHouseRentByCode(String code);
 }

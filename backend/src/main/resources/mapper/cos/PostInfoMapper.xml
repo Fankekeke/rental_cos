@@ -34,14 +34,14 @@
     <select id="replyInfoByPostId" resultType="java.util.LinkedHashMap">
         SELECT
         ri.id,
-        ri.user_id AS userId,
+        ri.user_code AS userCode,
         ri.content,
         ri.create_date AS createDate,
         ui.user_name AS userName,
         ui.avatar
         FROM
         reply_info ri
-        LEFT JOIN user_info ui ON ( ui.id = ri.user_id )
+        LEFT JOIN user_info ui ON ( ui.code = ri.user_code )
         WHERE
         1 = 1
         AND ri.post_id = #{ postId }
@@ -58,7 +58,7 @@
         COUNT(ri.post_id) replyNum
         FROM
         post_info pi
-        LEFT JOIN user_info ui ON ( pi.user_id = ui.id )
+        LEFT JOIN user_info ui ON ( pi.user_code = ui.code )
         LEFT JOIN reply_info ri ON ( ri.post_id = pi.id )
         WHERE
         1 = 1
@@ -73,7 +73,7 @@
         ui.avatar
         FROM
         post_info pi
-        LEFT JOIN user_info ui ON ( pi.user_id = ui.id )
+        LEFT JOIN user_info ui ON ( pi.user_code = ui.code )
         WHERE
         pi.id = #{postId}
     </select>
@@ -86,7 +86,7 @@
         ui.avatar
         FROM
         post_info pi
-        LEFT JOIN user_info ui ON ( pi.user_id = ui.id )
+        LEFT JOIN user_info ui ON ( pi.user_code = ui.code )
         WHERE
         1 = 1
         ORDER BY pi.create_date DESC

@@ -153,5 +153,13 @@ public class RentInfo implements Serializable {
      */
     private String createDate;
 
+    /**
+     * 访问量
+     */
+    private Integer views;
 
+    /**
+     * 合租类型（1.整租 2.合租）
+     */
+    private Integer rentType;
 }

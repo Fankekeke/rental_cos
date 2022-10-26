@@ -32,7 +32,7 @@ public class HousePriceTrendController {
      */
     @GetMapping("/page")
     public R page(Page<HousePriceTrend> page, HousePriceTrend housePriceTrend) {
-        return R.ok();
+        return R.ok(housePriceTrendService.selectPriceTrendPage(page, housePriceTrend));
     }
 
     /**

@@ -28,7 +28,9 @@
         ri.has_gas_stoves,
         ri.has_cook,
         ri.flag,
-        ri.create_date
+        ri.create_date,
+        ri.views,
+        ri.rent_type
     </sql>
 
     <sql id="baseParam">
@@ -55,6 +57,9 @@
         </if>
         <if test="rentInfo.hasDoorLock != null">
             AND ri.has_door_lock = #{rentInfo.hasDoorLock}
+        </if>
+        <if test="rentInfo.rentType != null">
+            AND ri.rent_type = #{rentInfo.rentType}
         </if>
     </sql>
 
