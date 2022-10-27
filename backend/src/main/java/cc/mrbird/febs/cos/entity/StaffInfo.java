@@ -2,6 +2,8 @@ package cc.mrbird.febs.cos.entity;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -22,6 +24,11 @@ public class StaffInfo implements Serializable {
      * 员工姓名
      */
     private String staffName;
+
+    /**
+     * 员工Code
+     */
+    private String staffCode;
 
     /**
      * 员工类型
@@ -58,5 +65,15 @@ public class StaffInfo implements Serializable {
      */
     private Integer staffStatus;
 
+    /**
+     * 待售出数量
+     */
+    @TableField(exist = false)
+    private Integer waitSellNum;
 
+    /**
+     * 已售出数量
+     */
+    @TableField(exist = false)
+    private Integer sellNum;
 }

@@ -1,5 +1,6 @@
 package cc.mrbird.febs.cos.service;
 
+import cc.mrbird.febs.cos.entity.RentCharge;
 import cc.mrbird.febs.cos.entity.RentInfo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -21,4 +22,12 @@ public interface IRentInfoService extends IService<RentInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectRentPage(Page<RentInfo> page, RentInfo rentInfo);
+
+    /**
+     * 获取租房状态
+     *
+     * @param rentId 租房ID
+     * @return 结果
+     */
+    RentCharge selectRentStatus(String rentId);
 }

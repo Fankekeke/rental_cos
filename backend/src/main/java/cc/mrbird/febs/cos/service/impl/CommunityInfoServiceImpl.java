@@ -3,8 +3,11 @@ package cc.mrbird.febs.cos.service.impl;
 import cc.mrbird.febs.cos.entity.CommunityInfo;
 import cc.mrbird.febs.cos.dao.CommunityInfoMapper;
 import cc.mrbird.febs.cos.entity.HouseInfo;
+import cc.mrbird.febs.cos.entity.RentCharge;
 import cc.mrbird.febs.cos.service.ICommunityInfoService;
 import cc.mrbird.febs.cos.service.IHouseInfoService;
+import cc.mrbird.febs.cos.service.IRentChargeService;
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -13,8 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author FanK
@@ -24,6 +27,8 @@ import java.util.List;
 public class CommunityInfoServiceImpl extends ServiceImpl<CommunityInfoMapper, CommunityInfo> implements ICommunityInfoService {
 
     private final IHouseInfoService houseInfoService;
+
+    private final IRentChargeService rentChargeService;
 
     /**
      * 分页获取小区信息
@@ -68,5 +73,38 @@ public class CommunityInfoServiceImpl extends ServiceImpl<CommunityInfoMapper, C
     @Override
     public List<LinkedHashMap<String, Object>> selectHouseRentByCode(String code) {
         return baseMapper.selectHouseRentByCode(code);
+    }
+
+    /**
+     * 获取小区房屋业务统计
+     *
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> selectHouseSell() {
+        List<CommunityInfo> communityList = this.list();
+        if (CollectionUtil.isEmpty(communityList)) {
+            return Collections.emptyList();
+        }
+        List<LinkedHashMap<String, Object>> result = new ArrayList<>();
+        communityList.forEach(item -> {
+            result.add(new LinkedHashMap<String, Object>(){
+                {
+                    put("communityCode", item.getCode());
+                    put("communityName", item.getCommunityName());
+                    put("waitSellNum", 0);
+                    put("sellNum", 0);
+                }
+            });
+        });
+
+        // 查找租房记录
+        List<RentCharge> rentChargeList = rentChargeService.list(Wrappers.<RentCharge>lambdaQuery().ne(RentCharge::getPlanStatus, 3));
+        if (CollectionUtil.isEmpty(rentChargeList)) {
+            return result;
+        }
+        // 根据小区编号转Map
+        // Map<String, List<RentCharge>> rentChargeMap = rentChargeList.stream().collect(Collectors.groupingBy(RentCharge::get))
+        return null;
     }
 }

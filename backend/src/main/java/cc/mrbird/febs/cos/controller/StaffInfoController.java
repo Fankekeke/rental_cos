@@ -4,6 +4,7 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,40 @@ public class StaffInfoController {
      */
     @GetMapping("/page")
     public R page(Page<StaffInfo> page, StaffInfo staffInfo) {
-        return R.ok();
+        return R.ok(staffInfoService.selectStaffPage(page, staffInfo));
+    }
+
+    /**
+     * 获取员工详细信息
+     *
+     * @param staffCode 员工编号
+     * @return 结果
+     */
+    @GetMapping("/detail/{staffCode}")
+    public R detail(@PathVariable("staffCode") String staffCode) {
+        return R.ok(staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStaffCode, staffCode)));
+    }
+
+    /**
+     * 获取员工业务统计
+     *
+     * @param staffType 员工类型
+     * @return 结果
+     */
+    @GetMapping("/kpi")
+    public R getStaffKpi(@RequestParam("staffType") Integer staffType) throws Exception {
+        return R.ok(staffInfoService.selectStaffKpi(staffType));
+    }
+
+    /**
+     * 获取员工信息
+     *
+     * @param type 员工类型
+     * @return 结果
+     */
+    @GetMapping("/list/{type}")
+    public R list(@PathVariable("type") Integer type) {
+        return R.ok(staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStaffStatus, 1).eq(StaffInfo::getStaffType, type)));
     }
 
     /**

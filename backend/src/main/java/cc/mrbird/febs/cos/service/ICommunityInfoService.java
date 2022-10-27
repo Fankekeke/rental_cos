@@ -18,7 +18,7 @@ public interface ICommunityInfoService extends IService<CommunityInfo> {
     /**
      * 分页获取小区信息
      *
-     * @param page 分页对象
+     * @param page          分页对象
      * @param communityInfo 小区信息
      * @return 结果
      */
@@ -47,4 +47,11 @@ public interface ICommunityInfoService extends IService<CommunityInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectHouseRentByCode(String code);
+
+    /**
+     * 获取小区房屋业务统计
+     *
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectHouseSell();
 }

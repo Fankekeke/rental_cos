@@ -26,13 +26,24 @@ public class RentInfoController {
     /**
      * 分页获取出租信息信息
      *
-     * @param page 分页对象
+     * @param page     分页对象
      * @param rentInfo 出租信息信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<RentInfo> page, RentInfo rentInfo) {
         return R.ok(rentInfoService.selectRentPage(page, rentInfo));
+    }
+
+    /**
+     * 获取租房状态
+     *
+     * @param rentId 租房ID
+     * @return 结果
+     */
+    @GetMapping("/rent/{rentId}")
+    public R getRentStatus(@PathVariable("rentId") String rentId) {
+        return R.ok(rentInfoService.selectRentStatus(rentId));
     }
 
     /**
