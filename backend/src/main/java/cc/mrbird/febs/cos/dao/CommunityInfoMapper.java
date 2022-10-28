@@ -38,4 +38,5 @@ public interface CommunityInfoMapper extends BaseMapper<CommunityInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectHouseRentByCode(@Param("code") String code);
+
 }

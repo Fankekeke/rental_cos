@@ -26,13 +26,26 @@ public class HousePriceTrendController {
     /**
      * 分页获取房价走势信息
      *
-     * @param page 分页对象
+     * @param page            分页对象
      * @param housePriceTrend 房价走势信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<HousePriceTrend> page, HousePriceTrend housePriceTrend) {
         return R.ok(housePriceTrendService.selectPriceTrendPage(page, housePriceTrend));
+    }
+
+    /**
+     * 获取房价走势信息
+     *
+     * @param communityCode 小区编号
+     * @param year          年
+     * @param month         月
+     * @return 结果
+     */
+    @GetMapping("/trend")
+    public R selectHousePriceTrend(String communityCode, String year, String month) {
+        return R.ok();
     }
 
     /**

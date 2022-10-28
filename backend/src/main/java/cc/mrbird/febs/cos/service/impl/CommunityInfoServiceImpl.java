@@ -99,12 +99,22 @@ public class CommunityInfoServiceImpl extends ServiceImpl<CommunityInfoMapper, C
         });
 
         // 查找租房记录
-        List<RentCharge> rentChargeList = rentChargeService.list(Wrappers.<RentCharge>lambdaQuery().ne(RentCharge::getPlanStatus, 3));
+        List<RentCharge> rentChargeList = rentChargeService.selectRentChargeWithHouse();
         if (CollectionUtil.isEmpty(rentChargeList)) {
             return result;
         }
         // 根据小区编号转Map
-        // Map<String, List<RentCharge>> rentChargeMap = rentChargeList.stream().collect(Collectors.groupingBy(RentCharge::get))
-        return null;
+        Map<String, List<RentCharge>> rentChargeMap = rentChargeList.stream().collect(Collectors.groupingBy(RentCharge::getCommunityCode));
+        for (LinkedHashMap<String, Object> community : result) {
+            List<RentCharge> rentCharges = rentChargeMap.get(community.get("communityCode").toString());
+            if (CollectionUtil.isEmpty(rentCharges)) {
+                continue;
+            }
+            int sellNum = (int) rentCharges.stream().filter(e -> e.getPlanStatus() == 2).count();
+            int waitSellNum = (int) rentCharges.stream().filter(e -> e.getPlanStatus() == 1).count();
+            community.put("waitSellNum", waitSellNum);
+            community.put("sellNum", sellNum);
+        }
+        return result;
     }
 }

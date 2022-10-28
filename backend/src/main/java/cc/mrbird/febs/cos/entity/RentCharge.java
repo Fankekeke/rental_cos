@@ -2,6 +2,8 @@ package cc.mrbird.febs.cos.entity;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -38,5 +40,16 @@ public class RentCharge implements Serializable {
      */
     private String createDate;
 
+    /**
+     * 小区编号
+     */
+    @TableField(exist = false)
+    private String communityCode;
+
+    /**
+     * 房屋编号
+     */
+    @TableField(exist = false)
+    private String houseCode;
 
 }

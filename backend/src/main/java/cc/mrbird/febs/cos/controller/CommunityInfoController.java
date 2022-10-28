@@ -47,6 +47,16 @@ public class CommunityInfoController {
     }
 
     /**
+     * 获取小区房屋业务统计
+     *
+     * @return 结果
+     */
+    @GetMapping("/selectHouseSell")
+    public R selectHouseSell() {
+        return R.ok(communityInfoService.selectHouseSell());
+    }
+
+    /**
      * 新增小区信息
      *
      * @param communityInfo 小区信息
