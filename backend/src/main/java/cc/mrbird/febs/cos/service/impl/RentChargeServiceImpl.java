@@ -21,6 +21,6 @@ public class RentChargeServiceImpl extends ServiceImpl<RentChargeMapper, RentCha
      */
     @Override
     public List<RentCharge> selectRentChargeWithHouse() {
-        return null;
+        return baseMapper.selectRentChargeWithHouse();
     }
 }
