@@ -56,10 +56,11 @@
 
     <!-- 分页获取房屋信息 -->
     <select id="selectHousePage" resultType="java.util.LinkedHashMap">
-        SELECT <include refid="baseResult"/> FROM house_info hi
+        SELECT <include refid="baseResult"/>, ci.community_name AS communityName FROM house_info hi
+        LEFT JOIN community_info ci ON (ci.code = hi.community_code)
         WHERE 1 = 1
         <include refid="baseParam"/>
-        ORDER ci.create_date DESC
+        ORDER BY hi.create_date DESC
     </select>
 
     <!-- 远程调用房屋信息 -->

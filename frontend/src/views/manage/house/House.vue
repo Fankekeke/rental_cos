@@ -18,7 +18,7 @@
                 label="小区名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.communityName"/>
+                <a-input v-model="queryParams.houseName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
@@ -148,45 +148,45 @@
         </template>
       </a-table>
     </div>
-    <community-add
-      v-if="communityAdd.visiable"
-      @close="handlecommunityAddClose"
-      @success="handlecommunityAddSuccess"
-      :communityAddVisiable="communityAdd.visiable">
-    </community-add>
-    <community-edit
-      ref="communityEdit"
-      @close="handlecommunityEditClose"
-      @success="handlecommunityEditSuccess"
-      :communityEditVisiable="communityEdit.visiable">
-    </community-edit>
-    <community-view
-      @close="handlecommunityViewClose"
-      :communityShow="communityView.visiable"
-      :communityData="communityView.data">
-    </community-view>
+    <house-add
+      v-if="houseAdd.visiable"
+      @close="handlehouseAddClose"
+      @success="handlehouseAddSuccess"
+      :houseAddVisiable="houseAdd.visiable">
+    </house-add>
+    <house-edit
+      ref="houseEdit"
+      @close="handlehouseEditClose"
+      @success="handlehouseEditSuccess"
+      :houseEditVisiable="houseEdit.visiable">
+    </house-edit>
+    <house-view
+      @close="handlehouseViewClose"
+      :houseShow="houseView.visiable"
+      :houseData="houseView.data">
+    </house-view>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import communityAdd from './CommunityAdd'
-import communityEdit from './CommunityEdit'
+import houseAdd from './HouseAdd'
+import houseEdit from './HouseEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
-import CommunityView from "./CommunityView";
+import houseView from "./HouseView";
 moment.locale('zh-cn')
 
 export default {
-  name: 'community',
-  components: {CommunityView, communityAdd, communityEdit, RangeDate},
+  name: 'house',
+  components: {houseView, houseAdd, houseEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      communityAdd: {
+      houseAdd: {
         visiable: false
       },
-      communityEdit: {
+      houseEdit: {
         visiable: false
       },
       queryParams: {},
@@ -204,7 +204,7 @@ export default {
         showSizeChanger: true,
         showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`
       },
-      communityView: {
+      houseView: {
         visiable: false,
         data: null
       },
@@ -217,10 +217,13 @@ export default {
     }),
     columns () {
       return [{
+        title: '房屋编号',
+        dataIndex: 'code'
+      }, {
         title: '小区名称',
         dataIndex: 'communityName'
       }, {
-        title: '小区地址',
+        title: '房屋地址',
         dataIndex: 'address',
         scopedSlots: { customRender: 'contentShow' }
       }, {
@@ -249,18 +252,18 @@ export default {
           }
         }
       }, {
-        title: '总建面积',
-        dataIndex: 'totalConstructionArea',
+        title: '房间数量',
+        dataIndex: 'roomNumber',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text + '㎡'
+            return text + '间'
           } else {
             return '- -'
           }
         }
       }, {
-        title: '所属商圈',
-        dataIndex: 'businessDistrict',
+        title: '客厅数量',
+        dataIndex: 'livingRoomNumber',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -269,27 +272,63 @@ export default {
           }
         }
       }, {
-        title: '统一供暖',
-        dataIndex: 'unifiedHeating',
+        title: '卫生间数量',
+        dataIndex: 'bathroomNumber',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '房间面积',
+        dataIndex: 'roomSize',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text + '㎡'
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '楼层',
+        dataIndex: 'floor',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '装修类型',
+        dataIndex: 'decorationType',
         customRender: (text, row, index) => {
           switch (text) {
             case 1:
-              return <a-tag color="green">是</a-tag>
+              return <a-tag>精装修</a-tag>
             case 2:
-              return <a-tag color="pink">否</a-tag>
+              return <a-tag>普通装修</a-tag>
+            case 3:
+              return <a-tag>暂无装修</a-tag>
             default:
               return '- -'
           }
         }
       }, {
-        title: '供水供电',
-        dataIndex: 'waterSupply',
+        title: '房屋类型',
+        dataIndex: 'houseType',
         customRender: (text, row, index) => {
           switch (text) {
             case 1:
-              return <a-tag>民用</a-tag>
+              return <a-tag>普通住宅</a-tag>
             case 2:
-              return <a-tag>商用</a-tag>
+              return <a-tag>高层楼</a-tag>
+            case 3:
+              return <a-tag>别墅</a-tag>
+            case 4:
+              return <a-tag>大平层</a-tag>
             default:
               return '- -'
           }
@@ -305,8 +344,8 @@ export default {
     this.fetch()
   },
   methods: {
-    handlecommunityViewClose () {
-      this.communityView.visiable = false
+    handlehouseViewClose () {
+      this.houseView.visiable = false
     },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
@@ -315,29 +354,29 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.communityAdd.visiable = true
+      this.houseAdd.visiable = true
     },
-    handlecommunityAddClose () {
-      this.communityAdd.visiable = false
+    handlehouseAddClose () {
+      this.houseAdd.visiable = false
     },
-    handlecommunityAddSuccess () {
-      this.communityAdd.visiable = false
+    handlehouseAddSuccess () {
+      this.houseAdd.visiable = false
       this.$message.success('新增小区成功')
       this.search()
     },
     view (row) {
-      this.communityView.data = row
-      this.communityView.visiable = true
+      this.houseView.data = row
+      this.houseView.visiable = true
     },
     edit (record) {
-      this.$refs.communityEdit.setFormValues(record)
-      this.communityEdit.visiable = true
+      this.$refs.houseEdit.setFormValues(record)
+      this.houseEdit.visiable = true
     },
-    handlecommunityEditClose () {
-      this.communityEdit.visiable = false
+    handlehouseEditClose () {
+      this.houseEdit.visiable = false
     },
-    handlecommunityEditSuccess () {
-      this.communityEdit.visiable = false
+    handlehouseEditSuccess () {
+      this.houseEdit.visiable = false
       this.$message.success('修改小区成功')
       this.search()
     },
@@ -356,7 +395,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/community-info/' + ids).then(() => {
+          that.$delete('/cos/house-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -443,7 +482,7 @@ export default {
       }
 
 
-      this.$get('/cos/community-info/page', {
+      this.$get('/cos/house-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data
