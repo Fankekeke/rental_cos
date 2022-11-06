@@ -116,7 +116,7 @@ public class HouseInfo implements Serializable {
     /**
      * 朝向
      */
-    private Integer towards;
+    private String towards;
 
     /**
      * 房源概况
