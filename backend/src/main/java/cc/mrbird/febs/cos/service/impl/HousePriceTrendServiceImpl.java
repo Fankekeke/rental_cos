@@ -12,6 +12,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,11 +44,11 @@ public class HousePriceTrendServiceImpl extends ServiceImpl<HousePriceTrendMappe
      * @return 结果
      */
     @Override
-    public List<LinkedHashMap<String, Object>> selectHousePriceTrend(String communityCode, String year, String month) {
+    public LinkedHashMap<String, BigDecimal> selectHousePriceTrend(String communityCode, String year, String month) {
         String type = StrUtil.isEmpty(month) ? "1" : "2";
-        List<HousePriceTrend> houseTrendList = this.list(Wrappers.<HousePriceTrend>lambdaQuery().eq(HousePriceTrend::getCommunityCode, communityCode));
+        List<HousePriceTrend> houseTrendList = baseMapper.selectPriceTrendByCommunityCode(communityCode);
         if (CollectionUtil.isEmpty(houseTrendList)) {
-            return Collections.emptyList();
+            return null;
         }
         List<String> dateList = new ArrayList<>();
         switch (type) {
@@ -59,7 +61,32 @@ public class HousePriceTrendServiceImpl extends ServiceImpl<HousePriceTrendMappe
                 break;
             default:
         }
-        houseTrendList = houseTrendList.stream().filter(e -> year.equals(StrUtil.toString(DateUtil.year(DateUtil.parse(e.getCreateDate(), ""))))).collect(Collectors.toList());
-        return null;
+        LinkedHashMap<String, BigDecimal> housePriceMap = new LinkedHashMap<>(16);
+        if ("1".equals(type)) {
+            Map<String, List<HousePriceTrend>> housePriceTrendMap = houseTrendList.stream().collect(Collectors.groupingBy(HousePriceTrend::getYear));
+            for (String date : dateList) {
+                List<HousePriceTrend> housePriceTrendList = housePriceTrendMap.get(date);
+                if (CollectionUtil.isEmpty(housePriceTrendList)) {
+                    housePriceMap.put(date, BigDecimal.ZERO);
+                    continue;
+                }
+                BigDecimal price = housePriceTrendList.stream().map(HousePriceTrend::getHousePrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+                housePriceMap.put(date, price.divide(BigDecimal.valueOf(housePriceTrendList.size()), 0, RoundingMode.HALF_UP));
+            }
+        } else {
+            houseTrendList = houseTrendList.stream().filter(e -> year.equals(e.getYear())).collect(Collectors.toList());
+            // 按照月度分组
+            Map<String, List<HousePriceTrend>> housePriceTrendMap = houseTrendList.stream().collect(Collectors.groupingBy(HousePriceTrend::getMonth));
+            for (String date : dateList) {
+                List<HousePriceTrend> housePriceTrendList = housePriceTrendMap.get(date);
+                if (CollectionUtil.isEmpty(housePriceTrendList)) {
+                    housePriceMap.put(date, BigDecimal.ZERO);
+                    continue;
+                }
+                BigDecimal price = housePriceTrendList.stream().map(HousePriceTrend::getHousePrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+                housePriceMap.put(date, price.divide(BigDecimal.valueOf(housePriceTrendList.size()), 0, RoundingMode.HALF_UP));
+            }
+        }
+        return housePriceMap;
     }
 }

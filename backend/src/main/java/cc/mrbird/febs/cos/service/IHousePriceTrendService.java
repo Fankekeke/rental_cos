@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -31,5 +32,5 @@ public interface IHousePriceTrendService extends IService<HousePriceTrend> {
      * @param month         月
      * @return 结果
      */
-    List<LinkedHashMap<String, Object>> selectHousePriceTrend(String communityCode, String year, String month);
+    LinkedHashMap<String, BigDecimal> selectHousePriceTrend(String communityCode, String year, String month);
 }
