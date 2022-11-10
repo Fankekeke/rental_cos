@@ -30,4 +30,11 @@ public interface IHouseInfoService extends IService<HouseInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> remoteHouse(String ownerCode);
+
+    /**
+     * 统计各省份数据
+     *
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectHouseInfoByProvince();
 }

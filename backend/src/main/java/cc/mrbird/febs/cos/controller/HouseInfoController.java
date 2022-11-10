@@ -47,6 +47,16 @@ public class HouseInfoController {
     }
 
     /**
+     * 统计各省份数据
+     *
+     * @return 结果
+     */
+    @GetMapping("/province")
+    public R selectHouseInfoByProvince() {
+        return R.ok();
+    }
+
+    /**
      * 新增房屋信息
      *
      * @param houseInfo 房屋信息

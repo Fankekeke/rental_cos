@@ -1,11 +1,8 @@
 package cc.mrbird.febs.cos.service.impl;
 
 import cc.mrbird.febs.cos.controller.po.RentChargePo;
-import cc.mrbird.febs.cos.entity.CommunityInfo;
-import cc.mrbird.febs.cos.entity.HouseInfo;
-import cc.mrbird.febs.cos.entity.RentCharge;
+import cc.mrbird.febs.cos.entity.*;
 import cc.mrbird.febs.cos.dao.RentChargeMapper;
-import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.entity.vo.RentChargeVo;
 import cc.mrbird.febs.cos.service.ICommunityInfoService;
 import cc.mrbird.febs.cos.service.IHouseInfoService;
@@ -193,5 +190,11 @@ public class RentChargeServiceImpl extends ServiceImpl<RentChargeMapper, RentCha
             result.add(rentChargeItem);
         }
         return result;
+    }
+
+    public List<LinkedHashMap<String, Object>> selectHouseInfoByProvince() {
+        // 所有省份信息
+        // List<SysCity> sysCityList =
+        return null;
     }
 }

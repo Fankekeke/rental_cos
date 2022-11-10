@@ -39,4 +39,15 @@ public class HouseInfoServiceImpl extends ServiceImpl<HouseInfoMapper, HouseInfo
     public List<LinkedHashMap<String, Object>> remoteHouse(String ownerCode) {
         return baseMapper.remoteHouse(ownerCode);
     }
+
+    /**
+     * 统计各省份数据
+     *
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> selectHouseInfoByProvince() {
+        // 获取所有
+        return null;
+    }
 }
