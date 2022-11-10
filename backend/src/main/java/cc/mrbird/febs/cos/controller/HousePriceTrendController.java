@@ -45,7 +45,7 @@ public class HousePriceTrendController {
      */
     @GetMapping("/trend")
     public R selectHousePriceTrend(String communityCode, String year, String month) {
-        return R.ok();
+        return R.ok(housePriceTrendService.selectHousePriceTrend(communityCode, year, month));
     }
 
     /**

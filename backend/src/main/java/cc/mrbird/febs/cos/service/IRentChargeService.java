@@ -1,8 +1,11 @@
 package cc.mrbird.febs.cos.service;
 
+import cc.mrbird.febs.cos.controller.po.RentChargePo;
 import cc.mrbird.febs.cos.entity.RentCharge;
+import cc.mrbird.febs.cos.entity.vo.RentChargeVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -16,4 +19,36 @@ public interface IRentChargeService extends IService<RentCharge> {
      * @return 结果
      */
     List<RentCharge> selectRentChargeWithHouse();
+
+    /**
+     * 获取房屋出租负责信息
+     *
+     * @param rentCharge 参数
+     * @return 结果
+     */
+    List<RentChargeVo> selectRentChargeList(RentChargePo rentCharge);
+
+    /**
+     * 根据时间获取去出租信息
+     *
+     * @param year  统计年度
+     * @param month 统计月度
+     * @return 结果
+     */
+    List<RentChargeVo> selectRentChargeByDate(String year, String month);
+
+    /**
+     * 获取各小区租房情况
+     *
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectRentChargeByCommunity(String communityCode);
+
+    /**
+     * 房屋出租信息
+     *
+     * @param houseCode 房屋编号
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectRentChargeByHouse(String houseCode);
 }

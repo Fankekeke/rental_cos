@@ -33,7 +33,7 @@ public class PostInfo implements Serializable {
     private String userCode;
 
     /**
-     *
+     * 标题
      */
     private String title;
 

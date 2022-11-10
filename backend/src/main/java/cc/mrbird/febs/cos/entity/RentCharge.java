@@ -49,6 +49,11 @@ public class RentCharge implements Serializable {
     private String createDate;
 
     /**
+     * 状态时间
+     */
+    private String checkDate;
+
+    /**
      * 小区编号
      */
     @TableField(exist = false)
