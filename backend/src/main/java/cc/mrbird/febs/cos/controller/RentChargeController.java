@@ -56,7 +56,18 @@ public class RentChargeController {
     }
 
     /**
-     * 根据时间湖泊去出租信息
+     * 获取员工负责情况
+     *
+     * @param staffCode 员工编号
+     * @return 结果
+     */
+    @GetMapping("/rentCharge/staff")
+    public R selectRentChargeByStaff(@RequestParam(value = "staffCode", required = false) String staffCode) {
+        return R.ok(rentChargeService.selectRentChargeByStaff(staffCode));
+    }
+
+    /**
+     * 根据时间获取去出租信息
      *
      * @param year  统计年度
      * @param month 统计月度

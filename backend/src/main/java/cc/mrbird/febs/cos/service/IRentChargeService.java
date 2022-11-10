@@ -51,4 +51,12 @@ public interface IRentChargeService extends IService<RentCharge> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectRentChargeByHouse(String houseCode);
+
+    /**
+     * 获取员工负责情况
+     *
+     * @param staffCode 员工编号
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectRentChargeByStaff(String staffCode);
 }

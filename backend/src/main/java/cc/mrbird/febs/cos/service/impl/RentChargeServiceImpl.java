@@ -5,10 +5,12 @@ import cc.mrbird.febs.cos.entity.CommunityInfo;
 import cc.mrbird.febs.cos.entity.HouseInfo;
 import cc.mrbird.febs.cos.entity.RentCharge;
 import cc.mrbird.febs.cos.dao.RentChargeMapper;
+import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.entity.vo.RentChargeVo;
 import cc.mrbird.febs.cos.service.ICommunityInfoService;
 import cc.mrbird.febs.cos.service.IHouseInfoService;
 import cc.mrbird.febs.cos.service.IRentChargeService;
+import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -30,6 +32,8 @@ public class RentChargeServiceImpl extends ServiceImpl<RentChargeMapper, RentCha
     private final ICommunityInfoService communityInfoService;
 
     private final IHouseInfoService houseInfoService;
+
+    private final IStaffInfoService staffInfoService;
 
     /**
      * 查询租房信息包括房屋编号与小区编号
@@ -141,6 +145,45 @@ public class RentChargeServiceImpl extends ServiceImpl<RentChargeMapper, RentCha
             LinkedHashMap<String, Object> rentChargeItem = new LinkedHashMap<String, Object>() {
                 {
                     put("house", houseInfo);
+                    put("rent", Collections.emptyList());
+                }
+            };
+            if (CollectionUtil.isNotEmpty(rentChargeVoItem)) {
+                rentChargeItem.put("rent", rentChargeVoItem);
+            }
+            result.add(rentChargeItem);
+        }
+        return result;
+    }
+
+    /**
+     * 获取员工负责情况
+     *
+     * @param staffCode 员工编号
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> selectRentChargeByStaff(String staffCode) {
+        // 返回数据
+        List<LinkedHashMap<String, Object>> result = new ArrayList<>();
+        RentChargePo param = new RentChargePo();
+        if (StrUtil.isNotEmpty(staffCode)) {
+            param.setStaffCode(staffCode);
+        }
+        List<RentChargeVo> rentChargeVoList = baseMapper.selectRentChargeList(param);
+        if (CollectionUtil.isEmpty(rentChargeVoList)) {
+            return result;
+        }
+        List<StaffInfo> staffInfoList = staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StrUtil.isNotEmpty(staffCode), StaffInfo::getStaffCode, staffCode).eq(StaffInfo::getStaffStatus, 1));
+        Map<String, List<RentChargeVo>> rentChargeMap = rentChargeVoList.stream().filter(e -> StrUtil.isNotEmpty(e.getStaffCode())).collect(Collectors.groupingBy(RentChargeVo::getStaffCode));
+        if (CollectionUtil.isEmpty(rentChargeMap) || CollectionUtil.isEmpty(staffInfoList)) {
+            return result;
+        }
+        for (StaffInfo staff : staffInfoList) {
+            List<RentChargeVo> rentChargeVoItem = rentChargeMap.get(staff.getStaffCode());
+            LinkedHashMap<String, Object> rentChargeItem = new LinkedHashMap<String, Object>() {
+                {
+                    put("staff", staff);
                     put("rent", Collections.emptyList());
                 }
             };
