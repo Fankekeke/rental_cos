@@ -56,9 +56,10 @@
 
     <!-- 分页获取房屋信息 -->
     <select id="selectHousePage" resultType="java.util.LinkedHashMap">
-        SELECT <include refid="baseResult"/>, ci.community_name AS communityName FROM house_info hi
+        SELECT <include refid="baseResult"/>, ci.community_name AS communityName, ui.user_name AS userName FROM house_info hi
         LEFT JOIN community_info ci ON (ci.code = hi.community_code)
-        WHERE 1 = 1
+        LEFT JOIN user_info ui ON (ui.code = hi.owner_code)
+        WHERE 1 = 1 AND hi.del_flag = '0'
         <include refid="baseParam"/>
         ORDER BY hi.create_date DESC
     </select>

@@ -64,7 +64,9 @@ public class HouseInfoController {
      */
     @PostMapping
     public R save(HouseInfo houseInfo) {
+        houseInfo.setCode("HOUSE-" + System.currentTimeMillis());
         houseInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        houseInfo.setDelFlag(0);
         return R.ok(houseInfoService.save(houseInfo));
     }
 

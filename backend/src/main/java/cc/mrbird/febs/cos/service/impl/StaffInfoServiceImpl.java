@@ -1,6 +1,7 @@
 package cc.mrbird.febs.cos.service.impl;
 
 import cc.mrbird.febs.common.exception.FebsException;
+import cc.mrbird.febs.cos.dao.RentChargeMapper;
 import cc.mrbird.febs.cos.entity.RentCharge;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.dao.StaffInfoMapper;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo> implements IStaffInfoService {
 
-    private final IRentChargeService rentChargeService;
+    private final RentChargeMapper rentChargeMapper;
 
     /**
      * 获取员工分页信息
@@ -55,7 +56,7 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
         }
 
         // 查找租房记录
-        List<RentCharge> rentChargeList = rentChargeService.list(Wrappers.<RentCharge>lambdaQuery().ne(RentCharge::getPlanStatus, 3));
+        List<RentCharge> rentChargeList = rentChargeMapper.selectList(Wrappers.<RentCharge>lambdaQuery().ne(RentCharge::getPlanStatus, 3));
         if (CollectionUtil.isEmpty(rentChargeList)) {
             return staffInfoList;
         }

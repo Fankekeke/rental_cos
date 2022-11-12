@@ -1,5 +1,6 @@
 package cc.mrbird.febs.cos.service.impl;
 
+import cc.mrbird.febs.cos.dao.RentChargeMapper;
 import cc.mrbird.febs.cos.entity.CommunityInfo;
 import cc.mrbird.febs.cos.dao.CommunityInfoMapper;
 import cc.mrbird.febs.cos.entity.HouseInfo;
@@ -28,7 +29,7 @@ public class CommunityInfoServiceImpl extends ServiceImpl<CommunityInfoMapper, C
 
     private final IHouseInfoService houseInfoService;
 
-    private final IRentChargeService rentChargeService;
+    private final RentChargeMapper rentChargeMapper;
 
     /**
      * 分页获取小区信息
@@ -99,7 +100,7 @@ public class CommunityInfoServiceImpl extends ServiceImpl<CommunityInfoMapper, C
         });
 
         // 查找租房记录
-        List<RentCharge> rentChargeList = rentChargeService.selectRentChargeWithHouse();
+        List<RentCharge> rentChargeList = rentChargeMapper.selectRentChargeWithHouse();
         if (CollectionUtil.isEmpty(rentChargeList)) {
             return result;
         }

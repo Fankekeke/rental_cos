@@ -13,10 +13,6 @@ import java.io.Serializable;
 @Data
 public class RentChargeVo extends RentCharge implements Serializable {
 
-    private String houseCode;
-
-    private String communityCode;
-
     private String houseAddress;
 
     private String indoorMap;

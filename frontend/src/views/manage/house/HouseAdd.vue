@@ -96,17 +96,15 @@
         <a-col :span="8">
           <a-form-item label='所属业主'>
             <a-input-search
-              v-decorator="[
-              'ownerCode'
-              ]"
+              v-model="userName"
               enter-button="选择"
-              @search="showChildrenDrawer"
+              @search="userDrawer = true"
             />
           </a-form-item>
         </a-col>
         <a-col :span="24"></a-col>
         <a-divider orientation="left">
-          <span style="font-size: 13px">选择地区</span>
+          <span style="font-size: 13px">其它</span>
         </a-divider>
         <a-col :span="8">
           <a-form-item label='所属小区'>
@@ -119,7 +117,7 @@
         </a-col>
         <a-col :span="8">
           <a-form-item label='所属地区'>
-            <a-cascader :options="options" v-model="defaultValue" :fieldNames="{label: 'title', value: 'title', children: 'children'}" placeholder="Please select" @change="onChange" />
+            <a-cascader disabled :options="options" v-model="defaultValue" :fieldNames="{label: 'title', value: 'title', children: 'children'}" placeholder="Please select" @change="onChange" />
           </a-form-item>
         </a-col>
         <a-col :span="24"></a-col>
@@ -128,6 +126,75 @@
             <a-textarea v-decorator="[
             'propertyOverview'
             ]" :rows="4"/>
+          </a-form-item>
+        </a-col>
+        <a-divider orientation="left">
+          <span style="font-size: 13px">图片</span>
+        </a-divider>
+        <a-col :span="24">
+          <a-form-item label='室内图' v-bind="formItemLayout">
+            <a-upload
+              name="avatar"
+              action="http://127.0.0.1:9527/file/fileUpload/"
+              list-type="picture-card"
+              :file-list="indoorMapFileList"
+              @preview="indoorMapHandlePreview"
+              @change="indoorMapPicHandleChange"
+            >
+              <div v-if="indoorMapFileList.length < 8">
+                <a-icon type="plus" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
+            <a-modal :visible="indoorMapPreviewVisible" :footer="null" @cancel="indoorMapHandleCancel">
+              <img alt="example" style="width: 100%" :src="indoorMapPreviewImage" />
+            </a-modal>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label='户型图' v-bind="formItemLayout">
+            <a-upload
+              name="avatar"
+              action="http://127.0.0.1:9527/file/fileUpload/"
+              list-type="picture-card"
+              :file-list="housePlanFileList"
+              @preview="housePlanHandlePreview"
+              @change="housePlanPicHandleChange"
+            >
+              <div v-if="housePlanFileList.length < 8">
+                <a-icon type="plus" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
+            <a-modal :visible="housePlanPreviewVisible" :footer="null" @cancel="housePlanHandleCancel">
+              <img alt="example" style="width: 100%" :src="housePlanPreviewImage" />
+            </a-modal>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label='环境图' v-bind="formItemLayout">
+            <a-upload
+              name="avatar"
+              action="http://127.0.0.1:9527/file/fileUpload/"
+              list-type="picture-card"
+              :file-list="environmentMapFileList"
+              @preview="environmentMapHandlePreview"
+              @change="environmentMapPicHandleChange"
+            >
+              <div v-if="environmentMapFileList.length < 8">
+                <a-icon type="plus" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
+            <a-modal :visible="environmentMapPreviewVisible" :footer="null" @cancel="environmentMapHandleCancel">
+              <img alt="example" style="width: 100%" :src="environmentMapPreviewImage" />
+            </a-modal>
           </a-form-item>
         </a-col>
       </a-row>
@@ -139,6 +206,7 @@
       <a-button @click="handleSubmit" type="primary" :loading="loading">提交</a-button>
     </div>
     <check-community :childrenDrawerShow="communityDrawer" @handlerClosed="handlerCommunityClosed"></check-community>
+    <check-user :childrenDrawerShow="userDrawer" @handlerClosed="handlerUserClosed"></check-user>
   </a-drawer>
 </template>
 
@@ -146,6 +214,7 @@
 import baiduMap from '@/utils/map/baiduMap'
 import {mapState} from 'vuex'
 import CheckCommunity from '../community/CheckCommunity'
+import CheckUser from "../user/CheckUser";
 function getBase64 (file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -160,7 +229,7 @@ const formItemLayout = {
 }
 export default {
   name: 'houseAdd',
-  components: {CheckCommunity},
+  components: {CheckUser, CheckCommunity},
   props: {
     houseAddVisiable: {
       default: false
@@ -181,42 +250,46 @@ export default {
       form: this.$form.createForm(this),
       loading: false,
       fileList: [],
+      indoorMapFileList: [],
+      housePlanFileList: [],
+      environmentMapFileList: [],
       previewVisible: false,
+      indoorMapPreviewVisible: false,
+      housePlanPreviewVisible: false,
+      environmentMapPreviewVisible: false,
       previewImage: '',
+      indoorMapPreviewImage: '',
+      housePlanPreviewImage: '',
+      environmentMapPreviewImage: '',
       localPoint: {},
       stayAddress: '',
       communityDrawer: false,
+      userDrawer: false,
       options: [],
       province: '',
       city: '',
       area: '',
       defaultValue: [],
       communityName: '',
-      community: null
+      community: null,
+      userName: '',
+      user: null
     }
   },
   mounted() {
-    this.getCity()
   },
   methods: {
-    getCity () {
-      this.$get('/cos/sys-city/cityChild').then((r) => {
-        this.options = r.data.data.children
-      })
-    },
-    onChange(value) {
-      if (value && value.length === 2) {
-        this.city = value[0]
-        this.area = value[1]
-      }
-      if (value && value.length === 3) {
-        this.province = value[0]
-        this.city = value[1]
-        this.area = value[2]
-      }
-    },
     handleCancel () {
       this.previewVisible = false
+    },
+    indoorMapHandleCancel () {
+      this.indoorMapPreviewVisible = false
+    },
+    housePlanHandleCancel () {
+      this.housePlanPreviewVisible = false
+    },
+    environmentMapHandleCancel () {
+      this.environmentMapPreviewVisible = false
     },
     async handlePreview (file) {
       if (!file.url && !file.preview) {
@@ -225,8 +298,38 @@ export default {
       this.previewImage = file.url || file.preview
       this.previewVisible = true
     },
+    async indoorMapHandlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.indoorMapPreviewImage = file.url || file.preview
+      this.indoorMapPreviewVisible = true
+    },
+    async housePlanHandlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.housePlanPreviewImage = file.url || file.preview
+      this.housePlanPreviewVisible = true
+    },
+    async environmentMapHandlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.environmentMapPreviewImage = file.url || file.preview
+      this.environmentMapPreviewVisible = true
+    },
     picHandleChange ({ fileList }) {
       this.fileList = fileList
+    },
+    indoorMapPicHandleChange ({ fileList }) {
+      this.indoorMapFileList = fileList
+    },
+    housePlanPicHandleChange ({ fileList }) {
+      this.housePlanFileList = fileList
+    },
+    environmentMapPicHandleChange ({ fileList }) {
+      this.environmentMapFileList = fileList
     },
     handlerCommunityClosed (community) {
       this.communityDrawer = false
@@ -243,6 +346,11 @@ export default {
         this.defaultValue.push(community['area'])
       }
     },
+    handlerUserClosed (user) {
+      this.userDrawer = false
+      this.userName = user.userName
+      this.user = user
+    },
     showChildrenDrawer () {
       this.childrenDrawer = true
     },
@@ -258,12 +366,35 @@ export default {
       this.$emit('close')
     },
     handleSubmit () {
+      let indoorMaps = []
+      let housePlans = []
+      let environmentMaps = []
+      this.indoorMapFileList.forEach(image => {
+        indoorMaps.push(image.response)
+      })
+      this.housePlanFileList.forEach(image => {
+        housePlans.push(image.response)
+      })
+      this.environmentMapFileList.forEach(image => {
+        environmentMaps.push(image.response)
+      })
+      if (this.community == null || this.user == null) {
+        this.$message.error('请选择所属小区和业主！')
+        return false
+      }
       this.form.validateFields((err, values) => {
         if (!err) {
           this.loading = true
-          values.province = this.province
-          values.city = this.city
-          values.area = this.area
+          values.province = this.community.province
+          values.city = this.community.city
+          values.area = this.community.area
+          values.longitude = this.community.longitude
+          values.latitude = this.community.latitude
+          values.communityCode = this.community.code
+          values.ownerCode = this.user.code
+          values.indoorMap = indoorMaps.length > 0 ? indoorMaps.join(',') : null
+          values.housePlan = housePlans.length > 0 ? housePlans.join(',') : null
+          values.environmentMap = environmentMaps.length > 0 ? environmentMaps.join(',') : null
           this.$post('/cos/house-info', {
             ...values
           }).then((r) => {

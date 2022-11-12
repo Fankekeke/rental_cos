@@ -10,7 +10,7 @@
   >
     <a-row :gutter="15" style="margin-bottom: 10px">
       <a-col :md="12" :sm="24">
-        <a-input-search v-model="queryParams.communityName" placeholder="输入用户名称查询" @search="search"/>
+        <a-input-search v-model="queryParams.userName" placeholder="输入用户名称查询" @search="search"/>
       </a-col>
     </a-row>
     <a-table ref="TableInfo"
@@ -60,9 +60,6 @@ export default {
     }),
     columns () {
       return [{
-        title: '用户编号',
-        dataIndex: 'code'
-      }, {
         title: '用户昵称',
         dataIndex: 'userName'
       }, {
@@ -111,19 +108,6 @@ export default {
           </a-popover>
         }
       }, {
-        title: '用户类型',
-        dataIndex: 'type',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag>普通用户</a-tag>
-            case 2:
-              return <a-tag>业主</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
         title: '创建时间',
         dataIndex: 'createDate'
       }]
@@ -131,6 +115,7 @@ export default {
   },
   data () {
     return {
+      queryParams: {},
       paginationInfo: null,
       dataSource: [],
       selectedRowKeys: [],
