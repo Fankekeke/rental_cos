@@ -4,10 +4,7 @@ import cc.mrbird.febs.cos.controller.po.RentChargePo;
 import cc.mrbird.febs.cos.entity.*;
 import cc.mrbird.febs.cos.dao.RentChargeMapper;
 import cc.mrbird.febs.cos.entity.vo.RentChargeVo;
-import cc.mrbird.febs.cos.service.ICommunityInfoService;
-import cc.mrbird.febs.cos.service.IHouseInfoService;
-import cc.mrbird.febs.cos.service.IRentChargeService;
-import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cc.mrbird.febs.cos.service.*;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -31,6 +28,8 @@ public class RentChargeServiceImpl extends ServiceImpl<RentChargeMapper, RentCha
     private final IHouseInfoService houseInfoService;
 
     private final IStaffInfoService staffInfoService;
+
+    private final ISysCityService cityService;
 
     /**
      * 查询租房信息包括房屋编号与小区编号
@@ -192,9 +191,73 @@ public class RentChargeServiceImpl extends ServiceImpl<RentChargeMapper, RentCha
         return result;
     }
 
+    /**
+     * 根据省份查询租房信息
+     *
+     * @return 结果
+     */
+    @Override
     public List<LinkedHashMap<String, Object>> selectHouseInfoByProvince() {
+        // 返回数据
+        List<LinkedHashMap<String, Object>> result = new ArrayList<>();
         // 所有省份信息
-        // List<SysCity> sysCityList =
-        return null;
+        List<SysCity> sysCityList = cityService.list(Wrappers.<SysCity>lambdaQuery().eq(SysCity::getParentId, 0));
+        // 获取所有租房信息
+        RentChargePo param = new RentChargePo();
+        List<RentChargeVo> rentChargeVoList = baseMapper.selectRentChargeList(param);
+        if (CollectionUtil.isEmpty(rentChargeVoList)) {
+            return result;
+        }
+        Map<String, List<RentChargeVo>> rentChargeMap = rentChargeVoList.stream().filter(e -> StrUtil.isNotEmpty(e.getProvince())).collect(Collectors.groupingBy(RentChargeVo::getProvince));
+        for (SysCity city : sysCityList) {
+            List<RentChargeVo> rentChargeVoItem = rentChargeMap.get(city.getName());
+            LinkedHashMap<String, Object> rentChargeItem = new LinkedHashMap<String, Object>() {
+                {
+                    put("name", city.getName());
+                }
+            };
+            if (CollectionUtil.isEmpty(rentChargeVoItem)) {
+                continue;
+            }
+            rentChargeItem.put("rent", rentChargeVoItem);
+            result.add(rentChargeItem);
+        }
+        return result;
+    }
+
+    /**
+     * 获取员工销售情况
+     *
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> selectRentTopByStaff() {
+        // 返回结果
+        List<LinkedHashMap<String, Object>> result = new ArrayList<>();
+        List<StaffInfo> staffInfoList = staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStaffStatus, 0));
+        if (CollectionUtil.isEmpty(staffInfoList)) {
+            return result;
+        }
+        RentChargePo param = new RentChargePo();
+        param.setPlanStatus(2);
+        List<RentChargeVo> rentChargeVoList = baseMapper.selectRentChargeList(param);
+        if (CollectionUtil.isEmpty(rentChargeVoList)) {
+            return result;
+        }
+        Map<String, List<RentChargeVo>> rentChargeMap = rentChargeVoList.stream().filter(e -> StrUtil.isNotEmpty(e.getStaffCode())).collect(Collectors.groupingBy(RentChargeVo::getStaffCode));
+        for (StaffInfo staff : staffInfoList) {
+            List<RentChargeVo> rentChargeVoItem = rentChargeMap.get(staff.getStaffCode());
+            LinkedHashMap<String, Object> rentChargeItem = new LinkedHashMap<String, Object>() {
+                {
+                    put("staff", staff);
+                    put("rent", Collections.emptyList());
+                }
+            };
+            if (CollectionUtil.isNotEmpty(rentChargeVoItem)) {
+                rentChargeItem.put("rent", rentChargeVoItem);
+            }
+            result.add(rentChargeItem);
+        }
+        return result;
     }
 }

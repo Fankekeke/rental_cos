@@ -67,6 +67,26 @@ public class RentChargeController {
     }
 
     /**
+     * 根据省份查询租房信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/rentCharge/province")
+    public R selectHouseInfoByProvince() {
+        return R.ok(rentChargeService.selectHouseInfoByProvince());
+    }
+
+    /**
+     * 获取员工销售情况
+     *
+     * @return 结果
+     */
+    @GetMapping("/rentCharge/top/staff")
+    public R selectRentTopByStaff() {
+        return R.ok(rentChargeService.selectRentTopByStaff());
+    }
+
+    /**
      * 根据时间获取去出租信息
      *
      * @param year  统计年度
