@@ -31,8 +31,14 @@
     </sql>
 
     <sql id="baseParam">
+        <if test="houseInfo.code != null and houseInfo.code != ''">
+            AND hi.code LIKE CONCAT('%',#{houseInfo.code},'%')
+        </if>
+        <if test="houseInfo.communityName != null and houseInfo.communityName != ''">
+            AND ci.community_name LIKE CONCAT('%',#{houseInfo.communityName},'%')
+        </if>
         <if test="houseInfo.address != null and houseInfo.address != ''">
-            AND hi.code LIKE CONCAT('%',#{houseInfo.address},'%')
+            AND hi.address LIKE CONCAT('%',#{houseInfo.address},'%')
         </if>
         <if test="houseInfo.province != null and houseInfo.province != ''">
             AND hi.province LIKE CONCAT('%',#{houseInfo.province},'%')

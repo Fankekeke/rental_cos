@@ -1,6 +1,6 @@
 <template>
   <a-drawer
-    title="修改小区"
+    title="修改房屋"
     :maskClosable="false"
     width=1350
     placement="right"
@@ -11,209 +11,194 @@
     <a-form :form="form" layout="vertical">
       <a-row :gutter="10">
         <a-divider orientation="left">
-          <span style="font-size: 13px">基础信息填报</span>
+          <span style="font-size: 13px">房屋信息填报</span>
         </a-divider>
         <a-col :span="4">
-          <a-form-item label='小区名称'>
+          <a-form-item label='房屋地址'>
             <a-input v-decorator="[
-            'houseName',
+            'address',
             { rules: [{ required: true, message: '请输入名称!' }] }
             ]"/>
           </a-form-item>
         </a-col>
         <a-col :span="4">
-          <a-form-item label='物业类型'>
+          <a-form-item label='装修类型'>
             <a-select v-decorator="[
-                'propertyType',
+                'decorationType',
                 ]">
-              <a-select-option value="1">公寓住宅</a-select-option>
-              <a-select-option value="2">商业物业</a-select-option>
-              <a-select-option value="3">工业物业</a-select-option>
+              <a-select-option value="1">精装修</a-select-option>
+              <a-select-option value="2">普通装修</a-select-option>
+              <a-select-option value="3">暂无装修</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="4">
-          <a-form-item label='竣工时间'>
+          <a-form-item label='房屋类型'>
+            <a-select v-decorator="[
+                'houseType',
+                ]">
+              <a-select-option value="1">普通住宅</a-select-option>
+              <a-select-option value="2">高层楼</a-select-option>
+              <a-select-option value="3">别墅</a-select-option>
+              <a-select-option value="4">大平层</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="4">
+          <a-form-item label='朝向'>
             <a-input v-decorator="[
-            'completionTime'
+            'towards'
             ]"/>
           </a-form-item>
         </a-col>
         <a-col :span="4">
-          <a-form-item label='权属类别'>
-            <a-select v-decorator="[
-                'tenureCategory',
-                ]">
-              <a-select-option value="1">商品房住宅</a-select-option>
-              <a-select-option value="2">央产房</a-select-option>
-              <a-select-option value="3">军产房</a-select-option>
-              <a-select-option value="4">小产权房</a-select-option>
-              <a-select-option value="5">自建房</a-select-option>
-            </a-select>
+          <a-form-item label='房间数量'>
+            <a-input-number style="width: 100%" :min="1" :step="1" v-decorator="[
+            'roomNumber'
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="4">
+          <a-form-item label='客厅数量'>
+            <a-input-number style="width: 100%" :min="1" :step="1" v-decorator="[
+            'livingRoomNumber'
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="4">
+          <a-form-item label='卫生间数量'>
+            <a-input-number style="width: 100%" :min="1" :step="1" v-decorator="[
+            'bathroomNumber'
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="4">
+          <a-form-item label='房间面积'>
+            <a-input-number style="width: 100%" :min="1" :step="0.1" v-decorator="[
+            'roomSize'
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="4">
+          <a-form-item label='楼层'>
+            <a-input-number style="width: 100%" :min="1" :step="1" v-decorator="[
+            'floor'
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="4">
+          <a-form-item label='标签'>
+            <a-input v-decorator="[
+            'tags'
+            ]"/>
           </a-form-item>
         </a-col>
         <a-col :span="8">
-          <a-form-item label='所在地'>
+          <a-form-item label='所属业主'>
             <a-input-search
-              v-decorator="[
-              'address'
-              ]"
+              v-model="userName"
               enter-button="选择"
-              @search="showChildrenDrawer"
+              @search="userDrawer = true"
             />
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='产权年限'>
-            <a-input v-decorator="[
-            'propertyTenure'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='总户数'>
-            <a-input-number style="width: 100%" :min="1" :step="1" v-decorator="[
-            'totalHouses'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='总建面积'>
-            <a-input-number style="width: 100%" :min="1" :step="0.1" v-decorator="[
-            'totalConstructionArea'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='容积率'>
-            <a-input-number style="width: 100%" :min="1" :step="0.1" v-decorator="[
-            'volumeRate'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='经度'>
-            <a-input v-decorator="[
-            'longitude'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='纬度'>
-            <a-input v-decorator="[
-            'latitude'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='绿化率'>
-            <a-input-number style="width: 100%" :min="1" :step="0.1" v-decorator="[
-            'greeningRate'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='建筑类型'>
-            <a-select v-decorator="[
-                'buildingType',
-                ]">
-              <a-select-option value="1">居住建筑</a-select-option>
-              <a-select-option value="2">公共建筑</a-select-option>
-              <a-select-option value="3">工业建筑</a-select-option>
-              <a-select-option value="4">农业建筑</a-select-option>
-              <a-select-option value="5">大量性建筑</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='所属商圈'>
-            <a-input v-decorator="[
-            'businessDistrict'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='停车位'>
-            <a-input v-decorator="[
-            'parkingSpace'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='统一供暖'>
-            <a-select v-decorator="[
-                'unifiedHeating',
-                ]">
-              <a-select-option value="1">是</a-select-option>
-              <a-select-option value="2">否</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='供水供电'>
-            <a-select v-decorator="[
-                'waterSupply',
-                ]">
-              <a-select-option value="1">民用</a-select-option>
-              <a-select-option value="2">商用</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='物业费'>
-            <a-input v-decorator="[
-            'propertyCosts'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='停车费'>
-            <a-input v-decorator="[
-            'parkingFee'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='车位管理费'>
-            <a-input v-decorator="[
-            'parkingManagementFee'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='物业公司'>
-            <a-input v-decorator="[
-            'propertyCompany'
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="4">
-          <a-form-item label='开发商'>
-            <a-input v-decorator="[
-            'developer'
-            ]"/>
           </a-form-item>
         </a-col>
         <a-col :span="24"></a-col>
         <a-divider orientation="left">
-          <span style="font-size: 13px">选择地区</span>
+          <span style="font-size: 13px">其它</span>
         </a-divider>
         <a-col :span="8">
-          <a-cascader :options="options" v-model="defaultValue" :fieldNames="{label: 'title', value: 'title', children: 'children'}" placeholder="Please select" @change="onChange" />
+          <a-form-item label='所属小区'>
+            <a-input-search
+              v-model="communityName"
+              enter-button="选择"
+              @search="communityDrawer = true"
+            />
+          </a-form-item>
         </a-col>
-
+        <a-col :span="8">
+          <a-form-item label='所属地区'>
+            <a-cascader disabled :options="options" v-model="defaultValue" :fieldNames="{label: 'title', value: 'title', children: 'children'}" placeholder="Please select" @change="onChange" />
+          </a-form-item>
+        </a-col>
         <a-col :span="24"></a-col>
-        <a-col :span="12">
-          <a-form-item label='备注'>
+        <a-col :span="16">
+          <a-form-item label='房源概况'>
             <a-textarea v-decorator="[
-            'remark'
+            'propertyOverview'
             ]" :rows="4"/>
+          </a-form-item>
+        </a-col>
+        <a-divider orientation="left">
+          <span style="font-size: 13px">图片</span>
+        </a-divider>
+        <a-col :span="24">
+          <a-form-item label='室内图' v-bind="formItemLayout">
+            <a-upload
+              name="avatar"
+              action="http://127.0.0.1:9527/file/fileUpload/"
+              list-type="picture-card"
+              :file-list="indoorMapFileList"
+              @preview="indoorMapHandlePreview"
+              @change="indoorMapPicHandleChange"
+            >
+              <div v-if="indoorMapFileList.length < 8">
+                <a-icon type="plus" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
+            <a-modal :visible="indoorMapPreviewVisible" :footer="null" @cancel="indoorMapHandleCancel">
+              <img alt="example" style="width: 100%" :src="indoorMapPreviewImage" />
+            </a-modal>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label='户型图' v-bind="formItemLayout">
+            <a-upload
+              name="avatar"
+              action="http://127.0.0.1:9527/file/fileUpload/"
+              list-type="picture-card"
+              :file-list="housePlanFileList"
+              @preview="housePlanHandlePreview"
+              @change="housePlanPicHandleChange"
+            >
+              <div v-if="housePlanFileList.length < 8">
+                <a-icon type="plus" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
+            <a-modal :visible="housePlanPreviewVisible" :footer="null" @cancel="housePlanHandleCancel">
+              <img alt="example" style="width: 100%" :src="housePlanPreviewImage" />
+            </a-modal>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label='环境图' v-bind="formItemLayout">
+            <a-upload
+              name="avatar"
+              action="http://127.0.0.1:9527/file/fileUpload/"
+              list-type="picture-card"
+              :file-list="environmentMapFileList"
+              @preview="environmentMapHandlePreview"
+              @change="environmentMapPicHandleChange"
+            >
+              <div v-if="environmentMapFileList.length < 8">
+                <a-icon type="plus" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
+            <a-modal :visible="environmentMapPreviewVisible" :footer="null" @cancel="environmentMapHandleCancel">
+              <img alt="example" style="width: 100%" :src="environmentMapPreviewImage" />
+            </a-modal>
           </a-form-item>
         </a-col>
       </a-row>
     </a-form>
-
-    <drawerMap :childrenDrawerShow="childrenDrawer" @handlerClosed="handlerClosed"></drawerMap>
 
     <div class="drawer-bootom-button">
       <a-popconfirm title="确定放弃编辑？" @confirm="onClose" okText="确定" cancelText="取消">
@@ -221,13 +206,15 @@
       </a-popconfirm>
       <a-button @click="handleSubmit" type="primary" :loading="loading">提交</a-button>
     </div>
+    <check-community :childrenDrawerShow="communityDrawer" @handlerClosed="handlerCommunityClosed"></check-community>
+    <check-user :childrenDrawerShow="userDrawer" @handlerClosed="handlerUserClosed"></check-user>
   </a-drawer>
 </template>
 
 <script>
 import {mapState} from 'vuex'
-import baiduMap from '@/utils/map/baiduMap'
-import drawerMap from '@/utils/map/searchmap/drawerMap'
+import CheckCommunity from '../community/CheckCommunity'
+import CheckUser from "../user/CheckUser";
 function getBase64 (file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -248,7 +235,7 @@ export default {
     }
   },
   components: {
-    drawerMap
+    CheckUser, CheckCommunity
   },
   computed: {
     ...mapState({
@@ -269,16 +256,30 @@ export default {
       form: this.$form.createForm(this),
       loading: false,
       fileList: [],
+      indoorMapFileList: [],
+      housePlanFileList: [],
+      environmentMapFileList: [],
       previewVisible: false,
+      indoorMapPreviewVisible: false,
+      housePlanPreviewVisible: false,
+      environmentMapPreviewVisible: false,
       previewImage: '',
+      indoorMapPreviewImage: '',
+      housePlanPreviewImage: '',
+      environmentMapPreviewImage: '',
       localPoint: {},
       stayAddress: '',
-      childrenDrawer: false,
+      communityDrawer: false,
+      userDrawer: false,
       options: [],
       province: '',
       city: '',
       area: '',
-      defaultValue: []
+      defaultValue: [],
+      communityName: '',
+      community: null,
+      userName: '',
+      user: null
     }
   },
   mounted() {
@@ -301,77 +302,17 @@ export default {
         this.area = value[2]
       }
     },
-    provinceSearch (searchText) {
-      this.provinceDataSource = !searchText ? [] : [searchText, searchText.repeat(2), searchText.repeat(3)];
-    },
-    citySearch (searchText) {
-      this.cityDataSource = !searchText ? [] : [searchText, searchText.repeat(2), searchText.repeat(3)];
-    },
-    areaSearch (searchText) {
-      this.areaDataSource = !searchText ? [] : [searchText, searchText.repeat(2), searchText.repeat(3)];
-    },
-    handlerClosed (localPoint) {
-      this.childrenDrawer = false
-      if (localPoint !== null && localPoint !== undefined) {
-        this.localPoint = localPoint
-
-        let address = baiduMap.getAddress(localPoint)
-        address.getLocation(localPoint, (rs) => {
-          if (rs != null) {
-            if (rs.address !== undefined && rs.address.length !== 0) {
-              this.stayAddress = rs.address
-            }
-            if (rs.surroundingPois !== undefined) {
-              if (rs.surroundingPois.address !== undefined && rs.surroundingPois.address.length !== 0) {
-                this.stayAddress = rs.surroundingPois.address
-              }
-            }
-            let obj = {}
-            obj['address'] = this.stayAddress
-            obj['longitude'] = localPoint.lng
-            obj['latitude'] = localPoint.lat
-            this.form.setFieldsValue(obj)
-          }
-        })
-      }
-    },
-    addPoint (point) {
-      this.localPoint = point
-    },
-    onSearch () {
-      let localData = []
-      var options = {
-        onSearchComplete: (results) => {
-          // 判断状态是否正确
-          // eslint-disable-next-line no-undef,eqeqeq
-          if (local.getStatus() == BMAP_STATUS_SUCCESS) {
-            for (var i = 0; i < results.getCurrentNumPois(); i++) {
-              if (i === 0) {
-                setTimeout(() => {
-                  baiduMap.findPoint(results.getPoi(0).point, 15)
-                }, 10)
-              }
-              localData.push(results.getPoi(i))
-              if (results.getPoi(i).point !== undefined) {
-                baiduMap.localPointAdd(results.getPoi(i))
-              }
-            }
-            this.localData = localData
-            this.cardShow = true
-          }
-        }
-      }
-      var local = new BMap.LocalSearch(baiduMap.rMap(), options)
-      local.search(this.local)
-    },
-    showChildrenDrawer () {
-      this.childrenDrawer = true
-    },
-    onChildrenDrawerClose () {
-      this.childrenDrawer = false
-    },
     handleCancel () {
       this.previewVisible = false
+    },
+    indoorMapHandleCancel () {
+      this.indoorMapPreviewVisible = false
+    },
+    housePlanHandleCancel () {
+      this.housePlanPreviewVisible = false
+    },
+    environmentMapHandleCancel () {
+      this.environmentMapPreviewVisible = false
     },
     async handlePreview (file) {
       if (!file.url && !file.preview) {
@@ -380,27 +321,106 @@ export default {
       this.previewImage = file.url || file.preview
       this.previewVisible = true
     },
+    async indoorMapHandlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.indoorMapPreviewImage = file.url || file.preview
+      this.indoorMapPreviewVisible = true
+    },
+    async housePlanHandlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.housePlanPreviewImage = file.url || file.preview
+      this.housePlanPreviewVisible = true
+    },
+    async environmentMapHandlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.environmentMapPreviewImage = file.url || file.preview
+      this.environmentMapPreviewVisible = true
+    },
     picHandleChange ({ fileList }) {
       this.fileList = fileList
     },
-    imagesInit (images) {
-      if (images !== null && images !== '') {
-        let imageList = []
-        images.split(',').forEach((image, index) => {
-          imageList.push({uid: index, name: image, status: 'done', url: 'http://127.0.0.1:9527/imagesWeb/' + image})
+    indoorMapPicHandleChange ({ fileList }) {
+      this.indoorMapFileList = fileList
+    },
+    housePlanPicHandleChange ({ fileList }) {
+      this.housePlanFileList = fileList
+    },
+    environmentMapPicHandleChange ({ fileList }) {
+      this.environmentMapFileList = fileList
+    },
+    handlerCommunityClosed (community) {
+      this.communityDrawer = false
+      this.defaultValue = []
+      this.communityName = community.communityName
+      this.community = community
+      if (community['province']) {
+        this.defaultValue.push(community['province'])
+      }
+      if (community['city']) {
+        this.defaultValue.push(community['city'])
+      }
+      if (community['area']) {
+        this.defaultValue.push(community['area'])
+      }
+    },
+    handlerUserClosed (user) {
+      this.userDrawer = false
+      this.userName = user.userName
+      this.user = user
+    },
+    showChildrenDrawer () {
+      this.childrenDrawer = true
+    },
+    onChildrenDrawerClose () {
+      this.childrenDrawer = false
+    },
+    imagesInit (indoorMap, housePlan, environmentMap) {
+      this.indoorMapFileList = []
+      this.housePlanFileList = []
+      this.environmentMapFileList = []
+      if (indoorMap !== null && indoorMap !== '') {
+        let indoorMapImageList = []
+        indoorMap.split(',').forEach((image, index) => {
+          indoorMapImageList.push({uid: index, name: image, status: 'done', url: 'http://127.0.0.1:9527/imagesWeb/' + image})
         })
-        this.fileList = imageList
+        this.indoorMapFileList = indoorMapImageList
+      }
+      if (housePlan !== null && housePlan !== '') {
+        let housePlanImageList = []
+        housePlan.split(',').forEach((image, index) => {
+          housePlanImageList.push({uid: index, name: image, status: 'done', url: 'http://127.0.0.1:9527/imagesWeb/' + image})
+        })
+        this.housePlanFileList = housePlanImageList
+      }
+      if (environmentMap !== null && environmentMap !== '') {
+        let environmentMapImageList = []
+        environmentMap.split(',').forEach((image, index) => {
+          environmentMapImageList.push({uid: index, name: image, status: 'done', url: 'http://127.0.0.1:9527/imagesWeb/' + image})
+        })
+        this.environmentMapFileList = environmentMapImageList
       }
     },
     setFormValues ({...house}) {
       this.rowId = house.id
-      let fields = ['houseName', 'propertyType', 'tenureCategory', 'completionTime', 'propertyTenure', 'totalHouses', 'totalConstructionArea', 'volumeRate', 'greeningRate', 'buildingType', 'businessDistrict', 'unifiedHeating', 'waterSupply', 'parkingSpace', 'propertyCosts', 'parkingFee', 'parkingManagementFee', 'propertyCompany', 'address', 'developer', 'province', 'city', 'area', 'longitude', 'latitude', 'remark']
+      let fields = ['address', 'roomNumber', 'livingRoomNumber', 'bathroomNumber', 'roomSize', 'floor', 'decorationType', 'houseType', 'towards', 'propertyOverview', 'tags', 'indoorMap', 'housePlan', 'environmentMap', 'communityName', 'userName', 'province', 'city', 'area']
       let obj = {}
       Object.keys(house).forEach((key) => {
-        if (key === 'propertyType' || key === 'tenureCategory' || key === 'buildingType' || key === 'unifiedHeating' || key === 'waterSupply') {
+        if (key === 'decorationType' || key === 'houseType') {
           if (house[key]) {
             house[key] = house[key].toString()
           }
+        }
+        if (key === 'communityName') {
+          this.communityName = house[key]
+        }
+        if (key === 'userName') {
+          this.userName = house[key]
         }
         if (fields.indexOf(key) !== -1) {
           this.form.getFieldDecorator(key)
@@ -417,8 +437,8 @@ export default {
         if (obj['area']) {
           this.defaultValue.push(obj['area'])
         }
-        console.log(this.defaultValue)
       }, 200)
+      this.imagesInit(obj['indoorMap'], obj['housePlan'], obj['environmentMap'])
       this.form.setFieldsValue(obj)
     },
     reset () {
@@ -431,13 +451,40 @@ export default {
       this.$emit('close')
     },
     handleSubmit () {
+      let indoorMaps = []
+      let housePlans = []
+      let environmentMaps = []
+      this.indoorMapFileList.forEach(image => {
+        indoorMaps.push(image.name)
+      })
+      this.housePlanFileList.forEach(image => {
+        housePlans.push(image.name)
+      })
+      this.environmentMapFileList.forEach(image => {
+        environmentMaps.push(image.name)
+      })
+      if (this.communityName == null || this.userName == null) {
+        this.$message.error('请选择所属小区和业主！')
+        return false
+      }
       this.form.validateFields((err, values) => {
         values.id = this.rowId
-        values.province = this.province
-        values.city = this.city
-        values.area = this.area
         if (!err) {
           this.loading = true
+          if (this.community !== null) {
+            values.province = this.community.province
+            values.city = this.community.city
+            values.area = this.community.area
+            values.longitude = this.community.longitude
+            values.latitude = this.community.latitude
+            values.communityCode = this.community.code
+          }
+          if (this.user !== null) {
+            values.ownerCode = this.user.code
+          }
+          values.indoorMap = indoorMaps.length > 0 ? indoorMaps.join(',') : null
+          values.housePlan = housePlans.length > 0 ? housePlans.join(',') : null
+          values.environmentMap = environmentMaps.length > 0 ? environmentMaps.join(',') : null
           this.$put('/cos/house-info', {
             ...values
           }).then((r) => {

@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.CommunityInfo;
 import cc.mrbird.febs.cos.service.ICommunityInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,17 @@ public class CommunityInfoController {
     @GetMapping("/page")
     public R page(Page<CommunityInfo> page, CommunityInfo communityInfo) {
         return R.ok(communityInfoService.selectCommunityPage(page, communityInfo));
+    }
+
+    /**
+     * 根据小区编号获取小区信息
+     *
+     * @param code 小区编号
+     * @return 结果
+     */
+    @GetMapping("/detail/{code}")
+    public R detail(@PathVariable("code") String code) {
+        return R.ok(communityInfoService.getOne(Wrappers.<CommunityInfo>lambdaQuery().eq(CommunityInfo::getCode, code)));
     }
 
     /**

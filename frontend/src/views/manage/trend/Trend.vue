@@ -7,63 +7,24 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="房屋编号"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.code"/>
+                label="标题"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.title"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="小区名称"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.houseName"/>
+                label="内容"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.content"/>
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="装修类型"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.decorationType">
-                  <a-select-option value="1">精装修</a-select-option>
-                  <a-select-option value="2">普通装修</a-select-option>
-                  <a-select-option value="3">暂无装修</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="房屋类型"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.houseType">
-                  <a-select-option value="1">普通住宅</a-select-option>
-                  <a-select-option value="2">高层楼</a-select-option>
-                  <a-select-option value="3">别墅</a-select-option>
-                  <a-select-option value="4">大平层</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <template v-if="advanced">
-              <a-col :md="6" :sm="24">
-                <a-form-item
-                  label="房屋地址"
-                  :labelCol="{span: 5}"
-                  :wrapperCol="{span: 18, offset: 1}">
-                  <a-input v-model="queryParams.address"/>
-                </a-form-item>
-              </a-col>
-            </template>
           </div>
           <span style="float: right; margin-top: 3px;">
             <a-button type="primary" @click="search">查询</a-button>
             <a-button style="margin-left: 8px" @click="reset">重置</a-button>
-            <a @click="toggleAdvanced" style="margin-left: 8px">
-              {{ advanced ? '收起' : '展开' }}
-              <a-icon :type="advanced ? 'up' : 'down'"/>
-            </a>
           </span>
         </a-row>
       </a-form>
@@ -99,57 +60,50 @@
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.address }}
+                {{ record.content }}
               </template>
-              {{ record.address.slice(0, 15) }} ...
+              {{ record.content.slice(0, 30) }} ...
             </a-tooltip>
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="folder-open" @click="view(record)" title="查 看" style="margin-right: 15px"></a-icon>
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
         </template>
       </a-table>
     </div>
-    <house-add
-      v-if="houseAdd.visiable"
-      @close="handlehouseAddClose"
-      @success="handlehouseAddSuccess"
-      :houseAddVisiable="houseAdd.visiable">
-    </house-add>
-    <house-edit
-      ref="houseEdit"
-      @close="handlehouseEditClose"
-      @success="handlehouseEditSuccess"
-      :houseEditVisiable="houseEdit.visiable">
-    </house-edit>
-    <house-view
-      @close="handlehouseViewClose"
-      :houseShow="houseView.visiable"
-      :houseData="houseView.data">
-    </house-view>
+    <trend-add
+      v-if="trendAdd.visiable"
+      @close="handletrendAddClose"
+      @success="handletrendAddSuccess"
+      :trendAddVisiable="trendAdd.visiable">
+    </trend-add>
+    <trend-edit
+      ref="trendEdit"
+      @close="handletrendEditClose"
+      @success="handletrendEditSuccess"
+      :trendEditVisiable="trendEdit.visiable">
+    </trend-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import houseAdd from './HouseAdd'
-import houseEdit from './HouseEdit'
+import trendAdd from './TrendAdd'
+import trendEdit from './TrendEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
-import houseView from "./HouseView";
 moment.locale('zh-cn')
 
 export default {
-  name: 'house',
-  components: {houseView, houseAdd, houseEdit, RangeDate},
+  name: 'trend',
+  components: {trendAdd, trendEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      houseAdd: {
+      trendAdd: {
         visiable: false
       },
-      houseEdit: {
+      trendEdit: {
         visiable: false
       },
       queryParams: {},
@@ -167,10 +121,6 @@ export default {
         showSizeChanger: true,
         showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`
       },
-      houseView: {
-        visiable: false,
-        data: null
-      },
       userList: []
     }
   },
@@ -180,105 +130,48 @@ export default {
     }),
     columns () {
       return [{
-        title: '房屋编号',
-        dataIndex: 'code'
+        title: '标题',
+        dataIndex: 'title',
+        scopedSlots: { customRender: 'titleShow' },
+        width: 300
       }, {
-        title: '小区名称',
-        dataIndex: 'communityName'
+        title: '公告内容',
+        dataIndex: 'content',
+        scopedSlots: { customRender: 'contentShow' },
+        width: 600
       }, {
-        title: '房屋地址',
-        dataIndex: 'address',
-        scopedSlots: { customRender: 'contentShow' }
-      }, {
-        title: '小区所在',
-        dataIndex: 'province',
+        title: '发布时间',
+        dataIndex: 'createDate',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return row.province + row.city + row.area
+            return text
           } else {
             return '- -'
           }
         }
       }, {
-        title: '房间数量',
-        dataIndex: 'roomNumber',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '间'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '客厅数量',
-        dataIndex: 'livingRoomNumber',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '厅'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '卫生间数量',
-        dataIndex: 'bathroomNumber',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '间'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '房间面积',
-        dataIndex: 'roomSize',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '㎡'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '楼层',
-        dataIndex: 'floor',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '层'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '装修类型',
-        dataIndex: 'decorationType',
+        title: '消息类型',
+        dataIndex: 'type',
         customRender: (text, row, index) => {
           switch (text) {
             case 1:
-              return <a-tag>精装修</a-tag>
+              return <a-tag>画报</a-tag>
             case 2:
-              return <a-tag>普通装修</a-tag>
+              return <a-tag>导购</a-tag>
             case 3:
-              return <a-tag>暂无装修</a-tag>
+              return <a-tag>新盘发布</a-tag>
             default:
               return '- -'
           }
         }
       }, {
-        title: '房屋类型',
-        dataIndex: 'houseType',
+        title: '上传人',
+        dataIndex: 'publisher',
         customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag>普通住宅</a-tag>
-            case 2:
-              return <a-tag>高层楼</a-tag>
-            case 3:
-              return <a-tag>别墅</a-tag>
-            case 4:
-              return <a-tag>大平层</a-tag>
-            default:
-              return '- -'
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
           }
         }
       }, {
@@ -292,9 +185,6 @@ export default {
     this.fetch()
   },
   methods: {
-    handlehouseViewClose () {
-      this.houseView.visiable = false
-    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
@@ -302,30 +192,26 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.houseAdd.visiable = true
+      this.trendAdd.visiable = true
     },
-    handlehouseAddClose () {
-      this.houseAdd.visiable = false
+    handletrendAddClose () {
+      this.trendAdd.visiable = false
     },
-    handlehouseAddSuccess () {
-      this.houseAdd.visiable = false
-      this.$message.success('新增小区成功')
+    handletrendAddSuccess () {
+      this.trendAdd.visiable = false
+      this.$message.success('新增公告成功')
       this.search()
     },
-    view (row) {
-      this.houseView.data = row
-      this.houseView.visiable = true
-    },
     edit (record) {
-      this.$refs.houseEdit.setFormValues(record)
-      this.houseEdit.visiable = true
+      this.$refs.trendEdit.setFormValues(record)
+      this.trendEdit.visiable = true
     },
-    handlehouseEditClose () {
-      this.houseEdit.visiable = false
+    handletrendEditClose () {
+      this.trendEdit.visiable = false
     },
-    handlehouseEditSuccess () {
-      this.houseEdit.visiable = false
-      this.$message.success('修改小区成功')
+    handletrendEditSuccess () {
+      this.trendEdit.visiable = false
+      this.$message.success('修改公告成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -343,7 +229,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/house-info/' + ids).then(() => {
+          that.$delete('/cos/trend-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -413,13 +299,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.decorationType === undefined) {
-        delete params.decorationType
-      }
-      if (params.houseType === undefined) {
-        delete params.houseType
-      }
-      this.$get('/cos/house-info/page', {
+      this.$get('/cos/trend-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

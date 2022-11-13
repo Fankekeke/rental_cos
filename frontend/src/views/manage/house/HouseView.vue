@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="小区详情" @cancel="onClose" :width="900">
+  <a-modal v-model="show" title="房屋详情" @cancel="onClose" :width="900">
     <template slot="footer">
       <a-button key="back" @click="onClose" type="danger">
         关闭
@@ -11,28 +11,22 @@
         <a-col :span="8"><b>小区编号：</b>
           {{ houseData.code !== null ? houseData.code : '- -' }}
         </a-col>
-        <a-col :span="8"><b>小区名称：</b>
-          {{ houseData.houseName !== null ? houseData.houseName : '- -' }}
+        <a-col :span="8"><b>房间数量：</b>
+          {{ houseData.roomNumber !== null ? houseData.roomNumber : '- -' }}
         </a-col>
-        <a-col :span="8"><b>物业类型：</b>
-          <span v-if="houseData.propertyType === 1">公寓住宅</span>
-          <span v-if="houseData.propertyType === 2">商业物业</span>
-          <span v-if="houseData.propertyType === 3">工业物业</span>
-          <span v-if="houseData.propertyType == null">- -</span>
+        <a-col :span="8"><b>客厅数量：</b>
+          {{ houseData.livingRoomNumber !== null ? houseData.livingRoomNumber : '- -' }}
         </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>竣工时间：</b>
-          {{ houseData.completionTime !== null ? houseData.completionTime : '- -' }}
+        <a-col :span="8"><b>卫生间数量：</b>
+          {{ houseData.bathroomNumber !== null ? houseData.bathroomNumber : '- -' }}
         </a-col>
-        <a-col :span="8"><b>权属类别：</b>
-          <span v-if="houseData.tenureCategory === 1">商品房住宅</span>
-          <span v-if="houseData.tenureCategory === 2">央产房</span>
-          <span v-if="houseData.tenureCategory === 3">军产房</span>
-          <span v-if="houseData.tenureCategory === 4">小产权房</span>
-          <span v-if="houseData.tenureCategory === 5">自建房</span>
-          <span v-if="houseData.tenureCategory == null">- -</span>
+        <a-col :span="8"><b>装修类型：</b>
+          <span v-if="houseData.decorationType === 1">精装修</span>
+          <span v-if="houseData.decorationType === 2">普通装修</span>
+          <span v-if="houseData.decorationType === 3">暂无装修</span>
         </a-col>
         <a-col :span="8"><b>所在地：</b>
           {{ houseData.address !== null ? houseData.address : '- -' }}
@@ -40,20 +34,23 @@
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>产权年限：</b>
-          {{ houseData.propertyTenure !== null ? houseData.propertyTenure : '- -' }}
+        <a-col :span="8"><b>房间面积：</b>
+          {{ houseData.roomSize !== null ? houseData.roomSize : '- -' }}
         </a-col>
-        <a-col :span="8"><b>总户数：</b>
-          {{ houseData.totalHouses !== null ? houseData.totalHouses : '- -' }}
+        <a-col :span="8"><b>楼层：</b>
+          {{ houseData.floor !== null ? houseData.floor : '- -' }}
         </a-col>
-        <a-col :span="8"><b>总建面积：</b>
-          {{ houseData.totalConstructionArea !== null ? houseData.totalConstructionArea : '- -' }}
+        <a-col :span="8"><b>房屋类型：</b>
+          <span v-if="houseData.houseType === 1">普通住宅</span>
+          <span v-if="houseData.houseType === 2">高层楼</span>
+          <span v-if="houseData.houseType === 3">别墅</span>
+          <span v-if="houseData.houseType === 3">大平层</span>
         </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>容积率：</b>
-          {{ houseData.volumeRate !== null ? houseData.volumeRate : '- -' }}
+        <a-col :span="8"><b>朝向：</b>
+          {{ houseData.towards !== null ? houseData.towards : '- -' }}
         </a-col>
         <a-col :span="8"><b>经度：</b>
           {{ houseData.longitude !== null ? houseData.longitude : '- -' }}
@@ -63,59 +60,71 @@
         </a-col>
       </a-row>
       <br/>
-      <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">物业配套</span></a-col>
+        <a-col :span="8"><b>标签：</b>
+          {{ houseData.tags !== null ? houseData.tags : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>所属小区：</b>
+          {{ houseData.communityName !== null ? houseData.communityName : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>所属业主：</b>
+          {{ houseData.userName !== null ? houseData.userName : '- -' }}
+        </a-col>
+      </a-row>
+      <br/>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;" v-if="community != null">
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">所属物业配套</span></a-col>
         <a-col :span="8"><b>绿化率：</b>
-          {{ houseData.greeningRate !== null ? houseData.greeningRate : '- -' }}
+          {{ community.greeningRate !== null ? community.greeningRate : '- -' }}
         </a-col>
         <a-col :span="8"><b>建筑类型：</b>
-          <span v-if="houseData.buildingType === 1">居住建筑</span>
-          <span v-if="houseData.buildingType === 2">公共建筑</span>
-          <span v-if="houseData.buildingType === 3">工业建筑</span>
-          <span v-if="houseData.buildingType === 4">农业建筑</span>
-          <span v-if="houseData.buildingType === 5">大量性建筑</span>
-          <span v-if="houseData.buildingType == null">- -</span>
+          <span v-if="community.buildingType === 1">居住建筑</span>
+          <span v-if="community.buildingType === 2">公共建筑</span>
+          <span v-if="community.buildingType === 3">工业建筑</span>
+          <span v-if="community.buildingType === 4">农业建筑</span>
+          <span v-if="community.buildingType === 5">大量性建筑</span>
+          <span v-if="community.buildingType == null">- -</span>
         </a-col>
         <a-col :span="8"><b>所属商圈：</b>
-          {{ houseData.businessDistrict !== null ? houseData.businessDistrict : '- -' }}
+          {{ community.businessDistrict !== null ? community.businessDistrict : '- -' }}
         </a-col>
       </a-row>
       <br/>
-      <a-row style="padding-left: 24px;padding-right: 24px;">
+      <a-row style="padding-left: 24px;padding-right: 24px;" v-if="community != null">
         <a-col :span="8"><b>停车位：</b>
-          {{ houseData.parkingSpace !== null ? houseData.parkingSpace : '- -' }}
+          {{ community.parkingSpace !== null ? community.parkingSpace : '- -' }}
         </a-col>
         <a-col :span="8"><b>统一供暖：</b>
-          <span v-if="houseData.unifiedHeating === 1" style="color: green">是</span>
-          <span v-if="houseData.unifiedHeating === 2" style="color: red">否</span>
-          <span v-if="houseData.unifiedHeating == null">- -</span>
+          <span v-if="community.unifiedHeating === 1" style="color: green">是</span>
+          <span v-if="community.unifiedHeating === 2" style="color: red">否</span>
+          <span v-if="community.unifiedHeating == null">- -</span>
         </a-col>
         <a-col :span="8"><b>供水供电：</b>
-          <span v-if="houseData.waterSupply === 1">民用</span>
-          <span v-if="houseData.waterSupply === 2">商用</span>
-          <span v-if="houseData.waterSupply == null">- -</span>
+          <span v-if="community.waterSupply === 1">民用</span>
+          <span v-if="community.waterSupply === 2">商用</span>
+          <span v-if="community.waterSupply == null">- -</span>
         </a-col>
       </a-row>
       <br/>
-      <a-row style="padding-left: 24px;padding-right: 24px;">
+      <a-row style="padding-left: 24px;padding-right: 24px;" v-if="community != null">
         <a-col :span="8"><b>物业费：</b>
-          {{ houseData.propertyCosts !== null ? houseData.propertyCosts : '- -' }}
+          {{ community.propertyCosts !== null ? community.propertyCosts : '- -' }}
         </a-col>
         <a-col :span="8"><b>停车费：</b>
-          {{ houseData.parkingFee !== null ? houseData.parkingFee : '- -' }}
+          {{ community.parkingFee !== null ? community.parkingFee : '- -' }}
         </a-col>
         <a-col :span="8"><b>车位管理费：</b>
-          {{ houseData.parkingManagementFee !== null ? houseData.parkingManagementFee : '- -' }}
+          {{ community.parkingManagementFee !== null ? community.parkingManagementFee : '- -' }}
         </a-col>
       </a-row>
       <br/>
-      <a-row style="padding-left: 24px;padding-right: 24px;">
+      <a-row style="padding-left: 24px;padding-right: 24px;" v-if="community != null">
         <a-col :span="8"><b>物业公司：</b>
-          {{ houseData.propertyCompany !== null ? houseData.propertyCompany : '- -' }}
+          {{ community.propertyCompany !== null ? community.propertyCompany : '- -' }}
         </a-col>
         <a-col :span="8"><b>开发商：</b>
-          {{ houseData.developer !== null ? houseData.developer : '- -' }}
+          {{ community.developer !== null ? community.developer : '- -' }}
         </a-col>
         <a-col :span="8"><b>位置：</b>
           {{  houseData.province + houseData.city + houseData.area }}
@@ -161,12 +170,14 @@ export default {
   },
   data () {
     return {
-      loading: false
+      loading: false,
+      community: null
     }
   },
   watch: {
     houseShow: function (value) {
       if (value) {
+        this.getCommunity(this.houseData.communityCode)
         setTimeout(() => {
           baiduMap.initMap('areas')
           setTimeout(() => {
@@ -177,6 +188,12 @@ export default {
     }
   },
   methods: {
+    getCommunity (communityCode) {
+      this.$get(`/cos/community-info/detail/${communityCode}`).then((r) => {
+        console.log(r.data)
+        this.community = r.data.data
+      })
+    },
     local (house) {
       baiduMap.clearOverlays()
       baiduMap.rMap().enableScrollWheelZoom(true)
