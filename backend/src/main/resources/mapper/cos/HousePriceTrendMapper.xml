@@ -17,14 +17,20 @@
 
     <!-- 分页获取房价走势信息 -->
     <select id="selectPriceTrendPage" resultType="java.util.LinkedHashMap">
-        SELECT <include refid="baseResult"/> FROM house_price_trend pt
+        SELECT <include refid="baseResult"/>,
+        ci.community_name AS communityName,
+        ci.province,
+        ci.city,
+        ci.area
+        FROM house_price_trend pt
+        LEFT JOIN community_info ci ON (ci.code = pt.community_code)
         WHERE 1 = 1
         <include refid="baseParam"/>
         ORDER pt.create_date DESC
     </select>
 
     <!-- 根据小区编号获取房价走势 -->
-    <select id="selectPriceTrendByCommunityCode">
+    <select id="selectPriceTrendByCommunityCode" resultType="cc.mrbird.febs.cos.entity.HousePriceTrend">
         SELECT <include refid="baseResult"/>, YEAR(pt.create_date) AS year, MONTH(pt.create_date) AS month FROM house_price_trend pt
         WHERE 1 = 1
         pt.community_code = #{housePriceTrend.communityCode}

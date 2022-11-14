@@ -1,10 +1,12 @@
 package cc.mrbird.febs.cos.controller;
 
 
+import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.HousePriceTrend;
 import cc.mrbird.febs.cos.service.IHousePriceTrendService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,12 @@ public class HousePriceTrendController {
      * @return 结果
      */
     @PostMapping
-    public R save(HousePriceTrend housePriceTrend) {
+    public R save(HousePriceTrend housePriceTrend) throws Exception {
+        // 判断是否重复
+        int count = housePriceTrendService.count(Wrappers.<HousePriceTrend>lambdaQuery().eq(HousePriceTrend::getCommunityCode, housePriceTrend.getCommunityCode()).eq(HousePriceTrend::getYear, housePriceTrend.getYear()).eq(HousePriceTrend::getMonth, housePriceTrend.getMonth()));
+        if (count > 1) {
+            throw new FebsException("此月度已添加过!");
+        }
         housePriceTrend.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(housePriceTrendService.save(housePriceTrend));
     }

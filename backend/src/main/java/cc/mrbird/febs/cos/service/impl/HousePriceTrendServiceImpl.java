@@ -1,5 +1,6 @@
 package cc.mrbird.febs.cos.service.impl;
 
+import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.HousePriceTrend;
 import cc.mrbird.febs.cos.dao.HousePriceTrendMapper;
 import cc.mrbird.febs.cos.service.IHousePriceTrendService;
