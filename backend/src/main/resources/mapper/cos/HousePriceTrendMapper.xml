@@ -33,6 +33,8 @@
     <select id="selectPriceTrendByCommunityCode" resultType="cc.mrbird.febs.cos.entity.HousePriceTrend">
         SELECT <include refid="baseResult"/>, YEAR(pt.create_date) AS year, MONTH(pt.create_date) AS month FROM house_price_trend pt
         WHERE 1 = 1
-        pt.community_code = #{housePriceTrend.communityCode}
+        <if test="housePriceTrend.communityCode != null and housePriceTrend.communityCode != ''">
+            AND pt.community_code = #{housePriceTrend.communityCode}
+        </if>
     </select>
 </mapper>

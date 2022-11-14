@@ -38,6 +38,28 @@ public class HousePriceTrendController {
     }
 
     /**
+     * 根据小区获取走势数据
+     *
+     * @param year 统计年度
+     * @return 结果
+     */
+    @GetMapping("/trend/{year}")
+    public R selectTrendByCommunity(@PathVariable("year") String year) {
+        return R.ok(housePriceTrendService.selectTrendByCommunity(year));
+    }
+
+    /**
+     * 根据省份获取走势数据
+     *
+     * @param year 统计年度
+     * @return 结果
+     */
+    @GetMapping("/trend/province/{year}")
+    public R selectTrendByProvince(@PathVariable("year") String year) {
+        return R.ok();
+    }
+
+    /**
      * 获取房价走势信息
      *
      * @param communityCode 小区编号

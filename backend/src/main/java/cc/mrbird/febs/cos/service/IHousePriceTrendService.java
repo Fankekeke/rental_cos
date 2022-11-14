@@ -1,6 +1,7 @@
 package cc.mrbird.febs.cos.service;
 
 import cc.mrbird.febs.cos.entity.HousePriceTrend;
+import cc.mrbird.febs.cos.entity.vo.PriceTrendRankVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -23,6 +24,21 @@ public interface IHousePriceTrendService extends IService<HousePriceTrend> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectPriceTrendPage(Page<HousePriceTrend> page, HousePriceTrend housePriceTrend);
+
+    /**
+     * 根据小区编号获取走势数据
+     *
+     * @return 结果
+     */
+    List<PriceTrendRankVo> selectTrendByCommunity(String year);
+
+    /**
+     * 根据小区编号获取走势数据
+     *
+     * @param year 统计年度
+     * @return 结果
+     */
+    List<PriceTrendRankVo> selectTrendByProvince(String year);
 
     /**
      * 获取房价走势信息

@@ -75,6 +75,7 @@ public class StaffInfoController {
      */
     @PostMapping
     public R save(@RequestBody StaffInfo staffInfo) {
+        staffInfo.setStaffCode("STAFF-" + System.currentTimeMillis());
         staffInfo.setStaffStatus(0);
         return R.ok(staffInfoService.save(staffInfo));
     }
