@@ -96,7 +96,7 @@ public class HousePriceTrendServiceImpl extends ServiceImpl<HousePriceTrendMappe
     }
 
     /**
-     * 根据小区编号获取走势数据
+     * 根据省份获取走势数据
      *
      * @param year 统计年度
      * @return 结果
@@ -136,9 +136,12 @@ public class HousePriceTrendServiceImpl extends ServiceImpl<HousePriceTrendMappe
                 continue;
             }
             List<String> communityCodeItemList = communityInfos.stream().map(CommunityInfo::getCode).collect(Collectors.toList());
-
+            List<HousePriceTrend> priceTrendItem = priceTrendList.stream().filter(e -> communityCodeItemList.contains(e.getCommunityCode())).collect(Collectors.toList());
+            BigDecimal priceTrend = priceTrendItem.stream().map(HousePriceTrend::getHousePrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+            item.setTrend(priceTrend.divide(BigDecimal.valueOf(priceTrendItem.size()), 2, RoundingMode.HALF_UP));
+            result.add(item);
         }
-        return null;
+        return result;
     }
 
     /**

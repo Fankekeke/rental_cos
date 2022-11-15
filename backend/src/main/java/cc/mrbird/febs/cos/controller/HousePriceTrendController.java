@@ -56,7 +56,7 @@ public class HousePriceTrendController {
      */
     @GetMapping("/trend/province/{year}")
     public R selectTrendByProvince(@PathVariable("year") String year) {
-        return R.ok();
+        return R.ok(housePriceTrendService.selectTrendByProvince(year));
     }
 
     /**
