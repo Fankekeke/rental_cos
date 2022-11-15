@@ -62,6 +62,8 @@
         ci.province,
         ci.city,
         ci.area,
+        hi.longitude,
+        hi.latitude,
         ri.rent_price AS rentPrice,
         YEAR(rc.check_date) AS checkYear,
         MONTH(rc.check_date) AS checkMonth

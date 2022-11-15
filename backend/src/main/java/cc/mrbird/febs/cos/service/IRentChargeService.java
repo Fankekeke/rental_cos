@@ -29,6 +29,14 @@ public interface IRentChargeService extends IService<RentCharge> {
     List<RentChargeVo> selectRentChargeList(RentChargePo rentCharge);
 
     /**
+     * 获取房屋租赁信息地图
+     *
+     * @param rentCharge 参数
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectRentChargeByMap(RentChargePo rentCharge);
+
+    /**
      * 根据时间获取去出租信息
      *
      * @param year  统计年度

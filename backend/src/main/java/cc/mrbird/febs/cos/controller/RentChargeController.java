@@ -34,6 +34,17 @@ public class RentChargeController {
     }
 
     /**
+     * 获取房屋租赁信息地图
+     *
+     * @param rentCharge 参数
+     * @return 结果
+     */
+    @GetMapping("rent/map")
+    public R selectRentChargeByMap(RentChargePo rentCharge) {
+        return R.ok();
+    }
+
+    /**
      * 获取各小区租房情况
      *
      * @param communityCode 小区编号

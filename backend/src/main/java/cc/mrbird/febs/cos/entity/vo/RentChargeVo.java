@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 租房负责返回信息
@@ -34,6 +35,10 @@ public class RentChargeVo extends RentCharge implements Serializable {
     private String area;
 
     private String rentPrice;
+
+    private BigDecimal longitude;
+
+    private BigDecimal latitude;
 
     private String checkYear;
 
