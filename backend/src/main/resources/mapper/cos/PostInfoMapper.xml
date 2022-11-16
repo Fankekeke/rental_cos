@@ -5,8 +5,9 @@
     <sql id="baseResult">
         pi.id,
         pi.user_code AS userCode,
+        pi.title,
         pi.post_type AS postType,
-        pi.post_type AS postType,
+        pi.node_code AS nodeCode,
         pi.content,
         pi.picture,
         pi.del_flag AS delFlag,
@@ -17,7 +18,7 @@
         <if test="postInfo.title != null and postInfo.title != ''">
             AND pi.title LIKE CONCAT('%',#{postInfo.title},'%')
         </if>
-        <if test="postInfo.postType != null and">
+        <if test="postInfo.postType != null">
             AND pi.post_type LIKE CONCAT('%',#{postInfo.postType},'%')
         </if>
     </sql>
@@ -27,7 +28,7 @@
         SELECT <include refid="baseResult"/> FROM post_info pi
         WHERE 1 = 1
         <include refid="baseParam"/>
-        ORDER pi.create_date DESC
+        ORDER BY pi.create_date DESC
     </select>
 
     <!-- 根据贴子ID获取回复信息 -->
