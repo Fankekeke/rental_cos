@@ -15,8 +15,14 @@
     </sql>
 
     <sql id="baseParam">
+        <if test="postInfo.userName != null and postInfo.userName != ''">
+            AND ui.user_name LIKE CONCAT('%',#{postInfo.userName},'%')
+        </if>
         <if test="postInfo.title != null and postInfo.title != ''">
             AND pi.title LIKE CONCAT('%',#{postInfo.title},'%')
+        </if>
+        <if test="postInfo.content != null and postInfo.content != ''">
+            AND pi.content LIKE CONCAT('%',#{postInfo.content},'%')
         </if>
         <if test="postInfo.postType != null">
             AND pi.post_type LIKE CONCAT('%',#{postInfo.postType},'%')
@@ -25,7 +31,11 @@
 
     <!-- 分页获取发帖记录信息 -->
     <select id="selectPostPage" resultType="java.util.LinkedHashMap">
-        SELECT <include refid="baseResult"/> FROM post_info pi
+        SELECT <include refid="baseResult"/>,
+        ui.user_name AS userName,
+        ui.avatar
+        FROM post_info pi
+        LEFT JOIN user_info ui ON ( ui.code = ri.user_code )
         WHERE 1 = 1
         <include refid="baseParam"/>
         ORDER BY pi.create_date DESC

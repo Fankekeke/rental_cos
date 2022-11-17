@@ -13,6 +13,15 @@
         <if test="housePriceTrend.communityCode != null and housePriceTrend.communityCode != ''">
             AND pt.community_code = #{housePriceTrend.communityCode}
         </if>
+        <if test="housePriceTrend.communityName != null and housePriceTrend.communityName != ''">
+            AND ci.community_name = #{housePriceTrend.communityName}
+        </if>
+        <if test="housePriceTrend.year != null and housePriceTrend.year != ''">
+            AND YEAR(pt.create_date) = #{housePriceTrend.year}
+        </if>
+        <if test="housePriceTrend.month != null and housePriceTrend.month != ''">
+            AND MONTH(pt.create_date) = #{housePriceTrend.month}
+        </if>
     </sql>
 
     <!-- 分页获取房价走势信息 -->
@@ -21,7 +30,9 @@
         ci.community_name AS communityName,
         ci.province,
         ci.city,
-        ci.area
+        ci.area,
+        YEAR(pt.create_date) AS year,
+        MONTH(pt.create_date) AS month
         FROM house_price_trend pt
         LEFT JOIN community_info ci ON (ci.code = pt.community_code)
         WHERE 1 = 1

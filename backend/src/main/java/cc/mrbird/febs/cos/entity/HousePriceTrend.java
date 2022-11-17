@@ -49,4 +49,7 @@ public class HousePriceTrend implements Serializable {
 
     @TableField(exist = false)
     private String month;
+
+    @TableField(exist = false)
+    private String communityName;
 }

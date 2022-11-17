@@ -12,6 +12,12 @@
     </sql>
 
     <sql id="baseParam">
+        <if test="replyInfo.userName != null and replyInfo.userName != ''">
+            AND ui.user_name = #{replyInfo.userName}
+        </if>
+        <if test="replyInfo.title != null and replyInfo.title != ''">
+            AND pi.title = #{replyInfo.title}
+        </if>
         <if test="replyInfo.userCode != null and replyInfo.userCode != ''">
             AND ri.user_code = #{replyInfo.userCode}
         </if>
@@ -25,7 +31,13 @@
 
     <!-- 分页获取帖子回复消息信息 -->
     <select id="selectReplyPage" resultType="java.util.LinkedHashMap">
-        SELECT <include refid="baseResult"/> FROM rent_info ri
+        SELECT <include refid="baseResult"/>,
+        pi.title,
+        ui.user_name AS userName,
+        ui.avatar
+        FROM reply_info ri
+        LEFT JOIN post_info pi ON (pi.post_id = ri.post_id)
+        LEFT JOIN user_info ui ON ( ui.code = ri.user_code )
         WHERE 1 = 1
         <include refid="baseParam"/>
         ORDER BY ri.create_date DESC
