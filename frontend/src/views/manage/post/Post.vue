@@ -8,24 +8,36 @@
             <a-col :md="6" :sm="24">
               <a-form-item
                 label='发帖人'
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.userName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
                 label="贴子标题"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.title"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
+                label="帖子类型"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-select v-model="queryParams.postType">
+                  <a-select-option value="1">小区</a-select-option>
+                  <a-select-option value="2">租房</a-select-option>
+                  <a-select-option value="3">出售</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
                 label="内容"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.content"/>
               </a-form-item>
             </a-col>
@@ -74,6 +86,8 @@
         </template>
         <template slot="operation" slot-scope="text, record">
           <a-icon type="reconciliation" @click="view(record)" title="查 看"></a-icon>
+          <a-icon v-if='record.delFlag == 0' type="reconciliation" @click="view(record)" title="下 架"></a-icon>
+          <a-icon v-if='record.delFlag == 1' type="reconciliation" @click="view(record)" title="上 架"></a-icon>
         </template>
       </a-table>
     </div>
@@ -152,9 +166,37 @@ export default {
           }
         }
       }, {
+        title: '贴子类型',
+        dataIndex: 'postType',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag>小区</a-tag>
+            case 2:
+              return <a-tag>租房</a-tag>
+            case 3:
+              return <a-tag>出售</a-tag>
+            default:
+              return '- -'
+          }
+        }
+      }, {
         title: '内容',
         dataIndex: 'content',
         scopedSlots: { customRender: 'contentShow' }
+      }, {
+        title: '状态',
+        dataIndex: 'delFlag',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 0:
+              return <a-tag color='green'>正常</a-tag>
+            case 1:
+              return <a-tag color='red'>下架</a-tag>
+            default:
+              return '- -'
+          }
+        }
       }, {
         title: '发帖日期',
         dataIndex: 'createDate',
@@ -176,6 +218,14 @@ export default {
     this.fetch()
   },
   methods: {
+    setPostStatus(postId, status) {
+      this.$get('/cos/post-info/setStatus', {
+        postId, status
+      }).then((r) => {
+        this.$message.success('修改成功！')
+        this.fetch()
+      })
+    },
     view (row) {
       this.postView.data = row
       this.postView.visiable = true
@@ -278,6 +328,9 @@ export default {
         // 如果分页信息为空，则设置为默认值
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
+      }
+      if (params.postType === undefined) {
+        delete params.postType
       }
       this.$get('/cos/post-info/page', {
         ...params

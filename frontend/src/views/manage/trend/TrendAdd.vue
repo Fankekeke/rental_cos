@@ -1,70 +1,39 @@
 <template>
-  <a-modal v-model="show" title="新增公告" @cancel="onClose" :width="800">
-    <template slot="footer">
-      <a-button key="back" @click="onClose">
-        取消
-      </a-button>
-      <a-button key="submit" type="primary" :loading="loading" @click="handleSubmit">
-        提交
-      </a-button>
-    </template>
+  <a-drawer title="新增房价走势" :maskClosable="false" width=900 placement="right" :closable="false" @close="onClose"
+    :visible="houseAddVisiable" style="height: calc(100% - 55px);overflow: auto;padding-bottom: 53px;">
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
         <a-col :span="12">
-          <a-form-item label='公告标题' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'title',
-            { rules: [{ required: true, message: '请输入名称!' }] }
-            ]"/>
+          <a-form-item label='所属小区'>
+            <a-input-search
+              v-model="communityName"
+              enter-button="选择"
+              @search="communityDrawer = true"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label='上传人' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'publisher',
-            { rules: [{ required: true, message: '请输入上传人!' }] }
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='公告类型' v-bind="formItemLayout">
-            <a-select v-decorator="[
-              'type',
-              { rules: [{ required: true, message: '请输入公告类型!' }] }
-              ]">
-              <a-select-option value="1">画报</a-select-option>
-              <a-select-option value="2">导购</a-select-option>
-              <a-select-option value="3">新盘发布</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='公告状态' v-bind="formItemLayout">
-            <a-select v-decorator="[
-              'rackUp',
-              { rules: [{ required: true, message: '请输入公告状态!' }] }
-              ]">
-              <a-select-option value="0">下架</a-select-option>
-              <a-select-option value="1">已发布</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="24">
-          <a-form-item label='公告内容' v-bind="formItemLayout">
-            <a-textarea :rows="6" v-decorator="[
-            'content',
-             { rules: [{ required: true, message: '请输入名称!' }] }
+          <a-form-item label='房屋均价'>
+            <a-input-number style="width: 100%" :min="1" :step="1" v-decorator="[
+            'housePrice'
             ]"/>
           </a-form-item>
         </a-col>
       </a-row>
     </a-form>
-  </a-modal>
+    <div class="drawer-bootom-button">
+      <a-popconfirm title="确定放弃编辑？" @confirm="onClose" okText="确定" cancelText="取消">
+        <a-button style="margin-right: .8rem">取消</a-button>
+      </a-popconfirm>
+      <a-button @click="handleSubmit" type="primary" :loading="loading">提交</a-button>
+    </div>
+    <check-community :childrenDrawerShow="communityDrawer" @handlerClosed="handlerCommunityClosed"></check-community>
+  </a-drawer>
 </template>
 
 <script>
-import {mapState} from 'vuex'
-function getBase64 (file) {
+import { mapState } from 'vuex'
+function getBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -95,30 +64,38 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       formItemLayout,
       form: this.$form.createForm(this),
       loading: false,
       fileList: [],
       previewVisible: false,
-      previewImage: ''
+      previewImage: '',
+      communityDrawer: false,
+      communityName: '',
+      community: null
     }
   },
   methods: {
-    reset () {
+    reset() {
       this.loading = false
       this.form.resetFields()
     },
-    onClose () {
+    onClose() {
       this.reset()
       this.$emit('close')
     },
-    handleSubmit () {
+    handleSubmit() {
+      if (this.community === null) {
+        this.$message.error('请选择小区信息')
+        return false
+      }
       this.form.validateFields((err, values) => {
         if (!err) {
           this.loading = true
-          this.$post('/cos/trend-info', {
+          values.communityCode = this.community.code
+          this.$post('/cos/house-price-trend', {
             ...values
           }).then((r) => {
             this.reset()

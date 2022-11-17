@@ -5,7 +5,7 @@
         关闭
       </a-button>
     </template>
-    <div style="font-size: 13px" v-if="postData !== null">
+    <div style="font-size: 13px;font-family: SimHei" v-if="postData !== null">
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">基础信息</span></a-col>
         <a-col :span="8"><b>发帖人：</b>
@@ -37,12 +37,6 @@
             @preview="handlePreview"
             @change="picHandleChange"
           >
-<!--            <div v-if="fileList.length < 8">-->
-<!--              <a-icon type="plus" />-->
-<!--              <div class="ant-upload-text">-->
-<!--                Upload-->
-<!--              </div>-->
-<!--            </div>-->
           </a-upload>
           <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
             <img alt="example" style="width: 100%" :src="previewImage" />
@@ -138,7 +132,6 @@ export default {
           replyList.push({author: item.userName, avatar: item.avatar, content: item.content, datetime: moment(item.createDate)})
         })
         this.replyList = replyList
-        console.log(JSON.stringify(this.replyList))
       })
     },
     handleCancel () {

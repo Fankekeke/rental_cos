@@ -7,18 +7,26 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="标题"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-input v-model="queryParams.title"/>
+                label="小区名称"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-input v-model="queryParams.communityName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="内容"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-input v-model="queryParams.content"/>
+                label="统计年份"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-input v-model="queryParams.year"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="统计月份"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-input v-model="queryParams.month"/>
               </a-form-item>
             </a-col>
           </div>
@@ -130,46 +138,45 @@ export default {
     }),
     columns () {
       return [{
-        title: '标题',
-        dataIndex: 'title',
-        scopedSlots: { customRender: 'titleShow' },
-        width: 300
+        title: '小区名称',
+        dataIndex: 'communityName',
+        scopedSlots: { customRender: 'titleShow' }
       }, {
-        title: '公告内容',
-        dataIndex: 'content',
-        scopedSlots: { customRender: 'contentShow' },
-        width: 600
-      }, {
-        title: '发布时间',
-        dataIndex: 'createDate',
+        title: '地区',
+        dataIndex: 'province',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text
+            return row.province + row.city + row.area
           } else {
             return '- -'
           }
         }
       }, {
-        title: '消息类型',
-        dataIndex: 'type',
+        title: '均价',
+        dataIndex: 'housePrice',
         customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag>画报</a-tag>
-            case 2:
-              return <a-tag>导购</a-tag>
-            case 3:
-              return <a-tag>新盘发布</a-tag>
-            default:
-              return '- -'
+          if (text !== null) {
+            return text + '元'
+          } else {
+            return '- -'
           }
         }
       }, {
-        title: '上传人',
-        dataIndex: 'publisher',
+        title: '统计年份',
+        dataIndex: 'year',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text
+            return text + '年'
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '统计月份',
+        dataIndex: 'month',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text + '月'
           } else {
             return '- -'
           }
@@ -199,7 +206,7 @@ export default {
     },
     handletrendAddSuccess () {
       this.trendAdd.visiable = false
-      this.$message.success('新增公告成功')
+      this.$message.success('新增房价走势成功')
       this.search()
     },
     edit (record) {
@@ -211,7 +218,7 @@ export default {
     },
     handletrendEditSuccess () {
       this.trendEdit.visiable = false
-      this.$message.success('修改公告成功')
+      this.$message.success('修改房价走势成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -299,7 +306,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/trend-info/page', {
+      this.$get('/cos/house-price-trend/page', {
         ...params
       }).then((r) => {
         let data = r.data.data
