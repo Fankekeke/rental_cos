@@ -35,7 +35,7 @@
         ui.user_name AS userName,
         ui.avatar
         FROM post_info pi
-        LEFT JOIN user_info ui ON ( ui.code = ri.user_code )
+        LEFT JOIN user_info ui ON ( ui.code = pi.user_code )
         WHERE 1 = 1
         <include refid="baseParam"/>
         ORDER BY pi.create_date DESC

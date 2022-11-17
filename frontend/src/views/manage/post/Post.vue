@@ -86,8 +86,8 @@
         </template>
         <template slot="operation" slot-scope="text, record">
           <a-icon type="reconciliation" @click="view(record)" title="查 看"></a-icon>
-          <a-icon v-if='record.delFlag == 0' type="reconciliation" @click="view(record)" title="下 架"></a-icon>
-          <a-icon v-if='record.delFlag == 1' type="reconciliation" @click="view(record)" title="上 架"></a-icon>
+          <a-icon v-if='record.delFlag == 0' style="margin-left: 15px" type="caret-down" @click="view(record)" title="下 架"></a-icon>
+          <a-icon v-if='record.delFlag == 1' style="margin-left: 15px" type="caret-up" @click="view(record)" title="上 架"></a-icon>
         </template>
       </a-table>
     </div>
@@ -150,9 +150,9 @@ export default {
           if (!record.avatar) return <a-avatar shape="square" icon="user" />
           return <a-popover>
             <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ record.avatar } />
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar } />
             </template>
-            <a-avatar shape="square" icon="user" src={ record.avatar } />
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar } />
           </a-popover>
         }
       }, {

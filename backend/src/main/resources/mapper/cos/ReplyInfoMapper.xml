@@ -3,12 +3,12 @@
 <mapper namespace="cc.mrbird.febs.cos.dao.ReplyInfoMapper">
 
     <sql id="baseResult">
-        id,
-        user_code,
-        post_id,
-        content,
-        del_flag,
-        create_date
+        ri.id,
+        ri.user_code,
+        ri.post_id,
+        ri.content,
+        ri.del_flag,
+        ri.create_date
     </sql>
 
     <sql id="baseParam">
@@ -36,7 +36,7 @@
         ui.user_name AS userName,
         ui.avatar
         FROM reply_info ri
-        LEFT JOIN post_info pi ON (pi.post_id = ri.post_id)
+        LEFT JOIN post_info pi ON (pi.id = ri.post_id)
         LEFT JOIN user_info ui ON ( ui.code = ri.user_code )
         WHERE 1 = 1
         <include refid="baseParam"/>

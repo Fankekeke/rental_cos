@@ -37,7 +37,7 @@
         LEFT JOIN community_info ci ON (ci.code = pt.community_code)
         WHERE 1 = 1
         <include refid="baseParam"/>
-        ORDER pt.create_date DESC
+        ORDER BY pt.create_date DESC
     </select>
 
     <!-- 根据小区编号获取房价走势 -->

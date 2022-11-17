@@ -44,10 +44,8 @@ public class HousePriceTrend implements Serializable {
      */
     private String createDate;
 
-    @TableField(exist = false)
     private String year;
 
-    @TableField(exist = false)
     private String month;
 
     @TableField(exist = false)

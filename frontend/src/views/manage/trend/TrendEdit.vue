@@ -1,6 +1,6 @@
 <template>
   <a-drawer title="修改房价走势" :maskClosable="false" width=900 placement="right" :closable="false" @close="onClose"
-    :visible="houseAddVisiable" style="height: calc(100% - 55px);overflow: auto;padding-bottom: 53px;">
+    :visible="trendEditVisiable" style="height: calc(100% - 55px);overflow: auto;padding-bottom: 53px;">
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
         <a-col :span="12">
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import CheckCommunity from '../community/CheckCommunity'
 import {mapState} from 'vuex'
 function getBase64 (file) {
   return new Promise((resolve, reject) => {
@@ -53,6 +54,7 @@ export default {
       default: false
     }
   },
+  components: {CheckCommunity},
   computed: {
     ...mapState({
       currentUser: state => state.account.user
@@ -80,6 +82,11 @@ export default {
     }
   },
   methods: {
+    handlerCommunityClosed (community) {
+      this.communityDrawer = false
+      this.communityName = community.communityName
+      this.community = community
+    },
     setFormValues ({...trend}) {
       this.rowId = trend.id
       let fields = ['housePrice', 'communityName']

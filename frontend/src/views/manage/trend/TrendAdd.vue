@@ -1,6 +1,6 @@
 <template>
   <a-drawer title="新增房价走势" :maskClosable="false" width=900 placement="right" :closable="false" @close="onClose"
-    :visible="houseAddVisiable" style="height: calc(100% - 55px);overflow: auto;padding-bottom: 53px;">
+    :visible="trendAddVisiable" style="height: calc(100% - 55px);overflow: auto;padding-bottom: 53px;">
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
         <a-col :span="12">
@@ -33,6 +33,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import CheckCommunity from '../community/CheckCommunity'
+import CheckUser from "../user/CheckUser";
 function getBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -64,6 +66,7 @@ export default {
       }
     }
   },
+  components: {CheckCommunity},
   data() {
     return {
       formItemLayout,
@@ -78,6 +81,11 @@ export default {
     }
   },
   methods: {
+    handlerCommunityClosed (community) {
+      this.communityDrawer = false
+      this.communityName = community.communityName
+      this.community = community
+    },
     reset() {
       this.loading = false
       this.form.resetFields()

@@ -58,9 +58,9 @@
             <a-badge status="error" v-if="record.rackUp === 0"/>
             <a-tooltip>
               <template slot="title">
-                {{ record.title }}
+                {{ record.communityName }}
               </template>
-              {{ record.title.slice(0, 8) }} ...
+              {{ record.communityName.slice(0, 15) }} ...
             </a-tooltip>
           </template>
         </template>
