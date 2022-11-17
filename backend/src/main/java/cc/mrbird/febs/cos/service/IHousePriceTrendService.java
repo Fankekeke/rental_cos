@@ -30,7 +30,7 @@ public interface IHousePriceTrendService extends IService<HousePriceTrend> {
      *
      * @return 结果
      */
-    List<PriceTrendRankVo> selectTrendByCommunity(String year);
+    List<PriceTrendRankVo> selectTrendByCommunity(String year, String province);
 
     /**
      * 根据小区编号获取走势数据

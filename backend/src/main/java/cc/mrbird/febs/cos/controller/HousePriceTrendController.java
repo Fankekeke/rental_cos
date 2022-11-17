@@ -43,9 +43,9 @@ public class HousePriceTrendController {
      * @param year 统计年度
      * @return 结果
      */
-    @GetMapping("/trend/{year}")
-    public R selectTrendByCommunity(@PathVariable("year") String year) {
-        return R.ok(housePriceTrendService.selectTrendByCommunity(year));
+    @GetMapping("/trend/top")
+    public R selectTrendByCommunity(@RequestParam(value = "year", required = false) String year, @RequestParam(value = "province", required = false) String province) {
+        return R.ok(housePriceTrendService.selectTrendByCommunity(year, province));
     }
 
     /**
@@ -55,7 +55,7 @@ public class HousePriceTrendController {
      * @return 结果
      */
     @GetMapping("/trend/province/{year}")
-    public R selectTrendByProvince(@PathVariable("year") String year) {
+    public R selectTrendByProvince(@PathVariable(value = "year", required = false) String year) {
         return R.ok(housePriceTrendService.selectTrendByProvince(year));
     }
 
@@ -67,7 +67,7 @@ public class HousePriceTrendController {
      * @param month         月
      * @return 结果
      */
-    @GetMapping("/trend")
+    @GetMapping("/trend/community")
     public R selectHousePriceTrend(String communityCode, String year, String month) {
         return R.ok(housePriceTrendService.selectHousePriceTrend(communityCode, year, month));
     }

@@ -55,7 +55,7 @@ public class HousePriceTrendServiceImpl extends ServiceImpl<HousePriceTrendMappe
      * @return 结果
      */
     @Override
-    public List<PriceTrendRankVo> selectTrendByCommunity(String year) {
+    public List<PriceTrendRankVo> selectTrendByCommunity(String year, String province) {
         if (StrUtil.isEmpty(year)) {
             // 获取当前年度
             year = StrUtil.toString(DateUtil.year(new Date()));
@@ -68,7 +68,7 @@ public class HousePriceTrendServiceImpl extends ServiceImpl<HousePriceTrendMappe
         }
         Map<String, List<HousePriceTrend>> priceTrendMap = priceTrendList.stream().collect(Collectors.groupingBy(HousePriceTrend::getCommunityCode));
         // 获取所有小区信息编号
-        List<CommunityInfo> communityInfoList = communityInfoMapper.selectList(Wrappers.<CommunityInfo>lambdaQuery().eq(CommunityInfo::getDelFlag, 0));
+        List<CommunityInfo> communityInfoList = communityInfoMapper.selectList(Wrappers.<CommunityInfo>lambdaQuery().eq(CommunityInfo::getDelFlag, 0).eq(StrUtil.isNotEmpty(province), CommunityInfo::getProvince, province));
         if (CollectionUtil.isEmpty(communityInfoList)) {
             return Collections.emptyList();
         }
