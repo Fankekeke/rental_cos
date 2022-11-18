@@ -65,7 +65,10 @@
 
     <!-- 分页获取出租信息信息 -->
     <select id="selectRentPage" resultType="java.util.LinkedHashMap">
-        SELECT <include refid="baseResult"/> FROM rent_info ri
+        SELECT <include refid="baseResult"/>,
+        hi.address AS houseAddress
+        FROM rent_info ri
+        LEFT JOIN house_info hi ON (hi.code = ri.house_code)
         WHERE 1 = 1
         <include refid="baseParam"/>
         ORDER ri.create_date DESC
