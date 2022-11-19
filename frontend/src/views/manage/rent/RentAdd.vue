@@ -99,9 +99,9 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: 'BulletinAdd',
+  name: 'rentAdd',
   props: {
-    bulletinAddVisiable: {
+    rentAddVisiable: {
       default: false
     }
   },
@@ -111,7 +111,7 @@ export default {
     }),
     show: {
       get: function () {
-        return this.bulletinAddVisiable
+        return this.rentAddVisiable
       },
       set: function () {
       }
@@ -160,7 +160,7 @@ export default {
         if (!err) {
           values.publisher = this.currentUser.userId
           this.loading = true
-          this.$post('/cos/bulletin-info', {
+          this.$post('/cos/rent-info', {
             ...values
           }).then((r) => {
             this.reset()

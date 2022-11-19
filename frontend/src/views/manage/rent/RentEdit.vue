@@ -99,9 +99,9 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: 'BulletinEdit',
+  name: 'rentEdit',
   props: {
-    bulletinEditVisiable: {
+    rentEditVisiable: {
       default: false
     }
   },
@@ -111,7 +111,7 @@ export default {
     }),
     show: {
       get: function () {
-        return this.bulletinEditVisiable
+        return this.rentEditVisiable
       },
       set: function () {
       }
@@ -151,21 +151,21 @@ export default {
         this.fileList = imageList
       }
     },
-    setFormValues ({...bulletin}) {
-      this.rowId = bulletin.id
+    setFormValues ({...rent}) {
+      this.rowId = rent.id
       let fields = ['title', 'content', 'publisher', 'rackUp', 'type']
       let obj = {}
-      Object.keys(bulletin).forEach((key) => {
+      Object.keys(rent).forEach((key) => {
         if (key === 'images') {
           this.fileList = []
-          this.imagesInit(bulletin['images'])
+          this.imagesInit(rent['images'])
         }
         if (key === 'rackUp' || key === 'type') {
-          bulletin[key] = bulletin[key].toString()
+          rent[key] = rent[key].toString()
         }
         if (fields.indexOf(key) !== -1) {
           this.form.getFieldDecorator(key)
-          obj[key] = bulletin[key]
+          obj[key] = rent[key]
         }
       })
       this.form.setFieldsValue(obj)
@@ -189,7 +189,7 @@ export default {
         values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
           this.loading = true
-          this.$put('/cos/bulletin-info', {
+          this.$put('/cos/rent-info', {
             ...values
           }).then((r) => {
             this.reset()

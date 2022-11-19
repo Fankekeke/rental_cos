@@ -60,9 +60,19 @@
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.content }}
+                {{ record.houseAddress }}
               </template>
-              {{ record.content.slice(0, 30) }} ...
+              {{ record.houseAddress.slice(0, 10) }} ...
+            </a-tooltip>
+          </template>
+        </template>
+        <template slot="rentalRequestShow" slot-scope="text, record">
+          <template>
+            <a-tooltip>
+              <template slot="title">
+                {{ record.rentalRequest }}
+              </template>
+              {{ record.rentalRequest.slice(0, 15) }} ...
             </a-tooltip>
           </template>
         </template>
@@ -73,39 +83,39 @@
         </template>
       </a-table>
     </div>
-    <bulletin-add
-      v-if="bulletinAdd.visiable"
-      @close="handleBulletinAddClose"
-      @success="handleBulletinAddSuccess"
-      :bulletinAddVisiable="bulletinAdd.visiable">
-    </bulletin-add>
-    <bulletin-edit
-      ref="bulletinEdit"
-      @close="handleBulletinEditClose"
-      @success="handleBulletinEditSuccess"
-      :bulletinEditVisiable="bulletinEdit.visiable">
-    </bulletin-edit>
+    <rent-add
+      v-if="rentAdd.visiable"
+      @close="handlerentAddClose"
+      @success="handlerentAddSuccess"
+      :rentAddVisiable="rentAdd.visiable">
+    </rent-add>
+    <rent-edit
+      ref="rentEdit"
+      @close="handlerentEditClose"
+      @success="handlerentEditSuccess"
+      :rentEditVisiable="rentEdit.visiable">
+    </rent-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import BulletinAdd from './RentAdd'
-import BulletinEdit from './RentEdit'
+import rentAdd from './RentAdd'
+import rentEdit from './RentEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: 'Bulletin',
-  components: {BulletinAdd, BulletinEdit, RangeDate},
+  name: 'rent',
+  components: {rentAdd, rentEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      bulletinAdd: {
+      rentAdd: {
         visiable: false
       },
-      bulletinEdit: {
+      rentEdit: {
         visiable: false
       },
       queryParams: {},
@@ -139,6 +149,20 @@ export default {
         title: '房屋地址',
         dataIndex: 'houseAddress',
         scopedSlots: { customRender: 'contentShow' },
+      }, {
+        title: '地区',
+        dataIndex: 'province',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return row.province + row.city + row.area
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '出租要求',
+        dataIndex: 'rentalRequest',
+        scopedSlots: { customRender: 'rentalRequestShow' },
       }, {
         title: '房间类型',
         dataIndex: 'roomType',
@@ -227,25 +251,25 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.bulletinAdd.visiable = true
+      this.rentAdd.visiable = true
     },
-    handleBulletinAddClose () {
-      this.bulletinAdd.visiable = false
+    handlerentAddClose () {
+      this.rentAdd.visiable = false
     },
-    handleBulletinAddSuccess () {
-      this.bulletinAdd.visiable = false
+    handlerentAddSuccess () {
+      this.rentAdd.visiable = false
       this.$message.success('新增公告成功')
       this.search()
     },
     edit (record) {
-      this.$refs.bulletinEdit.setFormValues(record)
-      this.bulletinEdit.visiable = true
+      this.$refs.rentEdit.setFormValues(record)
+      this.rentEdit.visiable = true
     },
-    handleBulletinEditClose () {
-      this.bulletinEdit.visiable = false
+    handlerentEditClose () {
+      this.rentEdit.visiable = false
     },
-    handleBulletinEditSuccess () {
-      this.bulletinEdit.visiable = false
+    handlerentEditSuccess () {
+      this.rentEdit.visiable = false
       this.$message.success('修改公告成功')
       this.search()
     },
@@ -264,7 +288,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/bulletin-info/' + ids).then(() => {
+          that.$delete('/cos/rent-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -334,7 +358,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/bulletin-info/page', {
+      this.$get('/cos/rent-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

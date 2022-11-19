@@ -6,6 +6,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.HousePriceTrend;
 import cc.mrbird.febs.cos.service.IHousePriceTrendService;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +69,7 @@ public class HousePriceTrendController {
      * @return 结果
      */
     @GetMapping("/trend/community")
-    public R selectHousePriceTrend(String communityCode, String year, String month) {
+    public R selectHousePriceTrend(@RequestParam("communityCode") String communityCode, @RequestParam("year") String year, @RequestParam("month") String month) {
         return R.ok(housePriceTrendService.selectHousePriceTrend(communityCode, year, month));
     }
 
@@ -80,9 +81,11 @@ public class HousePriceTrendController {
      */
     @PostMapping
     public R save(HousePriceTrend housePriceTrend) throws Exception {
+        housePriceTrend.setYear(StrUtil.toString(DateUtil.year(new Date())));
+        housePriceTrend.setMonth(StrUtil.toString(DateUtil.month(new Date()) + 1));
         // 判断是否重复
         int count = housePriceTrendService.count(Wrappers.<HousePriceTrend>lambdaQuery().eq(HousePriceTrend::getCommunityCode, housePriceTrend.getCommunityCode()).eq(HousePriceTrend::getYear, housePriceTrend.getYear()).eq(HousePriceTrend::getMonth, housePriceTrend.getMonth()));
-        if (count > 1) {
+        if (count >= 1) {
             throw new FebsException("此月度已添加过!");
         }
         housePriceTrend.setCreateDate(DateUtil.formatDateTime(new Date()));
