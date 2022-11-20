@@ -36,8 +36,8 @@ public class HouseInfoServiceImpl extends ServiceImpl<HouseInfoMapper, HouseInfo
      * @return 结果
      */
     @Override
-    public List<LinkedHashMap<String, Object>> remoteHouse(String ownerCode) {
-        return baseMapper.remoteHouse(ownerCode);
+    public List<LinkedHashMap<String, Object>> remoteHouse(String ownerCode, String address) {
+        return baseMapper.remoteHouse(ownerCode, address);
     }
 
     /**

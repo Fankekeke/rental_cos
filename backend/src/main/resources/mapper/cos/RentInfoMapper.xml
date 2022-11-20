@@ -61,6 +61,12 @@
         <if test="rentInfo.rentType != null">
             AND ri.rent_type = #{rentInfo.rentType}
         </if>
+        <if test="rentInfo.flag != null">
+            AND ri.flag = #{rentInfo.flag}
+        </if>
+        <if test="rentInfo.roomType != null">
+            AND ri.room_type = #{rentInfo.roomType}
+        </if>
     </sql>
 
     <!-- 分页获取出租信息信息 -->

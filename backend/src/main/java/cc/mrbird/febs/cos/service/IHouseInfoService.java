@@ -29,7 +29,7 @@ public interface IHouseInfoService extends IService<HouseInfo> {
      * @param ownerCode 业主编号
      * @return 结果
      */
-    List<LinkedHashMap<String, Object>> remoteHouse(String ownerCode);
+    List<LinkedHashMap<String, Object>> remoteHouse(String ownerCode, String address);
 
     /**
      * 统计各省份数据

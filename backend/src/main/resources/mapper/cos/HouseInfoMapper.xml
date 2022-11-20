@@ -77,8 +77,11 @@
         hi.address
         FROM house_info hi
         WHERE 1 = 1
-        <if test="name != null and name != ''">
+        <if test="ownerCode != null and ownerCode != ''">
             AND hi.owner_code = #{ownerCode}
+        </if>
+        <if test="address != null and address != ''">
+            AND hi.address LIKE CONCAT('%',#{address},'%')
         </if>
         LIMIT 8
     </select>

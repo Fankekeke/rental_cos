@@ -55,6 +55,8 @@ public class RentInfoController {
     @PostMapping
     public R save(RentInfo rentInfo) {
         rentInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        rentInfo.setFlag(1);
+        rentInfo.setViews(0);
         return R.ok(rentInfoService.save(rentInfo));
     }
 

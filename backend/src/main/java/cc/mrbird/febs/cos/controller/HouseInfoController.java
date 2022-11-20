@@ -42,8 +42,9 @@ public class HouseInfoController {
      * @param ownerCode 业主编号
      * @return 结果
      */
-    public R remoteHouse(@RequestParam(value = "ownerCode", required = false) String ownerCode) {
-        return R.ok(houseInfoService.remoteHouse(ownerCode));
+    @GetMapping("/remote")
+    public R remoteHouse(@RequestParam(value = "ownerCode", required = false) String ownerCode, @RequestParam(value = "address", required = false) String address) {
+        return R.ok(houseInfoService.remoteHouse(ownerCode, address));
     }
 
     /**

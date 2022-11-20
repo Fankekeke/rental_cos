@@ -37,7 +37,11 @@
         </a-row>
       </a-form>
     </div>
-    <div>
+    <a-card v-if="echartsShow" hoverable :bordered="false" style="width: 100%">
+      <a-skeleton active v-if="checkLoading" />
+      <apexchart v-if="!checkLoading" type="bar" height="250" :options="chartOptions" :series="series"></apexchart>
+    </a-card>
+    <div style="margin-top: 25px">
       <div class="operator">
         <a-button type="primary" ghost @click="add">新增</a-button>
         <a-button @click="batchDelete">删除</a-button>
@@ -60,7 +64,7 @@
               <template slot="title">
                 {{ record.communityName }}
               </template>
-              {{ record.communityName.slice(0, 15) }} ...
+              <a @click="selectHousePriceTrend(record)">{{ record.communityName.slice(0, 15) }} ...</a>
             </a-tooltip>
           </template>
         </template>
@@ -121,6 +125,7 @@ export default {
       dataSource: [],
       selectedRowKeys: [],
       loading: false,
+      checkLoading: false,
       pagination: {
         pageSizeOptions: ['10', '20', '30', '40', '100'],
         defaultCurrent: 1,
@@ -129,7 +134,49 @@ export default {
         showSizeChanger: true,
         showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`
       },
-      userList: []
+      echartsShow: false,
+      series: [{
+        name: '',
+        data: []
+      }],
+      chartOptions: {
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%'
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: []
+        },
+        yaxis: {
+          title: {
+            text: '$ (thousands)'
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return '均价： ' + val + ' 元'
+            }
+          }
+        }
+      },
     }
   },
   computed: {
@@ -192,6 +239,33 @@ export default {
     this.fetch()
   },
   methods: {
+    selectHousePriceTrend (row) {
+      if (!this.echartsShow) {
+        this.echartsShow = true
+      }
+      this.checkLoading = true
+      this.$get('/cos/house-price-trend/trend/community', {
+        communityCode: row.communityCode,
+        year: row.year,
+        month: row.month
+      }).then((r) => {
+        let data = r.data.data
+        let labels = []
+        let values = []
+        if (data !== undefined && data !== null) {
+          Object.keys(data).forEach(e => {
+            labels.push(e + '月')
+            values.push(data[e])
+          })
+          this.series[0].name = row.communityName
+          this.series[0].data = values
+          this.chartOptions.xaxis.categories = labels
+        }
+        setTimeout(() => {
+          this.checkLoading = false
+        }, 500)
+      })
+    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },

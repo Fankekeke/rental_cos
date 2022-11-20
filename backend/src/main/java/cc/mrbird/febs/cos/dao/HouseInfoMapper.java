@@ -29,5 +29,5 @@ public interface HouseInfoMapper extends BaseMapper<HouseInfo> {
      * @param ownerCode 业主编号
      * @return 结果
      */
-    List<LinkedHashMap<String, Object>> remoteHouse(@Param("ownerCode") String ownerCode);
+    List<LinkedHashMap<String, Object>> remoteHouse(@Param("ownerCode") String ownerCode, @Param("address") String address);
 }

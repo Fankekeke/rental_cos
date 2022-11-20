@@ -7,7 +7,7 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="标题"
+                label="出租标题"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
                 <a-input v-model="queryParams.title"/>
@@ -15,10 +15,36 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="内容"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-input v-model="queryParams.content"/>
+                label="合租类型"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-select v-model="queryParams.rentType" allowClear>
+                  <a-select-option value="1">整租</a-select-option>
+                  <a-select-option value="2">合租</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="出租状态"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-select v-model="queryParams.flag" allowClear>
+                  <a-select-option value="1">上架</a-select-option>
+                  <a-select-option value="2">下架</a-select-option>
+                  <a-select-option value="2">已被出租</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="房间类型"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-select v-model="queryParams.roomType" allowClear>
+                  <a-select-option value="1">主卧</a-select-option>
+                  <a-select-option value="2">次卧</a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
           </div>
@@ -357,6 +383,15 @@ export default {
         // 如果分页信息为空，则设置为默认值
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
+      }
+      if (params.roomType === undefined) {
+        delete params.roomType
+      }
+      if (params.flag === undefined) {
+        delete params.flag
+      }
+      if (params.rentType === undefined) {
+        delete params.rentType
       }
       this.$get('/cos/rent-info/page', {
         ...params
