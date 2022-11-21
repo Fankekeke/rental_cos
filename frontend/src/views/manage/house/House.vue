@@ -26,7 +26,7 @@
                 label="装修类型"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.decorationType">
+                <a-select v-model="queryParams.decorationType" allowClear>
                   <a-select-option value="1">精装修</a-select-option>
                   <a-select-option value="2">普通装修</a-select-option>
                   <a-select-option value="3">暂无装修</a-select-option>
@@ -38,7 +38,7 @@
                 label="房屋类型"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.houseType">
+                <a-select v-model="queryParams.houseType" allowClear>
                   <a-select-option value="1">普通住宅</a-select-option>
                   <a-select-option value="2">高层楼</a-select-option>
                   <a-select-option value="3">别墅</a-select-option>

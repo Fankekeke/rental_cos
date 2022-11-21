@@ -105,6 +105,7 @@
         <template slot="operation" slot-scope="text, record">
           <a-icon v-if="record.flag === 1" type="caret-down" @click="audit(record.id, 2)" title="下 架" style="margin-right: 10px"></a-icon>
           <a-icon v-if="record.flag === 2" type="caret-up" @click="audit(record.id, 1)" title="上 架" style="margin-right: 10px"></a-icon>
+          <a-icon type="bulb" @click="view(record)" title="详 情" style="margin-right: 10px"></a-icon>
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
         </template>
       </a-table>
@@ -121,6 +122,7 @@
       @success="handlerentEditSuccess"
       :rentEditVisiable="rentEdit.visiable">
     </rent-edit>
+    <rent-view :rentShow="rentView.visiable" :rentData="rentView.data" @close="rentView.visiable = false"></rent-view>
   </a-card>
 </template>
 
@@ -130,11 +132,12 @@ import rentAdd from './RentAdd'
 import rentEdit from './RentEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
+import RentView from "./RentView";
 moment.locale('zh-cn')
 
 export default {
   name: 'rent',
-  components: {rentAdd, rentEdit, RangeDate},
+  components: {RentView, rentAdd, rentEdit, RangeDate},
   data () {
     return {
       advanced: false,
@@ -143,6 +146,10 @@ export default {
       },
       rentEdit: {
         visiable: false
+      },
+      rentView: {
+        visiable: false,
+        data: null
       },
       queryParams: {},
       filteredInfo: null,
@@ -286,6 +293,10 @@ export default {
       this.rentAdd.visiable = false
       this.$message.success('新增公告成功')
       this.search()
+    },
+    view (record) {
+      this.rentView.visiable = true
+      this.rentView.data = record
     },
     edit (record) {
       this.$refs.rentEdit.setFormValues(record)

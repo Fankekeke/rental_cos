@@ -8,12 +8,8 @@
     <div style="font-size: 13px;font-family: SimHei" v-if="rentData !== null && houseInfo !== null && community !== null">
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">出租信息</span></a-col>
-        <a-col :span="8"><b>出租标题：</b>
+        <a-col :span="16"><b>出租标题：</b>
           {{ rentData.title !== null ? rentData.title : '- -' }}
-        </a-col>
-        <a-col :span="8"><b>房间类型：</b>
-          <span v-if="rentData.roomType === 1">主卧</span>
-          <span v-if="rentData.roomType === 2">次卧</span>
         </a-col>
         <a-col :span="8"><b>租金每月：</b>
           {{ rentData.rentPrice !== null ? rentData.rentPrice : '- -' }}元
@@ -41,6 +37,10 @@
         </a-col>
         <a-col :span="8"><b>访问量：</b>
           {{ rentData.views !== null ? rentData.views : '- -' }}次
+        </a-col>
+        <a-col :span="8"><b>房间类型：</b>
+          <span v-if="rentData.roomType === 1">主卧</span>
+          <span v-if="rentData.roomType === 2">次卧</span>
         </a-col>
       </a-row>
       <br/>
@@ -115,6 +115,7 @@
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">房间图片</span></a-col>
+        <span v-if="fileList.length === 0">暂无图片</span>
         <a-upload
           name="avatar"
           action="http://127.0.0.1:9527/file/fileUpload/"
@@ -319,6 +320,7 @@ export default {
   watch: {
     rentShow: function (value) {
       if (value) {
+        this.fileList = []
         this.getHouseInfo(this.rentData.houseCode)
         this.imagesInit(this.rentData.roomPictures)
         setTimeout(() => {

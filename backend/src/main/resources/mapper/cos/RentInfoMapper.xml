@@ -76,6 +76,8 @@
         hi.city,
         hi.area,
         hi.province,
+        hi.longitude,
+        hi.latitude,
         rc.id AS chargeId
         FROM rent_info ri
         LEFT JOIN house_info hi ON (hi.code = ri.house_code)
