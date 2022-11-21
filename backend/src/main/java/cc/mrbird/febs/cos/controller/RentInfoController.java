@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.RentInfo;
 import cc.mrbird.febs.cos.service.IRentInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,18 @@ public class RentInfoController {
     @GetMapping("/page")
     public R page(Page<RentInfo> page, RentInfo rentInfo) {
         return R.ok(rentInfoService.selectRentPage(page, rentInfo));
+    }
+
+    /**
+     * 设置租房信息状态
+     *
+     * @param rentId 出租信息ID
+     * @param status 状态
+     * @return 结果
+     */
+    @GetMapping("/setStatus")
+    public R setRentStatus(@RequestParam("rentId") Integer rentId, @RequestParam("status") Integer status) {
+        return R.ok(rentInfoService.update(Wrappers.<RentInfo>lambdaUpdate().set(RentInfo::getFlag, status).eq(RentInfo::getId, rentId)));
     }
 
     /**

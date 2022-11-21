@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.PaymentRecordMapper">
+
+    <sql id="baseResult">
+        pr.id,
+        pr.contract_code,
+        pr.rent_user_code,
+        pr.amount,
+        pr.rent_day,
+        pr.start_date,
+        pr.end_date,
+        pr.payment_type,
+        pr.create_date
+    </sql>
+
+    <sql id="baseParam">
+        <if test="paymentRecord.rentUser != null and paymentRecord.rentUser != ''">
+            AND ui.user_name LIKE CONCAT('%',#{paymentRecord.rentUser},'%')
+        </if>
+        <if test="paymentRecord.contractCode != null and paymentRecord.contractCode != ''">
+            AND pr.contract_code LIKE CONCAT('%',#{paymentRecord.contractCode},'%')
+        </if>
+        <if test="paymentRecord.paymentType != null">
+            AND pr.payment_type = #{paymentRecord.paymentType}
+        </if>
+    </sql>
+
+    <!-- 分页获取缴费记录 -->
+    <select id="selectRecordPage" resultType="java.util.LinkedHashMap">
+        SELECT <include refid="baseResult"/>,
+        ui1.user_name AS sendUserName,
+        ui1.avatar AS sendUserAvatar
+        FROM payment_record pr
+        LEFT JOIN user_info ui1 ON ( ui1.code = pr.rent_user_code )
+        WHERE 1 = 1
+        <include refid="baseParam"/>
+        ORDER BY pr.create_date DESC
+    </select>
+</mapper>

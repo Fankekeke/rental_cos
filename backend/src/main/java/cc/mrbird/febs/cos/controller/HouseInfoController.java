@@ -37,6 +37,17 @@ public class HouseInfoController {
     }
 
     /**
+     * 查询房屋详细信息
+     *
+     * @param houseCode 房屋编号
+     * @return 结果
+     */
+    @GetMapping("/detail/{houseCode}")
+    public R selectDetail(@PathVariable("houseCode") String houseCode) {
+        return R.ok(houseInfoService.getOne(Wrappers.<HouseInfo>lambdaQuery().eq(HouseInfo::getCode, houseCode)));
+    }
+
+    /**
      * 远程调用房屋信息
      *
      * @param ownerCode 业主编号

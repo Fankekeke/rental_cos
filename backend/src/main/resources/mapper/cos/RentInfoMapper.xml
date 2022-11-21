@@ -75,9 +75,11 @@
         hi.address AS houseAddress,
         hi.city,
         hi.area,
-        hi.province
+        hi.province,
+        rc.id AS chargeId
         FROM rent_info ri
         LEFT JOIN house_info hi ON (hi.code = ri.house_code)
+        LEFT JOIN rent_charge rc ON (rc.rent_id = ri.id)
         WHERE 1 = 1
         <include refid="baseParam"/>
         ORDER BY ri.create_date DESC
