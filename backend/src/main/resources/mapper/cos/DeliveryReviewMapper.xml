@@ -49,13 +49,58 @@
         ui1.user_name AS rentUserName,
         ui1.avatar AS rentUserAvatar,
         ui2.user_name AS ownerUserName,
-        ui2.avatar AS ownerUserAvatar
+        ui2.avatar AS ownerUserAvatar,
+        ci.community_name AS communityName
         FROM delivery_review dr
         LEFT JOIN user_info ui1 ON ( ui1.code = dr.rent_user_code )
         LEFT JOIN user_info ui2 ON ( ui2.code = mi.owner_user_code )
         LEFT JOIN house_info hi ON (hi.code = dr.house_code)
+        LEFT JOIN community_info ci ON ( ci.code = hi.community_code )
         WHERE 1 = 1
         <include refid="baseParam"/>
         ORDER BY dr.create_date DESC
+    </select>
+
+    <!-- 获取正常合同信息 -->
+    <select id="selectDeliveryOver" resultType="cc.mrbird.febs.cos.entity.vo.DeliveryReviewVo">
+        SELECT <include refid="baseResult"/>,
+        hi.address AS houseAddress,
+        hi.city,
+        hi.area,
+        hi.province,
+        ui1.user_name AS rentUserName,
+        ui1.avatar AS rentUserAvatar,
+        ui2.user_name AS ownerUserName,
+        ui2.avatar AS ownerUserAvatar,
+        ci.community_name AS communityName
+        FROM delivery_review dr
+        LEFT JOIN user_info ui1 ON ( ui1.code = dr.rent_user_code )
+        LEFT JOIN user_info ui2 ON ( ui2.code = mi.owner_user_code )
+        LEFT JOIN house_info hi ON (hi.code = dr.house_code)
+        LEFT JOIN community_info ci ON ( ci.code = hi.community_code )
+        WHERE 1 = 1
+        AND dr.contract_status = '1'
+        AND dr.step = '2'
+        <if test="userCode != null and userCode != ''">
+            AND dr.rent_user_code LIKE CONCAT('%',#{userCode},'%')
+        </if>
+        ORDER BY dr.create_date DESC
+    </select>
+
+    <!-- 导出合同信息 -->
+    <select id="exportContract" resultType="cc.mrbird.febs.cos.entity.vo.ContractVo">
+        SELECT <include refid="baseResult"/>,
+        hi.address AS houseAddress,
+        hi.city,
+        hi.area,
+        hi.province,
+        ui1.user_name AS rentUserName,
+        ui2.user_name AS ownerUserName,
+        ci.community_name AS communityName
+        FROM delivery_review dr
+        LEFT JOIN user_info ui1 ON ( ui1.code = dr.rent_user_code )
+        LEFT JOIN user_info ui2 ON ( ui2.code = mi.owner_user_code )
+        LEFT JOIN house_info hi ON (hi.code = dr.house_code)
+        LEFT JOIN community_info ci ON ( ci.code = hi.community_code )
     </select>
 </mapper>

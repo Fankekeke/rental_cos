@@ -2,6 +2,7 @@ package cc.mrbird.febs.cos.service;
 
 import cc.mrbird.febs.cos.controller.po.RentChargePo;
 import cc.mrbird.febs.cos.entity.RentCharge;
+import cc.mrbird.febs.cos.entity.vo.RentChargeDetailVo;
 import cc.mrbird.febs.cos.entity.vo.RentChargeVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -27,6 +28,14 @@ public interface IRentChargeService extends IService<RentCharge> {
      * @return 结果
      */
     List<RentChargeVo> selectRentChargeList(RentChargePo rentCharge);
+
+    /**
+     * 获取租房信息详情
+     *
+     * @param chargeId id
+     * @return 结果
+     */
+    RentChargeDetailVo selectChargeDetail(Integer chargeId);
 
     /**
      * 获取房屋租赁信息地图

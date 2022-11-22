@@ -3,6 +3,7 @@ package cc.mrbird.febs.cos.service.impl;
 import cc.mrbird.febs.cos.controller.po.RentChargePo;
 import cc.mrbird.febs.cos.entity.*;
 import cc.mrbird.febs.cos.dao.RentChargeMapper;
+import cc.mrbird.febs.cos.entity.vo.RentChargeDetailVo;
 import cc.mrbird.febs.cos.entity.vo.RentChargeVo;
 import cc.mrbird.febs.cos.service.*;
 import cn.hutool.core.collection.CollectionUtil;
@@ -50,6 +51,17 @@ public class RentChargeServiceImpl extends ServiceImpl<RentChargeMapper, RentCha
     @Override
     public List<RentChargeVo> selectRentChargeList(RentChargePo rentCharge) {
         return baseMapper.selectRentChargeList(rentCharge);
+    }
+
+    /**
+     * 获取租房信息详情
+     *
+     * @param chargeId id
+     * @return 结果
+     */
+    @Override
+    public RentChargeDetailVo selectChargeDetail(Integer chargeId) {
+        return baseMapper.selectChargeDetail(chargeId);
     }
 
     /**

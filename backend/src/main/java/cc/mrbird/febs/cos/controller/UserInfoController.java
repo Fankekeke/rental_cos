@@ -20,13 +20,13 @@ import java.util.List;
 @RequestMapping("/cos/user-info")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserInfoController {
-    
+
     private final IUserInfoService userInfoService;
 
     /**
      * 分页获取用户信息
      *
-     * @param page 分页对象
+     * @param page     分页对象
      * @param userInfo 用户信息
      * @return 结果
      */
@@ -45,6 +45,17 @@ public class UserInfoController {
     public R save(UserInfo userInfo) {
         userInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(userInfoService.save(userInfo));
+    }
+
+    /**
+     * 远程调用用户信息
+     *
+     * @param userName 用户名称
+     * @return 结果
+     */
+    @GetMapping("/remote/{userName}")
+    public R remote(@PathVariable(value = "userName", required = false) String userName) {
+        return R.ok(userInfoService.remote(userName));
     }
 
     /**

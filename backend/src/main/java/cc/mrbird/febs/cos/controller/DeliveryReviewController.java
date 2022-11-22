@@ -38,6 +38,28 @@ public class DeliveryReviewController {
     }
 
     /**
+     * 房租合同预警
+     *
+     * @param userCode 用户编号
+     * @return 结果
+     */
+    @GetMapping("/deliveryOver/{userCode}")
+    public R selectDeliveryOver(@PathVariable(value = "userCode", required = false) String userCode) {
+        return R.ok(deliveryReviewService.selectDeliveryOver(userCode));
+    }
+
+    /**
+     * 导出合同信息
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    @GetMapping("/download/contract/{code}")
+    public R exportContract(@PathVariable("code") String contractCode) {
+        return R.ok(deliveryReviewService.exportContract(contractCode));
+    }
+
+    /**
      * 添加交付审核信息
      *
      * @param deliveryReview 交付审核信息

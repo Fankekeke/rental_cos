@@ -74,4 +74,29 @@
         WHERE 1 = 1
         <include refid="baseParam"/>
     </select>
+
+    <!-- 获取租房信息详情 -->
+    <select id="selectChargeDetail" resultType="cc.mrbird.febs.cos.entity.vo.RentChargeDetailVo">
+        SELECT
+        rc.rent_id AS rentId,
+        rc.id AS chargeId,
+        rc.staff_code AS staffCode,
+        si.staff_name AS staffName,
+        hi.code AS houseCode,
+        hi.owner_code AS ownerUserCode,
+        ci.code AS communityCode
+        hi.address AS houseAddress,
+        ci.community_name AS communityName,
+        ci.business_district AS businessDistrict,
+        ci.province,
+        ci.city,
+        ci.area,
+        ri.rent_price AS contractPrice
+        FROM rent_charge rc
+        LEFT JOIN rent_id ri ON (ri.id = rc.rent_id)
+        LEFT JOIN house_info hi ON (hi.code = ri.house_code)
+        LEFT JOIN community_info ci ON (ci.code = hi.community_code)
+        LEFT JOIN staff_info si ON (si.staff_code = rc.staff_code)
+        WHERE 1 = 1
+    </select>
 </mapper>

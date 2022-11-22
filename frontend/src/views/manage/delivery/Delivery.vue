@@ -7,43 +7,40 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="出租标题"
+                label="员工姓名"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
-                <a-input v-model="queryParams.title"/>
+                <a-input v-model="queryParams.staffName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="合租类型"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.rentType" allowClear>
-                  <a-select-option value="1">整租</a-select-option>
-                  <a-select-option value="2">合租</a-select-option>
+                label="租房人"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.rentUserName"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="当前状态"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-select v-model="queryParams.step">
+                  <a-select-option value="1">等待审批</a-select-option>
+                  <a-select-option value="2">通过</a-select-option>
+                  <a-select-option value="2">驳回</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="出租状态"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.flag" allowClear>
-                  <a-select-option value="1">上架</a-select-option>
-                  <a-select-option value="2">下架</a-select-option>
-                  <a-select-option value="2">已被出租</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="房间类型"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.roomType" allowClear>
-                  <a-select-option value="1">主卧</a-select-option>
-                  <a-select-option value="2">次卧</a-select-option>
+                label="缴费方式"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-select v-model="queryParams.payType">
+                  <a-select-option value="1">押一付一</a-select-option>
+                  <a-select-option value="2">押一付三</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -86,70 +83,51 @@
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.houseAddress }}
+                {{ record.content }}
               </template>
-              {{ record.houseAddress.slice(0, 10) }} ...
-            </a-tooltip>
-          </template>
-        </template>
-        <template slot="rentalRequestShow" slot-scope="text, record">
-          <template>
-            <a-tooltip>
-              <template slot="title">
-                {{ record.rentalRequest }}
-              </template>
-              {{ record.rentalRequest.slice(0, 15) }} ...
+              {{ record.content.slice(0, 30) }} ...
             </a-tooltip>
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon v-if="record.flag === 1" type="caret-down" @click="audit(record.id, 2)" title="下 架" style="margin-right: 10px"></a-icon>
-          <a-icon v-if="record.flag === 2" type="caret-up" @click="audit(record.id, 1)" title="上 架" style="margin-right: 10px"></a-icon>
-          <a-icon type="bulb" @click="view(record)" title="详 情" style="margin-right: 10px"></a-icon>
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
         </template>
       </a-table>
     </div>
-    <rent-add
-      v-if="rentAdd.visiable"
-      @close="handlerentAddClose"
-      @success="handlerentAddSuccess"
-      :rentAddVisiable="rentAdd.visiable">
-    </rent-add>
-    <rent-edit
-      ref="rentEdit"
-      @close="handlerentEditClose"
-      @success="handlerentEditSuccess"
-      :rentEditVisiable="rentEdit.visiable">
-    </rent-edit>
-    <rent-view :rentShow="rentView.visiable" :rentData="rentView.data" @close="rentView.visiable = false"></rent-view>
+    <bulletin-add
+      v-if="bulletinAdd.visiable"
+      @close="handleBulletinAddClose"
+      @success="handleBulletinAddSuccess"
+      :bulletinAddVisiable="bulletinAdd.visiable">
+    </bulletin-add>
+    <bulletin-edit
+      ref="bulletinEdit"
+      @close="handleBulletinEditClose"
+      @success="handleBulletinEditSuccess"
+      :bulletinEditVisiable="bulletinEdit.visiable">
+    </bulletin-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import rentAdd from './RentAdd'
-import rentEdit from './RentEdit'
+import BulletinAdd from './DeliveryAdd'
+import BulletinEdit from './BulletinEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
-import RentView from "./RentView";
 moment.locale('zh-cn')
 
 export default {
-  name: 'rent',
-  components: {RentView, rentAdd, rentEdit, RangeDate},
+  name: 'Bulletin',
+  components: {BulletinAdd, BulletinEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      rentAdd: {
+      bulletinAdd: {
         visiable: false
       },
-      rentEdit: {
+      bulletinEdit: {
         visiable: false
-      },
-      rentView: {
-        visiable: false,
-        data: null
       },
       queryParams: {},
       filteredInfo: null,
@@ -175,95 +153,89 @@ export default {
     }),
     columns () {
       return [{
-        title: '出租标题',
-        dataIndex: 'title',
-        scopedSlots: { customRender: 'titleShow' }
-      }, {
-        title: '房屋地址',
-        dataIndex: 'houseAddress',
-        scopedSlots: { customRender: 'contentShow' },
-      }, {
-        title: '地区',
-        dataIndex: 'province',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return row.province + row.city + row.area
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '出租要求',
-        dataIndex: 'rentalRequest',
-        scopedSlots: { customRender: 'rentalRequestShow' },
-      }, {
-        title: '房间类型',
-        dataIndex: 'roomType',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag>主卧</a-tag>
-            case 2:
-              return <a-tag>次卧</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '租金/月',
-        dataIndex: 'rentPrice',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '元'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '出租状态',
-        dataIndex: 'flag',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag color="green">上架</a-tag>
-            case 2:
-              return <a-tag color="red">下架</a-tag>
-            case 3:
-              return <a-tag color="pink">已被出租</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '房屋照片',
-        dataIndex: 'roomPictures',
-        customRender: (text, record, index) => {
-          if (!record.roomPictures) return <a-avatar shape="square" icon="user" />
-          return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.roomPictures.split(',')[0] } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.roomPictures.split(',')[0] } />
-          </a-popover>
-        }
-      }, {
-        title: '访问量',
-        dataIndex: 'views',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '次'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '创建时间',
-        dataIndex: 'createDate',
+        title: '合同编号',
+        dataIndex: 'contractCode',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
           } else {
             return '- -'
+          }
+        }
+      }, {
+        title: '房屋地址',
+        dataIndex: 'houseAddress',
+        scopedSlots: { customRender: 'titleShow' }
+      }, {
+        title: '小区地址',
+        dataIndex: 'communityName',
+        scopedSlots: { customRender: 'contentShow' }
+      }, {
+        title: '租房人',
+        dataIndex: 'rentUserName',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '所属业主',
+        dataIndex: 'ownerUserName',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '租金/月',
+        dataIndex: 'contractPrice',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '当前状态',
+        dataIndex: 'step',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag>正在审核</a-tag>
+            case 2:
+              return <a-tag>审核通过</a-tag>
+            case 3:
+              return <a-tag>驳 回</a-tag>
+            default:
+              return '- -'
+          }
+        }
+      }, {
+        title: '租用时间',
+        dataIndex: 'rentDay',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text + '个月'
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '缴费方式',
+        dataIndex: 'payType',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag>押一付一</a-tag>
+            case 2:
+              return <a-tag>押一付三</a-tag>
+            default:
+              return '- -'
           }
         }
       }, {
@@ -284,39 +256,26 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.rentAdd.visiable = true
+      this.bulletinAdd.visiable = true
     },
-    handlerentAddClose () {
-      this.rentAdd.visiable = false
+    handleBulletinAddClose () {
+      this.bulletinAdd.visiable = false
     },
-    handlerentAddSuccess () {
-      this.rentAdd.visiable = false
-      this.$message.success('新增租房信息成功')
+    handleBulletinAddSuccess () {
+      this.bulletinAdd.visiable = false
+      this.$message.success('新增公告成功')
       this.search()
     },
-    audit (record, status) {
-      this.$get(`/cos/rent-info/setStatus`, {
-        rentId: record.id,
-        status
-      }).then((r) => {
-        this.$message.success('更新状态成功')
-        this.search()
-      })
-    },
-    view (record) {
-      this.rentView.visiable = true
-      this.rentView.data = record
-    },
     edit (record) {
-      this.$refs.rentEdit.setFormValues(record)
-      this.rentEdit.visiable = true
+      this.$refs.bulletinEdit.setFormValues(record)
+      this.bulletinEdit.visiable = true
     },
-    handlerentEditClose () {
-      this.rentEdit.visiable = false
+    handleBulletinEditClose () {
+      this.bulletinEdit.visiable = false
     },
-    handlerentEditSuccess () {
-      this.rentEdit.visiable = false
-      this.$message.success('修改租房信息成功')
+    handleBulletinEditSuccess () {
+      this.bulletinEdit.visiable = false
+      this.$message.success('修改公告成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -334,7 +293,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/rent-info/' + ids).then(() => {
+          that.$delete('/cos/bulletin-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -404,16 +363,13 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.roomType === undefined) {
-        delete params.roomType
+      if (params.step === undefined) {
+        delete params.step
       }
-      if (params.flag === undefined) {
-        delete params.flag
+      if (params.payType === undefined) {
+        delete params.payType
       }
-      if (params.rentType === undefined) {
-        delete params.rentType
-      }
-      this.$get('/cos/rent-info/page', {
+      this.$get('/cos/bulletin-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

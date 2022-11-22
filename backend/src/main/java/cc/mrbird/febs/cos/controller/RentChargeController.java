@@ -34,6 +34,17 @@ public class RentChargeController {
     }
 
     /**
+     * 获取租房信息详情
+     *
+     * @param chargeId id
+     * @return 结果
+     */
+    @GetMapping("/detail/{id}")
+    public R detail(@PathVariable("id") Integer chargeId) {
+        return R.ok(rentChargeService.selectChargeDetail(chargeId));
+    }
+
+    /**
      * 获取房屋租赁信息地图
      *
      * @param rentCharge 参数

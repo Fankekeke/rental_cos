@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author FanK
@@ -26,5 +27,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public IPage<LinkedHashMap<String, Object>> getUserInfoByPage(Page<UserInfo> page, UserInfo userInfo) {
         return baseMapper.getUserInfoByPage(page, userInfo);
+    }
+
+    /**
+     * 远程调用用户信息
+     *
+     * @param userName 用户名称
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> remote(String userName) {
+        return baseMapper.remote(userName);
     }
 }

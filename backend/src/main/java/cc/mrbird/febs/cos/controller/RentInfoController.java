@@ -49,6 +49,17 @@ public class RentInfoController {
     }
 
     /**
+     * 查询租房信息详情
+     *
+     * @param rentId 出租ID
+     * @return 结果
+     */
+    @GetMapping("/detail/{rentId}")
+    public R detail(@PathVariable("rentId") Integer rentId) {
+        return R.ok(rentInfoService.getById(rentId));
+    }
+
+    /**
      * 获取租房状态
      *
      * @param rentId 租房ID

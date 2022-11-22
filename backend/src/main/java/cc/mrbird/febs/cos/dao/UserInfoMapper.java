@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author FanK
@@ -21,4 +22,12 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> getUserInfoByPage(Page<UserInfo> page, @Param("userInfo") UserInfo userInfo);
+
+    /**
+     * 远程调用用户信息
+     *
+     * @param userName 用户名称
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> remote(@Param("userName") String userName);
 }

@@ -7,7 +7,7 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="出租标题"
+                label="标题"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
                 <a-input v-model="queryParams.title"/>
@@ -15,36 +15,26 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="合租类型"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.rentType" allowClear>
-                  <a-select-option value="1">整租</a-select-option>
-                  <a-select-option value="2">合租</a-select-option>
-                </a-select>
+                label="内容"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.content"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="出租状态"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.flag" allowClear>
-                  <a-select-option value="1">上架</a-select-option>
-                  <a-select-option value="2">下架</a-select-option>
-                  <a-select-option value="2">已被出租</a-select-option>
-                </a-select>
+                label="发送人"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.sendUserName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="房间类型"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.roomType" allowClear>
-                  <a-select-option value="1">主卧</a-select-option>
-                  <a-select-option value="2">次卧</a-select-option>
-                </a-select>
+                label="接收人"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.toUserName"/>
               </a-form-item>
             </a-col>
           </div>
@@ -57,7 +47,7 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">新增</a-button>
+        <a-button type="primary" ghost @click="add">发送消息</a-button>
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -86,70 +76,51 @@
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.houseAddress }}
+                {{ record.content }}
               </template>
-              {{ record.houseAddress.slice(0, 10) }} ...
-            </a-tooltip>
-          </template>
-        </template>
-        <template slot="rentalRequestShow" slot-scope="text, record">
-          <template>
-            <a-tooltip>
-              <template slot="title">
-                {{ record.rentalRequest }}
-              </template>
-              {{ record.rentalRequest.slice(0, 15) }} ...
+              {{ record.content.slice(0, 30) }} ...
             </a-tooltip>
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon v-if="record.flag === 1" type="caret-down" @click="audit(record.id, 2)" title="下 架" style="margin-right: 10px"></a-icon>
-          <a-icon v-if="record.flag === 2" type="caret-up" @click="audit(record.id, 1)" title="上 架" style="margin-right: 10px"></a-icon>
-          <a-icon type="bulb" @click="view(record)" title="详 情" style="margin-right: 10px"></a-icon>
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
         </template>
       </a-table>
     </div>
-    <rent-add
-      v-if="rentAdd.visiable"
-      @close="handlerentAddClose"
-      @success="handlerentAddSuccess"
-      :rentAddVisiable="rentAdd.visiable">
-    </rent-add>
-    <rent-edit
-      ref="rentEdit"
-      @close="handlerentEditClose"
-      @success="handlerentEditSuccess"
-      :rentEditVisiable="rentEdit.visiable">
-    </rent-edit>
-    <rent-view :rentShow="rentView.visiable" :rentData="rentView.data" @close="rentView.visiable = false"></rent-view>
+    <message-add
+      v-if="messageAdd.visiable"
+      @close="handlemessageAddClose"
+      @success="handlemessageAddSuccess"
+      :messageAddVisiable="messageAdd.visiable">
+    </message-add>
+    <message-edit
+      ref="messageEdit"
+      @close="handlemessageEditClose"
+      @success="handlemessageEditSuccess"
+      :messageEditVisiable="messageEdit.visiable">
+    </message-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import rentAdd from './RentAdd'
-import rentEdit from './RentEdit'
+import messageAdd from './MessageAdd'
+import messageEdit from './MessageEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
-import RentView from "./RentView";
 moment.locale('zh-cn')
 
 export default {
-  name: 'rent',
-  components: {RentView, rentAdd, rentEdit, RangeDate},
+  name: 'message',
+  components: {messageAdd, messageEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      rentAdd: {
+      messageAdd: {
         visiable: false
       },
-      rentEdit: {
+      messageEdit: {
         visiable: false
-      },
-      rentView: {
-        visiable: false,
-        data: null
       },
       queryParams: {},
       filteredInfo: null,
@@ -175,89 +146,48 @@ export default {
     }),
     columns () {
       return [{
-        title: '出租标题',
+        title: '消息标题',
         dataIndex: 'title',
         scopedSlots: { customRender: 'titleShow' }
       }, {
-        title: '房屋地址',
-        dataIndex: 'houseAddress',
-        scopedSlots: { customRender: 'contentShow' },
+        title: '消息内容',
+        dataIndex: 'content',
+        scopedSlots: { customRender: 'contentShow' }
       }, {
-        title: '地区',
-        dataIndex: 'province',
+        title: '发送人',
+        dataIndex: 'sendUserName',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return row.province + row.city + row.area
+            return text
           } else {
             return '- -'
           }
         }
       }, {
-        title: '出租要求',
-        dataIndex: 'rentalRequest',
-        scopedSlots: { customRender: 'rentalRequestShow' },
+        title: '接收人',
+        dataIndex: 'toUserName',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
       }, {
-        title: '房间类型',
-        dataIndex: 'roomType',
+        title: '已读状态',
+        dataIndex: 'delFlag',
         customRender: (text, row, index) => {
           switch (text) {
+            case 0:
+              return <a-tag color="pink">未读</a-tag>
             case 1:
-              return <a-tag>主卧</a-tag>
-            case 2:
-              return <a-tag>次卧</a-tag>
+              return <a-tag color="green">已读</a-tag>
             default:
               return '- -'
           }
         }
       }, {
-        title: '租金/月',
-        dataIndex: 'rentPrice',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '元'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '出租状态',
-        dataIndex: 'flag',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag color="green">上架</a-tag>
-            case 2:
-              return <a-tag color="red">下架</a-tag>
-            case 3:
-              return <a-tag color="pink">已被出租</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '房屋照片',
-        dataIndex: 'roomPictures',
-        customRender: (text, record, index) => {
-          if (!record.roomPictures) return <a-avatar shape="square" icon="user" />
-          return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.roomPictures.split(',')[0] } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.roomPictures.split(',')[0] } />
-          </a-popover>
-        }
-      }, {
-        title: '访问量',
-        dataIndex: 'views',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '次'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '创建时间',
+        title: '发送时间',
         dataIndex: 'createDate',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -284,39 +214,26 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.rentAdd.visiable = true
+      this.messageAdd.visiable = true
     },
-    handlerentAddClose () {
-      this.rentAdd.visiable = false
+    handlemessageAddClose () {
+      this.messageAdd.visiable = false
     },
-    handlerentAddSuccess () {
-      this.rentAdd.visiable = false
-      this.$message.success('新增租房信息成功')
+    handlemessageAddSuccess () {
+      this.messageAdd.visiable = false
+      this.$message.success('发送消息成功')
       this.search()
     },
-    audit (record, status) {
-      this.$get(`/cos/rent-info/setStatus`, {
-        rentId: record.id,
-        status
-      }).then((r) => {
-        this.$message.success('更新状态成功')
-        this.search()
-      })
-    },
-    view (record) {
-      this.rentView.visiable = true
-      this.rentView.data = record
-    },
     edit (record) {
-      this.$refs.rentEdit.setFormValues(record)
-      this.rentEdit.visiable = true
+      this.$refs.messageEdit.setFormValues(record)
+      this.messageEdit.visiable = true
     },
-    handlerentEditClose () {
-      this.rentEdit.visiable = false
+    handlemessageEditClose () {
+      this.messageEdit.visiable = false
     },
-    handlerentEditSuccess () {
-      this.rentEdit.visiable = false
-      this.$message.success('修改租房信息成功')
+    handlemessageEditSuccess () {
+      this.messageEdit.visiable = false
+      this.$message.success('修改消息成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -334,7 +251,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/rent-info/' + ids).then(() => {
+          that.$delete('/cos/message-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -404,16 +321,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.roomType === undefined) {
-        delete params.roomType
-      }
-      if (params.flag === undefined) {
-        delete params.flag
-      }
-      if (params.rentType === undefined) {
-        delete params.rentType
-      }
-      this.$get('/cos/rent-info/page', {
+      this.$get('/cos/message-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data
