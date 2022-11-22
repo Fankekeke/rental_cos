@@ -66,7 +66,7 @@ public class DeliveryReviewController {
      * @return 结果
      */
     @PostMapping
-    public R save(@RequestBody DeliveryReview deliveryReview) {
+    public R save(DeliveryReview deliveryReview) {
         return R.ok(deliveryReviewService.saveDeliveryReview(deliveryReview));
     }
 
@@ -77,7 +77,7 @@ public class DeliveryReviewController {
      * @return 结果
      */
     @PutMapping
-    public R edit(@RequestBody DeliveryReview deliveryReview) {
+    public R edit(DeliveryReview deliveryReview) {
         return R.ok(deliveryReviewService.updateById(deliveryReview));
     }
 

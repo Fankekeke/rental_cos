@@ -13,8 +13,6 @@ public class DeliveryReviewVo extends DeliveryReview {
 
     private String province;
 
-    private String rentUserName;
-
     private String rentUserAvatar;
 
     private String ownerUserName;

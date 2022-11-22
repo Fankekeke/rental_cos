@@ -4,12 +4,14 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,9 +76,10 @@ public class StaffInfoController {
      * @return 结果
      */
     @PostMapping
-    public R save(@RequestBody StaffInfo staffInfo) {
+    public R save(StaffInfo staffInfo) {
         staffInfo.setStaffCode("STAFF-" + System.currentTimeMillis());
         staffInfo.setStaffStatus(0);
+        staffInfo.setCreateDate(DateUtil.formatDate(new Date()));
         return R.ok(staffInfoService.save(staffInfo));
     }
 
@@ -87,7 +90,7 @@ public class StaffInfoController {
      * @return 结果
      */
     @PutMapping
-    public R edit(@RequestBody StaffInfo staffInfo) {
+    public R edit(StaffInfo staffInfo) {
         return R.ok(staffInfoService.updateById(staffInfo));
     }
 

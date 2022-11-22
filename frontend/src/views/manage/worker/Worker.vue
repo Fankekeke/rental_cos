@@ -7,7 +7,7 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="员工姓名"
+                label="人员姓名"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
                 <a-input v-model="queryParams.staffName"/>
@@ -15,32 +15,20 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="租房人"
+                label="联系方式"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
-                <a-input v-model="queryParams.rentUserName"/>
+                <a-input v-model="queryParams.phone"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="当前状态"
+                label="人员类型"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
-                <a-select v-model="queryParams.step">
-                  <a-select-option value="1">等待审批</a-select-option>
-                  <a-select-option value="2">通过</a-select-option>
-                  <a-select-option value="2">驳回</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="缴费方式"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-select v-model="queryParams.payType">
-                  <a-select-option value="1">押一付一</a-select-option>
-                  <a-select-option value="2">押一付三</a-select-option>
+                <a-select v-model="queryParams.staffType" allowClear>
+                  <a-select-option value="1">销售员</a-select-option>
+                  <a-select-option value="2">超级销售员</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -69,8 +57,7 @@
                @change="handleTableChange">
         <template slot="titleShow" slot-scope="text, record">
           <template>
-            <a-badge status="processing" v-if="record.rackUp === 1"/>
-            <a-badge status="error" v-if="record.rackUp === 0"/>
+            <a-badge status="processing"/>
             <a-tooltip>
               <template slot="title">
                 {{ record.title }}
@@ -94,32 +81,39 @@
         </template>
       </a-table>
     </div>
-    <bulletin-add
-      v-if="bulletinAdd.visiable"
-      @close="handleBulletinAddClose"
-      @success="handleBulletinAddSuccess"
-      :bulletinAddVisiable="bulletinAdd.visiable">
-    </bulletin-add>
+    <worker-add
+      v-if="workerAdd.visiable"
+      @close="handleWorkerAddClose"
+      @success="handleWorkerAddSuccess"
+      :workerAddVisiable="workerAdd.visiable">
+    </worker-add>
+    <worker-edit
+      ref="workerEdit"
+      @close="handleWorkerEditClose"
+      @success="handleWorkerEditSuccess"
+      :workerEditVisiable="workerEdit.visiable">
+    </worker-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import BulletinAdd from './DeliveryAdd'
+import WorkerAdd from './WorkerAdd'
+import WorkerEdit from './WorkerEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: 'Bulletin',
-  components: {BulletinAdd, RangeDate},
+  name: 'Worker',
+  components: {WorkerAdd, WorkerEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      bulletinAdd: {
+      workerAdd: {
         visiable: false
       },
-      bulletinEdit: {
+      workerEdit: {
         visiable: false
       },
       queryParams: {},
@@ -146,89 +140,70 @@ export default {
     }),
     columns () {
       return [{
-        title: '合同编号',
-        dataIndex: 'contractCode',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
+        title: '人员姓名',
+        dataIndex: 'staffName'
+      }, {
+        title: '联系方式',
+        dataIndex: 'phone'
+      }, {
+        title: '照片',
+        dataIndex: 'avatar',
+        customRender: (text, record, index) => {
+          if (!record.avatar) return <a-avatar shape="square" icon="user" />
+          return <a-popover>
+            <template slot="content">
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar.split(',')[0] } />
+            </template>
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar.split(',')[0] } />
+          </a-popover>
         }
       }, {
-        title: '房屋地址',
-        dataIndex: 'houseAddress',
-        scopedSlots: { customRender: 'titleShow' }
-      }, {
-        title: '小区地址',
-        dataIndex: 'communityName',
-        scopedSlots: { customRender: 'contentShow' }
-      }, {
-        title: '租房人',
-        dataIndex: 'rentUserName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '所属业主',
-        dataIndex: 'ownerUserName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '租金/月',
-        dataIndex: 'contractPrice',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '当前状态',
-        dataIndex: 'step',
+        title: '人员类型',
+        dataIndex: 'staffType',
         customRender: (text, row, index) => {
           switch (text) {
             case 1:
-              return <a-tag>正在审核</a-tag>
+              return <a-tag>销售员</a-tag>
             case 2:
-              return <a-tag>审核通过</a-tag>
-            case 3:
-              return <a-tag>驳 回</a-tag>
+              return <a-tag>超级销售员</a-tag>
             default:
               return '- -'
           }
         }
       }, {
-        title: '租用时间',
-        dataIndex: 'rentDay',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '个月'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '缴费方式',
-        dataIndex: 'payType',
+        title: '性别',
+        dataIndex: 'sex',
         customRender: (text, row, index) => {
           switch (text) {
             case 1:
-              return <a-tag>押一付一</a-tag>
+              return <a-tag>男</a-tag>
             case 2:
-              return <a-tag>押一付三</a-tag>
+              return <a-tag>女</a-tag>
             default:
               return '- -'
+          }
+        }
+      }, {
+        title: '员工状态',
+        dataIndex: 'staffStatus',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 0:
+              return <a-tag color="green">正常</a-tag>
+            case 1:
+              return <a-tag color="red">离职</a-tag>
+            default:
+              return '- -'
+          }
+        }
+      }, {
+        title: '创建时间',
+        dataIndex: 'createDate',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
           }
         }
       }, {
@@ -249,26 +224,26 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.bulletinAdd.visiable = true
+      this.workerAdd.visiable = true
     },
-    handleBulletinAddClose () {
-      this.bulletinAdd.visiable = false
+    handleWorkerAddClose () {
+      this.workerAdd.visiable = false
     },
-    handleBulletinAddSuccess () {
-      this.bulletinAdd.visiable = false
-      this.$message.success('新增公告成功')
+    handleWorkerAddSuccess () {
+      this.workerAdd.visiable = false
+      this.$message.success('新增工作人员成功')
       this.search()
     },
     edit (record) {
-      this.$refs.bulletinEdit.setFormValues(record)
-      this.bulletinEdit.visiable = true
+      this.$refs.workerEdit.setFormValues(record)
+      this.workerEdit.visiable = true
     },
-    handleBulletinEditClose () {
-      this.bulletinEdit.visiable = false
+    handleWorkerEditClose () {
+      this.workerEdit.visiable = false
     },
-    handleBulletinEditSuccess () {
-      this.bulletinEdit.visiable = false
-      this.$message.success('修改公告成功')
+    handleWorkerEditSuccess () {
+      this.workerEdit.visiable = false
+      this.$message.success('修改工作人员成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -286,7 +261,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/bulletin-info/' + ids).then(() => {
+          that.$delete('/cos/worker-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -356,13 +331,10 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.step === undefined) {
-        delete params.step
+      if (params.staffType === undefined) {
+        delete params.staffType
       }
-      if (params.payType === undefined) {
-        delete params.payType
-      }
-      this.$get('/cos/delivery-review/page', {
+      this.$get('/cos/staff-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

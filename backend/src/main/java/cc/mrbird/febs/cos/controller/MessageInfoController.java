@@ -65,7 +65,7 @@ public class MessageInfoController {
      * @return 结果
      */
     @PostMapping
-    public R save(@RequestBody MessageInfo messageInfo) {
+    public R save(MessageInfo messageInfo) {
         messageInfo.setDelFlag("0");
         messageInfo.setCreateDate(DateUtil.formatDate(new Date()));
         return R.ok(messageInfoService.save(messageInfo));
@@ -78,7 +78,7 @@ public class MessageInfoController {
      * @return 结果
      */
     @PutMapping
-    public R edit(@RequestBody MessageInfo messageInfo) {
+    public R edit(MessageInfo messageInfo) {
         return R.ok(messageInfoService.updateById(messageInfo));
     }
 

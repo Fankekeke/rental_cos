@@ -66,7 +66,7 @@ public class StaffInfo implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private String createDate;
 
     /**
      * 员工状态（0.离职 1.在岗）

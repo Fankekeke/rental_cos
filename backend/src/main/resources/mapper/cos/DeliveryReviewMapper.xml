@@ -53,7 +53,7 @@
         ci.community_name AS communityName
         FROM delivery_review dr
         LEFT JOIN user_info ui1 ON ( ui1.code = dr.rent_user_code )
-        LEFT JOIN user_info ui2 ON ( ui2.code = mi.owner_user_code )
+        LEFT JOIN user_info ui2 ON ( ui2.code = dr.owner_user_code )
         LEFT JOIN house_info hi ON (hi.code = dr.house_code)
         LEFT JOIN community_info ci ON ( ci.code = hi.community_code )
         WHERE 1 = 1
@@ -75,7 +75,7 @@
         ci.community_name AS communityName
         FROM delivery_review dr
         LEFT JOIN user_info ui1 ON ( ui1.code = dr.rent_user_code )
-        LEFT JOIN user_info ui2 ON ( ui2.code = mi.owner_user_code )
+        LEFT JOIN user_info ui2 ON ( ui2.code = dr.owner_user_code )
         LEFT JOIN house_info hi ON (hi.code = dr.house_code)
         LEFT JOIN community_info ci ON ( ci.code = hi.community_code )
         WHERE 1 = 1
@@ -99,7 +99,7 @@
         ci.community_name AS communityName
         FROM delivery_review dr
         LEFT JOIN user_info ui1 ON ( ui1.code = dr.rent_user_code )
-        LEFT JOIN user_info ui2 ON ( ui2.code = mi.owner_user_code )
+        LEFT JOIN user_info ui2 ON ( ui2.code = dr.owner_user_code )
         LEFT JOIN house_info hi ON (hi.code = dr.house_code)
         LEFT JOIN community_info ci ON ( ci.code = hi.community_code )
     </select>

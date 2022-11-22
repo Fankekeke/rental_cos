@@ -127,7 +127,7 @@ public class RentChargeController {
      * @return 结果
      */
     @PostMapping
-    public R save(@RequestBody RentCharge rentCharge) {
+    public R save(RentCharge rentCharge) {
         rentCharge.setPlanStatus(1);
         rentCharge.setCreateDate(DateUtil.formatDate(new Date()));
         return R.ok(rentChargeService.save(rentCharge));
@@ -140,7 +140,7 @@ public class RentChargeController {
      * @return 结果
      */
     @PutMapping
-    public R edit(@RequestBody RentCharge rentCharge) {
+    public R edit(RentCharge rentCharge) {
         return R.ok(rentChargeService.updateById(rentCharge));
     }
 

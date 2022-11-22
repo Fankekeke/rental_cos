@@ -294,9 +294,9 @@ export default {
       this.$message.success('新增租房信息成功')
       this.search()
     },
-    audit (record, status) {
+    audit (rentId, status) {
       this.$get(`/cos/rent-info/setStatus`, {
-        rentId: record.id,
+        rentId,
         status
       }).then((r) => {
         this.$message.success('更新状态成功')
