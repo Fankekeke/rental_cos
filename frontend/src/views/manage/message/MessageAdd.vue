@@ -104,9 +104,12 @@ export default {
   },
   methods: {
     handleSearch (value) {
-      this.$get(`/cos/user-info/remote/${value}`).then((r) => {
-        this.userList = r.data.data
-      })
+      this.userList = []
+      if (value !== '' && value !== null) {
+        this.$get(`/cos/user-info/remote/${value}`).then((r) => {
+          this.userList = r.data.data
+        })
+      }
     },
     handleChange (value) {
       console.log(value);
@@ -140,7 +143,7 @@ export default {
       }
       this.form.validateFields((err, values) => {
         if (!err) {
-          values.toUserCode = this.userCode
+          values.toUser = this.userCode
           this.loading = true
           this.$post('/cos/message-info', {
             ...values

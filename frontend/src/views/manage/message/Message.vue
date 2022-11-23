@@ -160,7 +160,7 @@ export default {
           if (text !== null) {
             return text
           } else {
-            return '- -'
+            return '管理员'
           }
         }
       }, {
@@ -178,9 +178,9 @@ export default {
         dataIndex: 'delFlag',
         customRender: (text, row, index) => {
           switch (text) {
-            case 0:
+            case '0':
               return <a-tag color="pink">未读</a-tag>
-            case 1:
+            case '1':
               return <a-tag color="green">已读</a-tag>
             default:
               return '- -'

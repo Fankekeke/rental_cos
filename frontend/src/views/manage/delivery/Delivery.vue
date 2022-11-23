@@ -8,25 +8,25 @@
             <a-col :md="6" :sm="24">
               <a-form-item
                 label="员工姓名"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.staffName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
                 label="租房人"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.rentUserName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
                 label="当前状态"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-select v-model="queryParams.step">
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-select v-model="queryParams.step" allowClear>
                   <a-select-option value="1">等待审批</a-select-option>
                   <a-select-option value="2">通过</a-select-option>
                   <a-select-option value="2">驳回</a-select-option>
@@ -36,9 +36,9 @@
             <a-col :md="6" :sm="24">
               <a-form-item
                 label="缴费方式"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-select v-model="queryParams.payType">
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-select v-model="queryParams.payType" allowClear>
                   <a-select-option value="1">押一付一</a-select-option>
                   <a-select-option value="2">押一付三</a-select-option>
                 </a-select>
@@ -54,7 +54,7 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">新增</a-button>
+<!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -69,13 +69,11 @@
                @change="handleTableChange">
         <template slot="titleShow" slot-scope="text, record">
           <template>
-            <a-badge status="processing" v-if="record.rackUp === 1"/>
-            <a-badge status="error" v-if="record.rackUp === 0"/>
             <a-tooltip>
               <template slot="title">
-                {{ record.title }}
+                {{ record.houseAddress }}
               </template>
-              {{ record.title.slice(0, 8) }} ...
+              {{ record.houseAddress.slice(0, 8) }} ...
             </a-tooltip>
           </template>
         </template>
@@ -83,14 +81,14 @@
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.content }}
+                {{ record.communityName }}
               </template>
-              {{ record.content.slice(0, 30) }} ...
+              {{ record.communityName.slice(0, 30) }} ...
             </a-tooltip>
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
+          <a-icon type="pushpin" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="审 核"></a-icon>
         </template>
       </a-table>
     </div>
@@ -198,11 +196,11 @@ export default {
         dataIndex: 'step',
         customRender: (text, row, index) => {
           switch (text) {
-            case 1:
+            case '1':
               return <a-tag>正在审核</a-tag>
-            case 2:
+            case '2':
               return <a-tag>审核通过</a-tag>
-            case 3:
+            case '3':
               return <a-tag>驳 回</a-tag>
             default:
               return '- -'
@@ -223,9 +221,9 @@ export default {
         dataIndex: 'payType',
         customRender: (text, row, index) => {
           switch (text) {
-            case 1:
+            case '1':
               return <a-tag>押一付一</a-tag>
-            case 2:
+            case '2':
               return <a-tag>押一付三</a-tag>
             default:
               return '- -'

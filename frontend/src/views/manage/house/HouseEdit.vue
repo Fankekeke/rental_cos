@@ -455,13 +455,26 @@ export default {
       let housePlans = []
       let environmentMaps = []
       this.indoorMapFileList.forEach(image => {
-        indoorMaps.push(image.name)
+        if (image.response !== undefined) {
+          indoorMaps.push(image.response)
+        } else {
+          indoorMaps.push(image.name)
+        }
       })
       this.housePlanFileList.forEach(image => {
-        housePlans.push(image.name)
+        if (image.response !== undefined) {
+          housePlans.push(image.response)
+        } else {
+          housePlans.push(image.name)
+        }
       })
       this.environmentMapFileList.forEach(image => {
         environmentMaps.push(image.name)
+        if (image.response !== undefined) {
+          environmentMaps.push(image.response)
+        } else {
+          environmentMaps.push(image.name)
+        }
       })
       if (this.communityName == null || this.userName == null) {
         this.$message.error('请选择所属小区和业主！')

@@ -6,6 +6,7 @@ import cc.mrbird.febs.cos.controller.po.RentChargePo;
 import cc.mrbird.febs.cos.entity.RentCharge;
 import cc.mrbird.febs.cos.service.IRentChargeService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -128,6 +129,11 @@ public class RentChargeController {
      */
     @PostMapping
     public R save(RentCharge rentCharge) {
+        RentCharge last = rentChargeService.getOne(Wrappers.<RentCharge>lambdaQuery().eq(RentCharge::getRentId, rentCharge.getRentId()));
+        if (last != null) {
+            last.setStaffCode(rentCharge.getStaffCode());
+            return R.ok(rentChargeService.updateById(last));
+        }
         rentCharge.setPlanStatus(1);
         rentCharge.setCreateDate(DateUtil.formatDate(new Date()));
         return R.ok(rentChargeService.save(rentCharge));

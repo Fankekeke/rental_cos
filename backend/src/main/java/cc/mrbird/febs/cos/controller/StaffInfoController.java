@@ -79,7 +79,7 @@ public class StaffInfoController {
     public R save(StaffInfo staffInfo) {
         staffInfo.setStaffCode("STAFF-" + System.currentTimeMillis());
         staffInfo.setStaffStatus(0);
-        staffInfo.setCreateDate(DateUtil.formatDate(new Date()));
+        staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(staffInfoService.save(staffInfo));
     }
 

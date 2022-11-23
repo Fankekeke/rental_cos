@@ -78,10 +78,13 @@
         hi.province,
         hi.longitude,
         hi.latitude,
-        rc.id AS chargeId
+        rc.id AS chargeId,
+        si.staff_code AS staffCode,
+        si.staff_name AS staffName
         FROM rent_info ri
         LEFT JOIN house_info hi ON (hi.code = ri.house_code)
         LEFT JOIN rent_charge rc ON (rc.rent_id = ri.id)
+        LEFT JOIN staff_info si ON (si.staff_code = rc.staff_code)
         WHERE 1 = 1
         <include refid="baseParam"/>
         ORDER BY ri.create_date DESC

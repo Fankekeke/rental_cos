@@ -102,5 +102,6 @@
         LEFT JOIN user_info ui2 ON ( ui2.code = dr.owner_user_code )
         LEFT JOIN house_info hi ON (hi.code = dr.house_code)
         LEFT JOIN community_info ci ON ( ci.code = hi.community_code )
+        WHERE dr.contract_code = #{ contractCode }
     </select>
 </mapper>
