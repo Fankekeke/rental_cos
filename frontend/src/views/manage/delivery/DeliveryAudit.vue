@@ -1,14 +1,84 @@
 <template>
-  <a-modal v-model="show" title="添加合同审核" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="租房合同审批" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
-        取消
+        驳回
       </a-button>
       <a-button key="submit" type="primary" :loading="loading" @click="handleSubmit">
         提交
       </a-button>
     </template>
     <div style="font-size: 13px;font-family: SimHei" v-if="rentData !== null && houseInfo !== null && community !== null">
+      <div style="padding-left: 24px;padding-right: 24px;margin-bottom: 50px;margin-top: 50px">
+        <a-steps :current="current" progress-dot size="small">
+          <a-step title="已提交" />
+          <a-step title="正在审核" />
+          <a-step :title="currentText" />
+        </a-steps>
+      </div>
+      <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">合同信息</span></a-col>
+        <a-col :span="8"><b>合同编号：</b>
+          {{ deliveryInfo.contractCode !== null ? deliveryInfo.contractCode : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>租房人：</b>
+          <a-popover trigger="hover">
+            <template slot="content">
+              <a-avatar shape="square" size="132" icon="user" :src="'http://127.0.0.1:9527/imagesWeb/' + deliveryInfo.rentUserAvatar" />
+            </template>
+            <a>{{ deliveryInfo.rentUserName !== null ? deliveryInfo.rentUserName : '- -' }}</a>
+          </a-popover>
+        </a-col>
+        <a-col :span="8"><b>房屋业主：</b>
+          <a-popover trigger="hover">
+            <template slot="content">
+              <a-avatar shape="square" size="132" icon="user" :src="'http://127.0.0.1:9527/imagesWeb/' + deliveryInfo.ownerUserAvatar" />
+            </template>
+            <a>{{ deliveryInfo.ownerUserName !== null ? deliveryInfo.ownerUserName : '- -' }}</a>
+          </a-popover>
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-col :span="8"><b>小区名称：</b>
+          {{ deliveryInfo.communityName !== null ? deliveryInfo.communityName : '- -' }}
+        </a-col>
+        <a-col :span="16"><b>房屋地址：</b>
+          {{ deliveryInfo.houseAddress !== null ? deliveryInfo.houseAddress : '- -' }}
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-col :span="8"><b>地址：</b>
+          {{ deliveryInfo.province }} {{ deliveryInfo.city }} {{ deliveryInfo.area }}
+        </a-col>
+        <a-col :span="8"><b>提交时间：</b>
+          {{ deliveryInfo.createDate !== null ? deliveryInfo.createDate : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>缴费方式：</b>
+          <span v-if="deliveryInfo.payType == 1">押一付一</span>
+          <span v-if="deliveryInfo.payType == 2">押一付三</span>
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-col :span="8"><b>居住时常：</b>
+          {{ deliveryInfo.rentDay }}月
+        </a-col>
+        <a-col :span="8"><b>开始时间：</b>
+          {{ deliveryInfo.startLive !== null ? deliveryInfo.startLive : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>结束时间：</b>
+          {{ deliveryInfo.endLive !== null ? deliveryInfo.endLive : '- -' }}
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-col :span="8"><b>每月房租：</b>
+          {{ deliveryInfo.contractPrice }}元
+        </a-col>
+      </a-row>
+      <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">出租信息</span></a-col>
         <a-col :span="16"><b>出租标题：</b>
@@ -271,8 +341,8 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
-import moment from "moment";
+import {mapState} from 'vuex'
+import moment from 'moment'
 
 export default {
   name: 'DeliveryAudit',
@@ -280,7 +350,10 @@ export default {
     rentAuditVisiable: {
       default: false
     },
-    chargeId: {}
+    deliveryInfo: {
+      type: Object,
+      default: null
+    }
   },
   computed: {
     ...mapState({
@@ -297,13 +370,25 @@ export default {
   watch: {
     rentAuditVisiable: function (value) {
       if (value) {
-        this.getChargeDetail(this.chargeId)
+        switch (this.deliveryInfo.step) {
+          case '1':
+            this.current = 1
+            break
+          case '2':
+            this.current = 2
+            this.currentText = '审核通过'
+            break
+          case '3':
+            this.current = 2
+            this.currentText = '审核驳回'
+            break
+        }
+        this.getChargeDetail(this.deliveryInfo.chargeId)
       }
     }
   },
   data () {
     return {
-      formItemLayout,
       form: this.$form.createForm(this),
       loading: false,
       fileList: [],
@@ -312,10 +397,25 @@ export default {
       rentData: null,
       chargeInfo: null,
       community: null,
-      houseInfo: null
+      houseInfo: null,
+      current: 0,
+      currentText: '审核结果'
     }
   },
   methods: {
+    handleCancel () {
+      this.previewVisible = false
+    },
+    async handlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.previewImage = file.url || file.preview
+      this.previewVisible = true
+    },
+    picHandleChange ({ fileList }) {
+      this.fileList = fileList
+    },
     getChargeDetail (chargeId) {
       this.$get(`/cos/rent-charge/detail/${chargeId}`).then((r) => {
         this.chargeInfo = r.data.data
@@ -340,8 +440,10 @@ export default {
       })
     },
     onClose () {
-      this.reset()
       this.$emit('close')
+    },
+    handleSubmit () {
+
     }
   }
 }

@@ -88,37 +88,43 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="pushpin" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="审 核"></a-icon>
+          <a-icon type="pushpin" theme="twoTone" twoToneColor="#4a9ff5" @click="audit(record)" title="审 核"></a-icon>
         </template>
       </a-table>
     </div>
-    <bulletin-add
-      v-if="bulletinAdd.visiable"
-      @close="handleBulletinAddClose"
-      @success="handleBulletinAddSuccess"
-      :bulletinAddVisiable="bulletinAdd.visiable">
-    </bulletin-add>
+    <delivery-add
+      v-if="deliveryAdd.visiable"
+      @close="handledeliveryAddClose"
+      @success="handledeliveryAddSuccess"
+      :deliveryAddVisiable="deliveryAdd.visiable">
+    </delivery-add>
+    <delivery-audit :rentAuditVisiable="rentAudit.visiable" :deliveryInfo="rentAudit.data" @close="rentAuditClose"></delivery-audit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import BulletinAdd from './DeliveryAdd'
+import deliveryAdd from './DeliveryAdd'
 import {mapState} from 'vuex'
 import moment from 'moment'
+import deliveryAudit from "./DeliveryAudit";
 moment.locale('zh-cn')
 
 export default {
-  name: 'Bulletin',
-  components: {BulletinAdd, RangeDate},
+  name: 'delivery',
+  components: {deliveryAudit, deliveryAdd, RangeDate},
   data () {
     return {
       advanced: false,
-      bulletinAdd: {
+      deliveryAdd: {
         visiable: false
       },
-      bulletinEdit: {
+      deliveryEdit: {
         visiable: false
+      },
+      rentAudit: {
+        visiable: false,
+        data: null
       },
       queryParams: {},
       filteredInfo: null,
@@ -240,6 +246,13 @@ export default {
     this.fetch()
   },
   methods: {
+    audit (row) {
+      this.rentAudit.visiable = true
+      this.rentAudit.data = row
+    },
+    rentAuditClose () {
+      this.rentAudit.visiable = false
+    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
@@ -247,25 +260,25 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.bulletinAdd.visiable = true
+      this.deliveryAdd.visiable = true
     },
-    handleBulletinAddClose () {
-      this.bulletinAdd.visiable = false
+    handledeliveryAddClose () {
+      this.deliveryAdd.visiable = false
     },
-    handleBulletinAddSuccess () {
-      this.bulletinAdd.visiable = false
+    handledeliveryAddSuccess () {
+      this.deliveryAdd.visiable = false
       this.$message.success('新增公告成功')
       this.search()
     },
     edit (record) {
-      this.$refs.bulletinEdit.setFormValues(record)
-      this.bulletinEdit.visiable = true
+      this.$refs.deliveryEdit.setFormValues(record)
+      this.deliveryEdit.visiable = true
     },
-    handleBulletinEditClose () {
-      this.bulletinEdit.visiable = false
+    handledeliveryEditClose () {
+      this.deliveryEdit.visiable = false
     },
-    handleBulletinEditSuccess () {
-      this.bulletinEdit.visiable = false
+    handledeliveryEditSuccess () {
+      this.deliveryEdit.visiable = false
       this.$message.success('修改公告成功')
       this.search()
     },
@@ -284,7 +297,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/bulletin-info/' + ids).then(() => {
+          that.$delete('/cos/delivery-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
