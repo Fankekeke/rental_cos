@@ -7,41 +7,18 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="员工姓名"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.staffName"/>
+                label="标题"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.title"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="租房人"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.rentUserName"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="当前状态"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.step" allowClear>
-                  <a-select-option value="1">等待审批</a-select-option>
-                  <a-select-option value="2">通过</a-select-option>
-                  <a-select-option value="2">驳回</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="缴费方式"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.payType" allowClear>
-                  <a-select-option value="1">押一付一</a-select-option>
-                  <a-select-option value="2">押一付三</a-select-option>
-                </a-select>
+                label="内容"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.content"/>
               </a-form-item>
             </a-col>
           </div>
@@ -54,7 +31,7 @@
     </div>
     <div>
       <div class="operator">
-<!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
+        <a-button type="primary" ghost @click="add">新增</a-button>
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -69,11 +46,13 @@
                @change="handleTableChange">
         <template slot="titleShow" slot-scope="text, record">
           <template>
+            <a-badge status="processing" v-if="record.rackUp === 1"/>
+            <a-badge status="error" v-if="record.rackUp === 0"/>
             <a-tooltip>
               <template slot="title">
-                {{ record.houseAddress }}
+                {{ record.title }}
               </template>
-              {{ record.houseAddress.slice(0, 8) }} ...
+              {{ record.title.slice(0, 8) }} ...
             </a-tooltip>
           </template>
         </template>
@@ -81,51 +60,51 @@
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.communityName }}
+                {{ record.content }}
               </template>
-              {{ record.communityName.slice(0, 30) }} ...
+              {{ record.content.slice(0, 30) }} ...
             </a-tooltip>
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon v-if="record.step === '1'" type="pushpin" theme="twoTone" twoToneColor="#4a9ff5" @click="audit(record)" title="审 核"></a-icon>
-          <a-icon v-else type="bulb" theme="twoTone" twoToneColor="#4a9ff5" @click="audit(record)" title="查 看"></a-icon>
+          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
         </template>
       </a-table>
     </div>
-    <delivery-add
-      v-if="deliveryAdd.visiable"
-      @close="handledeliveryAddClose"
-      @success="handledeliveryAddSuccess"
-      :deliveryAddVisiable="deliveryAdd.visiable">
-    </delivery-add>
-    <delivery-audit :rentAuditVisiable="rentAudit.visiable" :deliveryInfo="rentAudit.data" @close="rentAuditClose" @success="rentAuditSuccess"></delivery-audit>
+    <template-add
+      v-if="templateAdd.visiable"
+      @close="handletemplateAddClose"
+      @success="handletemplateAddSuccess"
+      :templateAddVisiable="templateAdd.visiable">
+    </template-add>
+    <template-edit
+      ref="templateEdit"
+      @close="handletemplateEditClose"
+      @success="handletemplateEditSuccess"
+      :templateEditVisiable="templateEdit.visiable">
+    </template-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import deliveryAdd from './DeliveryAdd'
+import templateAdd from './TemplateAdd'
+import templateEdit from './TemplateEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
-import deliveryAudit from "./DeliveryAudit";
 moment.locale('zh-cn')
 
 export default {
-  name: 'delivery',
-  components: {deliveryAudit, deliveryAdd, RangeDate},
+  name: 'template',
+  components: {templateAdd, templateEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      deliveryAdd: {
+      templateAdd: {
         visiable: false
       },
-      deliveryEdit: {
+      templateEdit: {
         visiable: false
-      },
-      rentAudit: {
-        visiable: false,
-        data: null
       },
       queryParams: {},
       filteredInfo: null,
@@ -151,8 +130,18 @@ export default {
     }),
     columns () {
       return [{
-        title: '合同编号',
-        dataIndex: 'contractCode',
+        title: '消息标题',
+        dataIndex: 'title',
+        scopedSlots: { customRender: 'titleShow' },
+        width: 300
+      }, {
+        title: '消息内容',
+        dataIndex: 'content',
+        scopedSlots: { customRender: 'contentShow' },
+        width: 600
+      }, {
+        title: '发布时间',
+        dataIndex: 'createDate',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -161,80 +150,10 @@ export default {
           }
         }
       }, {
-        title: '房屋地址',
-        dataIndex: 'houseAddress',
-        scopedSlots: { customRender: 'titleShow' }
-      }, {
-        title: '小区地址',
-        dataIndex: 'communityName',
-        scopedSlots: { customRender: 'contentShow' }
-      }, {
-        title: '租房人',
-        dataIndex: 'rentUserName',
+        title: '上传人',
+        dataIndex: 'publisher',
         customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '所属业主',
-        dataIndex: 'ownerUserName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '租金/月',
-        dataIndex: 'contractPrice',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '当前状态',
-        dataIndex: 'step',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case '1':
-              return <a-tag>正在审核</a-tag>
-            case '2':
-              return <a-tag>审核通过</a-tag>
-            case '3':
-              return <a-tag color="red">驳 回</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '租用时间',
-        dataIndex: 'rentDay',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '个月'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '缴费方式',
-        dataIndex: 'payType',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case '1':
-              return <a-tag>押一付一</a-tag>
-            case '2':
-              return <a-tag>押一付三</a-tag>
-            default:
-              return '- -'
-          }
+          return '管理员'
         }
       }, {
         title: '操作',
@@ -247,18 +166,6 @@ export default {
     this.fetch()
   },
   methods: {
-    audit (row) {
-      this.rentAudit.visiable = true
-      this.rentAudit.data = row
-    },
-    rentAuditClose () {
-      this.rentAudit.visiable = false
-    },
-    rentAuditSuccess () {
-      this.rentAudit.visiable = false
-      this.$message.success('审批成功')
-      this.search()
-    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
@@ -266,26 +173,26 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.deliveryAdd.visiable = true
+      this.templateAdd.visiable = true
     },
-    handledeliveryAddClose () {
-      this.deliveryAdd.visiable = false
+    handletemplateAddClose () {
+      this.templateAdd.visiable = false
     },
-    handledeliveryAddSuccess () {
-      this.deliveryAdd.visiable = false
-      this.$message.success('新增公告成功')
+    handletemplateAddSuccess () {
+      this.templateAdd.visiable = false
+      this.$message.success('新增消息模板成功')
       this.search()
     },
     edit (record) {
-      this.$refs.deliveryEdit.setFormValues(record)
-      this.deliveryEdit.visiable = true
+      this.$refs.templateEdit.setFormValues(record)
+      this.templateEdit.visiable = true
     },
-    handledeliveryEditClose () {
-      this.deliveryEdit.visiable = false
+    handletemplateEditClose () {
+      this.templateEdit.visiable = false
     },
-    handledeliveryEditSuccess () {
-      this.deliveryEdit.visiable = false
-      this.$message.success('修改公告成功')
+    handletemplateEditSuccess () {
+      this.templateEdit.visiable = false
+      this.$message.success('修改消息模板成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -303,7 +210,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/delivery-info/' + ids).then(() => {
+          that.$delete('/cos/template-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -373,13 +280,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.step === undefined) {
-        delete params.step
-      }
-      if (params.payType === undefined) {
-        delete params.payType
-      }
-      this.$get('/cos/delivery-review/page', {
+      this.$get('/cos/message-template/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

@@ -138,6 +138,31 @@ public class DeliveryReviewServiceImpl extends ServiceImpl<DeliveryReviewMapper,
         }
         // 计算居住结束时间
         deliveryReview.setEndLive(DateUtil.formatDate(DateUtil.offsetMonth(DateUtil.parse(deliveryReview.getStartLive(), "yyyy-MM-dd"), deliveryReview.getRentDay())));
+
+        return this.save(deliveryReview);
+    }
+
+    /**
+     * 导出合同信息
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    @Override
+    public ContractVo exportContract(String contractCode) {
+        return baseMapper.exportContract(contractCode);
+    }
+
+    /**
+     * 合同审核通过
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean auditAdopt(String contractCode) {
+        DeliveryReview deliveryReview = this.getOne(Wrappers.<DeliveryReview>lambdaQuery().eq(DeliveryReview::getContractCode, contractCode));
         // 添加缴费记录
         PaymentRecord deposit = new PaymentRecord();
         deposit.setContractCode(deliveryReview.getContractCode());
@@ -168,17 +193,26 @@ public class DeliveryReviewServiceImpl extends ServiceImpl<DeliveryReviewMapper,
         paymentRecordList.add(deposit);
         paymentRecordList.add(rent);
         paymentRecordService.saveBatch(paymentRecordList);
-        return this.save(deliveryReview);
+        deliveryReview.setContractStatus("1");
+        deliveryReview.setStep("2");
+        return this.updateById(deliveryReview);
     }
 
     /**
-     * 导出合同信息
+     * 合同审核驳回
      *
      * @param contractCode 合同编号
      * @return 结果
      */
     @Override
-    public ContractVo exportContract(String contractCode) {
-        return baseMapper.exportContract(contractCode);
+    public boolean auditReject(String contractCode) {
+        DeliveryReview delivery = this.getOne(Wrappers.<DeliveryReview>lambdaQuery().eq(DeliveryReview::getContractCode, contractCode));
+        // 修改租房状态
+        RentCharge rentCharge = rentChargeService.getById(delivery.getChargeId());
+        rentInfoService.update(Wrappers.<RentInfo>lambdaUpdate().set(RentInfo::getFlag, "3").eq(RentInfo::getId, rentCharge.getRentId()));
+        // 修改合同状态
+        delivery.setContractStatus("2");
+        delivery.setStep("3");
+        return this.updateById(delivery);
     }
 }

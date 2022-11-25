@@ -1,11 +1,11 @@
 <template>
   <a-modal v-model="show" title="租房合同审批" @cancel="onClose" :width="800">
     <template slot="footer">
-      <a-button key="back" @click="onClose">
+      <a-button v-if="this.deliveryInfo.step === '1'" key="back" @click="handleSubmit(2)">
         驳回
       </a-button>
-      <a-button key="submit" type="primary" :loading="loading" @click="handleSubmit">
-        提交
+      <a-button v-if="this.deliveryInfo.step === '1'" key="submit" type="primary" :loading="loading" @click="handleSubmit(1)">
+        通过
       </a-button>
     </template>
     <div style="font-size: 13px;font-family: SimHei" v-if="rentData !== null && houseInfo !== null && community !== null">
@@ -442,8 +442,11 @@ export default {
     onClose () {
       this.$emit('close')
     },
-    handleSubmit () {
-
+    handleSubmit (status) {
+      let url = '/cos/delivery-review/' + (status === 1 ? 'auditAdopt' : 'auditReject')
+      this.$get(`${url}/${this.deliveryInfo.contractCode}`).then((r) => {
+        this.$emit('success')
+      })
     }
   }
 }
