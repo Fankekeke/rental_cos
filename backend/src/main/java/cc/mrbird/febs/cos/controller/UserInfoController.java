@@ -36,6 +36,16 @@ public class UserInfoController {
     }
 
     /**
+     * 获取用户信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/list")
+    public R list() {
+        return R.ok(userInfoService.list());
+    }
+
+    /**
      * 新增用户信息
      *
      * @param userInfo 用户信息

@@ -4,24 +4,6 @@
       <!-- 搜索区域 -->
       <a-form layout="horizontal">
         <a-row :gutter="15">
-          <div :class="advanced ? null: 'fold'">
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="标题"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-input v-model="queryParams.title"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="内容"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-input v-model="queryParams.content"/>
-              </a-form-item>
-            </a-col>
-          </div>
           <span style="float: right; margin-top: 3px;">
             <a-button type="primary" @click="search">查询</a-button>
             <a-button style="margin-left: 8px" @click="reset">重置</a-button>
@@ -62,12 +44,9 @@
               <template slot="title">
                 {{ record.content }}
               </template>
-              {{ record.content.slice(0, 30) }} ...
+              {{ record.content.slice(0, 15) }} ...
             </a-tooltip>
           </template>
-        </template>
-        <template slot="operation" slot-scope="text, record">
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
         </template>
       </a-table>
     </div>
@@ -130,15 +109,41 @@ export default {
     }),
     columns () {
       return [{
-        title: '标题',
-        dataIndex: 'title',
-        scopedSlots: { customRender: 'titleShow' },
-        width: 300
+        title: '发送对象',
+        dataIndex: 'userName'
       }, {
-        title: '公告内容',
+        title: '头像',
+        dataIndex: 'avatar',
+        customRender: (text, record, index) => {
+          if (!record.avatar) return <a-avatar shape="square" icon="user" />
+          return <a-popover>
+            <template slot="content">
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar } />
+            </template>
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar } />
+          </a-popover>
+        }
+      }, {
+        title: '邮箱地址',
+        dataIndex: 'email'
+      }, {
+        title: '用户类型',
+        dataIndex: 'sendUserType',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case '1':
+              return <a-tag>用户</a-tag>
+            case '2':
+              return <a-tag>员工</a-tag>
+            default:
+              return '- -'
+          }
+        }
+      }, {
+        title: '发送内容',
         dataIndex: 'content',
-        scopedSlots: { customRender: 'contentShow' },
-        width: 600
+        scopedSlots: {customRender: 'contentShow'}
+
       }, {
         title: '发布时间',
         dataIndex: 'createDate',
@@ -149,35 +154,6 @@ export default {
             return '- -'
           }
         }
-      }, {
-        title: '消息类型',
-        dataIndex: 'type',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag>画报</a-tag>
-            case 2:
-              return <a-tag>导购</a-tag>
-            case 3:
-              return <a-tag>新盘发布</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '上传人',
-        dataIndex: 'publisher',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '操作',
-        dataIndex: 'operation',
-        scopedSlots: {customRender: 'operation'}
       }]
     }
   },
@@ -199,7 +175,7 @@ export default {
     },
     handlerecordAddSuccess () {
       this.recordAdd.visiable = false
-      this.$message.success('新增公告成功')
+      this.$message.success('发送成功')
       this.search()
     },
     edit (record) {
@@ -229,7 +205,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/record-info/' + ids).then(() => {
+          that.$delete('/cos/message-record/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -299,7 +275,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/record-info/page', {
+      this.$get('/cos/message-record/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

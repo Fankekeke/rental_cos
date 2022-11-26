@@ -30,7 +30,7 @@ public class MessageTemplateController {
     /**
      * 分页查询消息发送记录
      *
-     * @param page        分页对象
+     * @param page            分页对象
      * @param messageTemplate 参数
      * @return 结果
      */
@@ -39,6 +39,16 @@ public class MessageTemplateController {
         return R.ok(messageTemplateService.page(page, Wrappers.<MessageTemplate>lambdaQuery()
                 .like(StrUtil.isNotEmpty(messageTemplate.getTitle()), MessageTemplate::getTitle, messageTemplate.getTitle())
                 .like(StrUtil.isNotEmpty(messageTemplate.getContent()), MessageTemplate::getContent, messageTemplate.getContent())));
+    }
+
+    /**
+     * 查询消息模板
+     *
+     * @return 结果
+     */
+    @GetMapping("/list")
+    public R list() {
+        return R.ok(messageTemplateService.list());
     }
 
     /**

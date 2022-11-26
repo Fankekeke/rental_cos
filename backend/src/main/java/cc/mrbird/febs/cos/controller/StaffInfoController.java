@@ -37,6 +37,16 @@ public class StaffInfoController {
     }
 
     /**
+     * 获取员工信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/list")
+    public R list() {
+        return R.ok(staffInfoService.list());
+    }
+
+    /**
      * 获取员工详细信息
      *
      * @param staffCode 员工编号

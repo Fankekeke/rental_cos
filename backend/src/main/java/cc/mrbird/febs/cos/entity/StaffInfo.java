@@ -64,6 +64,11 @@ public class StaffInfo implements Serializable {
     private String phone;
 
     /**
+     * 邮箱
+     */
+    private String email;
+
+    /**
      * 创建时间
      */
     private String createDate;

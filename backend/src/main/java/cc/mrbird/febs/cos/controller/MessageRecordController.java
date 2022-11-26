@@ -27,13 +27,24 @@ public class MessageRecordController {
     /**
      * 分页查询消息发送记录
      *
-     * @param page        分页对象
+     * @param page          分页对象
      * @param messageRecord 参数
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<MessageRecord> page, MessageRecord messageRecord) {
-        return R.ok();
+        return R.ok(messageRecordService.selectMessageRecordPage(page, messageRecord));
+    }
+
+    /**
+     * 消息发送记录
+     *
+     * @param messageRecord 参数
+     * @return 结果
+     */
+    @PostMapping
+    public R send(MessageRecord messageRecord) {
+        return R.ok(messageRecordService.send(messageRecord));
     }
 
     /**
