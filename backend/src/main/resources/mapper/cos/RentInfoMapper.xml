@@ -72,17 +72,22 @@
     <!-- 分页获取出租信息信息 -->
     <select id="selectRentPage" resultType="java.util.LinkedHashMap">
         SELECT <include refid="baseResult"/>,
+        ci.community_name AS communityName,
         hi.address AS houseAddress,
         hi.city,
         hi.area,
         hi.province,
         hi.longitude,
         hi.latitude,
+        hi.room_number AS roomNumber,
+        hi.living_room_number AS livingRoomNumber,
+        hi.towards,
         rc.id AS chargeId,
         si.staff_code AS staffCode,
         si.staff_name AS staffName
         FROM rent_info ri
         LEFT JOIN house_info hi ON (hi.code = ri.house_code)
+        LEFT JOIN community_info ci ON (ci.code = hi.community_code)
         LEFT JOIN rent_charge rc ON (rc.rent_id = ri.id)
         LEFT JOIN staff_info si ON (si.staff_code = rc.staff_code)
         WHERE 1 = 1
