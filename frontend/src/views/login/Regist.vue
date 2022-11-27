@@ -1,6 +1,6 @@
 <template>
   <a-card :bordered="false" hoverable style="margin-top:  10px;background-color: #f9f9f9">
-    <div style="text-align: left;font-size: 14px;margin-bottom: 30px"><b>二手房交易平台</b></div>
+    <div style="text-align: left;font-size: 14px;margin-bottom: 30px"><b></b></div>
     <div class="user-layout-register">
       <a-form ref="formRegister" :autoFormCreate="(form)=>{this.form = form}" id="formRegister">
         <a-divider orientation="left"><span style="font-size: 12px">账户注册</span></a-divider>
