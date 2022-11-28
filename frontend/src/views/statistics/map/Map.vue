@@ -135,6 +135,26 @@
                 </a-row>
                 <br/>
                 <a-row style="padding-left: 24px;padding-right: 24px;">
+                  <a-col style="margin-bottom: 15px"><span style="font-size: 14px;font-weight: 650;color: #000c17">周边设施</span></a-col>
+                  <a-col :span="24">
+                    <a-radio-group button-style="solid" style="width: 100%" @change="gisOnChange">
+                      <a-radio-button value="1" style="width: 25%;text-align: center">
+                        交通
+                      </a-radio-button>
+                      <a-radio-button value="2" style="width: 25%;text-align: center">
+                        餐饮
+                      </a-radio-button>
+                      <a-radio-button value="3" style="width: 25%;text-align: center">
+                        教育
+                      </a-radio-button>
+                      <a-radio-button value="4" style="width: 25%;text-align: center">
+                        医疗
+                      </a-radio-button>
+                    </a-radio-group>
+                  </a-col>
+                </a-row>
+                <br/>
+                <a-row style="padding-left: 24px;padding-right: 24px;">
                   <a-col style="margin-bottom: 15px"><span style="font-size: 14px;font-weight: 650;color: #000c17">租金备注</span></a-col>
                   {{ rentData.rentRemark !== null ? rentData.rentRemark : '- -' }}元
                 </a-row>
@@ -286,6 +306,26 @@
               </a-card>
               <div style="font-size: 12px;font-family: SimHei;color: #404040;margin-top: 15px">
                 <a-row style="padding-left: 24px;padding-right: 24px;" v-if="communityData != null">
+                  <a-col style="margin-bottom: 15px"><span style="font-size: 14px;font-weight: 650;color: #000c17">周边设施</span></a-col>
+                  <a-col :span="24">
+                    <a-radio-group button-style="solid" style="width: 100%" @change="gisOnChange">
+                      <a-radio-button value="1" style="width: 25%;text-align: center">
+                        交通
+                      </a-radio-button>
+                      <a-radio-button value="2" style="width: 25%;text-align: center">
+                        餐饮
+                      </a-radio-button>
+                      <a-radio-button value="3" style="width: 25%;text-align: center">
+                        教育
+                      </a-radio-button>
+                      <a-radio-button value="4" style="width: 25%;text-align: center">
+                        医疗
+                      </a-radio-button>
+                    </a-radio-group>
+                  </a-col>
+                </a-row>
+                <br/>
+                <a-row style="padding-left: 24px;padding-right: 24px;" v-if="communityData != null">
                   <a-col style="margin-bottom: 15px"><span style="font-size: 14px;font-weight: 650;color: #000c17">小区信息</span></a-col>
                   <a-col :span="12"><b>绿化率：</b>
                     {{ communityData.greeningRate !== null ? communityData.greeningRate : '- -' }}
@@ -371,6 +411,10 @@
                   <a-skeleton active v-if="checkLoading" />
                   <apexchart v-if="!checkLoading" type="bar" height="180" :options="chartOptions" :series="series"></apexchart>
                 </a-card>
+                <br/>
+                <a-row style="padding-left: 24px;padding-right: 24px;" v-if="communityData != null">
+                  <a-col><span style="font-size: 14px;font-weight: 650;color: #000c17">出租情况</span></a-col>
+                </a-row>
                 <br/>
                 <div style="text-align: center">
                   <a-icon type="smile" theme="twoTone" style="font-size: 75px"/>
@@ -509,6 +553,28 @@ export default {
     }, 500)
   },
   methods: {
+    gisOnChange (e) {
+      let key = ''
+      switch (e.target.value) {
+        case '1':
+          key = '公交站'
+          break
+        case '2':
+          key = '餐饮'
+          break
+        case '3':
+          key = '教育'
+          break
+        case '4':
+          key = '医疗'
+          break
+      }
+      if (this.rentShow) {
+        baiduMap.searchNear(this.rentData.longitude, this.rentData.latitude, key)
+      } else {
+        baiduMap.searchNear(this.communityData.longitude, this.communityData.latitude, key)
+      }
+    },
     selectHousePriceTrend (row) {
       if (!this.echartsShow) {
         this.echartsShow = true
@@ -583,7 +649,7 @@ export default {
       if (this.rentShow) {
         end = new BMap.Point(this.rentData.longitude, this.rentData.latitude)
       } else {
-        end = new BMap.Point(his.communityData.longitude, this.communityData.latitude)
+        end = new BMap.Point(this.communityData.longitude, this.communityData.latitude)
       }
       // eslint-disable-next-line no-undef
       driving.search(start, end)
@@ -680,5 +746,8 @@ export default {
   >>> .ant-card-extra {
     font-size: 13px;
     font-family: SimHei;
+  }
+  >>> .ant-radio-button-wrapper {
+    border-radius: 0;
   }
 </style>

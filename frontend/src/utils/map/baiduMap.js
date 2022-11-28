@@ -24,6 +24,19 @@ baiduMap.initMap = (id) => {
   map.addControl(overViewOpen) // 右下角，打开
 }
 
+baiduMap.searchNear = (lnt, lat, key) => {
+  map.clearOverlays()
+  var mPoint = new BMap.Point(lnt, lat);
+  map.enableScrollWheelZoom();
+  map.centerAndZoom(mPoint, 15);
+
+  var circle = new BMap.Circle(mPoint,1000,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+  map.addOverlay(circle);
+  var local =  new BMap.LocalSearch(map, {renderOptions: {map: map, autoViewport: false}});
+  console.log(key)
+  local.searchNearby(key, mPoint,1000);
+}
+
 /* 查找点位 */
 baiduMap.findPoint = (point, zoom) => {
   if (zoom == undefined) {
