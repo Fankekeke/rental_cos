@@ -11,7 +11,10 @@
         <i-menu style="height: 64px; line-height: 64px;" class="system-top-menu" :theme="theme" mode="horizontal" :menuData="menuData" @select="onSelect"/>
       </div>
       <div :class="['global-header-right', theme]">
-          <header-avatar class="header-item"/>
+        <a-badge count="5">
+          <a-icon type="bell" style="font-size: 18px"/>
+        </a-badge>
+        <header-avatar class="header-item"/>
       </div>
     </div>
   </a-layout-header>
