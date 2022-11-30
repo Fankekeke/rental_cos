@@ -43,7 +43,7 @@
     <!-- 查询租房信息包括房屋编号与小区编号 -->
     <select id="selectRentChargeWithHouse" resultType="cc.mrbird.febs.cos.entity.RentCharge">
         SELECT rc.*, hi.code AS houseCode, ci.code AS communityCode FROM rent_charge rc
-        LEFT JOIN rent_id ri ON (ri.id = rc.rent_id)
+        LEFT JOIN rent_info ri ON (ri.id = rc.rent_id)
         LEFT JOIN house_info hi ON (hi.code = ri.house_code)
         LEFT JOIN community_info ci ON (ci.code = hi.community_code)
         WHERE 1 = 1
@@ -51,7 +51,7 @@
 
     <!-- 查询租房信息以及房屋小区信息 -->
     <select id="selectRentChargeList" resultType="cc.mrbird.febs.cos.entity.vo.RentChargeVo">
-        SELECT rc.*, hi.code AS houseCode, ci.code AS communityCode
+        SELECT rc.*, hi.code AS houseCode, ci.code AS communityCode,
         hi.address AS houseAddress,
         hi.indoor_map AS indoorMap,
         hi.decoration_type AS decorationType,
@@ -68,7 +68,7 @@
         YEAR(rc.check_date) AS checkYear,
         MONTH(rc.check_date) AS checkMonth
         FROM rent_charge rc
-        LEFT JOIN rent_id ri ON (ri.id = rc.rent_id)
+        LEFT JOIN rent_info ri ON (ri.id = rc.rent_id)
         LEFT JOIN house_info hi ON (hi.code = ri.house_code)
         LEFT JOIN community_info ci ON (ci.code = hi.community_code)
         WHERE 1 = 1

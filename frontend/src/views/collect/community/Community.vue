@@ -4,35 +4,6 @@
       <!-- 搜索区域 -->
       <a-form layout="horizontal">
         <a-row :gutter="15">
-          <div :class="advanced ? null: 'fold'">
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="人员姓名"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.staffName"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="联系方式"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.phone"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="人员类型"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.staffType" allowClear>
-                  <a-select-option value="1">销售员</a-select-option>
-                  <a-select-option value="2">超级销售员</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-          </div>
           <span style="float: right; margin-top: 3px;">
             <a-button type="primary" @click="search">查询</a-button>
             <a-button style="margin-left: 8px" @click="reset">重置</a-button>
@@ -42,7 +13,7 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">新增</a-button>
+        <!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -55,14 +26,13 @@
                :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
                :scroll="{ x: 900 }"
                @change="handleTableChange">
-        <template slot="titleShow" slot-scope="text, record">
+        <template slot="addressShow" slot-scope="text, record">
           <template>
-            <a-badge status="processing"/>
             <a-tooltip>
               <template slot="title">
-                {{ record.title }}
+                {{ record.address }}
               </template>
-              {{ record.title.slice(0, 8) }} ...
+              {{ record.address.slice(0, 10) }} ...
             </a-tooltip>
           </template>
         </template>
@@ -72,50 +42,31 @@
               <template slot="title">
                 {{ record.content }}
               </template>
-              {{ record.content.slice(0, 30) }} ...
+              {{ record.content.slice(0, 15) }} ...
             </a-tooltip>
           </template>
         </template>
-        <template slot="operation" slot-scope="text, record">
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
-        </template>
       </a-table>
     </div>
-    <worker-add
-      v-if="workerAdd.visiable"
-      @close="handleWorkerAddClose"
-      @success="handleWorkerAddSuccess"
-      :workerAddVisiable="workerAdd.visiable">
-    </worker-add>
-    <worker-edit
-      ref="workerEdit"
-      @close="handleWorkerEditClose"
-      @success="handleWorkerEditSuccess"
-      :workerEditVisiable="workerEdit.visiable">
-    </worker-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import WorkerAdd from './WorkerAdd'
-import WorkerEdit from './WorkerEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: 'Worker',
-  components: {WorkerAdd, WorkerEdit, RangeDate},
+  name: 'Reply',
+  components: {RangeDate},
   data () {
     return {
+      postView: {
+        visiable: false,
+        data: null
+      },
       advanced: false,
-      workerAdd: {
-        visiable: false
-      },
-      workerEdit: {
-        visiable: false
-      },
       queryParams: {},
       filteredInfo: null,
       sortedInfo: null,
@@ -140,68 +91,33 @@ export default {
     }),
     columns () {
       return [{
-        title: '员工编号',
-        dataIndex: 'staffCode'
+        title: '用户名称',
+        dataIndex: 'userName'
       }, {
-        title: '人员姓名',
-        dataIndex: 'staffName'
-      }, {
-        title: '联系方式',
-        dataIndex: 'phone'
-      }, {
-        title: '照片',
+        title: '头像',
         dataIndex: 'avatar',
         customRender: (text, record, index) => {
           if (!record.avatar) return <a-avatar shape="square" icon="user" />
           return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar.split(',')[0] } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar.split(',')[0] } />
+          <template slot="content">
+            <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar } />
+          </template>
+          <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar } />
           </a-popover>
         }
-      }, {
-        title: '人员类型',
-        dataIndex: 'staffType',
+      },  {
+        title: '小区所在',
+        dataIndex: 'province',
         customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag>销售员</a-tag>
-            case 2:
-              return <a-tag>超级销售员</a-tag>
-            default:
-              return '- -'
+          if (text !== null) {
+            return row.province + row.city + row.area
+          } else {
+            return '- -'
           }
         }
       }, {
-        title: '性别',
-        dataIndex: 'sex',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag>男</a-tag>
-            case 2:
-              return <a-tag>女</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '员工状态',
-        dataIndex: 'staffStatus',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag color="green">正常</a-tag>
-            case 1:
-              return <a-tag color="red">离职</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '创建时间',
-        dataIndex: 'createDate',
+        title: '小区名称',
+        dataIndex: 'communityName',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -210,9 +126,15 @@ export default {
           }
         }
       }, {
-        title: '操作',
-        dataIndex: 'operation',
-        scopedSlots: {customRender: 'operation'}
+        title: '回复时间',
+        dataIndex: 'createDate',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
       }]
     }
   },
@@ -220,34 +142,23 @@ export default {
     this.fetch()
   },
   methods: {
+    view (row) {
+      this.postView.data = row
+      this.postView.visiable = true
+    },
+    handlePostViewClose () {
+      this.postView.visiable = false
+    },
+    handlePostCheckClose () {
+      this.postView.visiable = false
+      this.$message.success('审核成功')
+      this.fetch()
+    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
-    },
-    add () {
-      this.workerAdd.visiable = true
-    },
-    handleWorkerAddClose () {
-      this.workerAdd.visiable = false
-    },
-    handleWorkerAddSuccess () {
-      this.workerAdd.visiable = false
-      this.$message.success('新增工作人员成功')
-      this.search()
-    },
-    edit (record) {
-      this.$refs.workerEdit.setFormValues(record)
-      this.workerEdit.visiable = true
-    },
-    handleWorkerEditClose () {
-      this.workerEdit.visiable = false
-    },
-    handleWorkerEditSuccess () {
-      this.workerEdit.visiable = false
-      this.$message.success('修改工作人员成功')
-      this.search()
     },
     handleDeptChange (value) {
       this.queryParams.deptId = value || ''
@@ -264,7 +175,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/worker-info/' + ids).then(() => {
+          that.$delete('/cos/collect-community/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -334,10 +245,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.staffType === undefined) {
-        delete params.staffType
-      }
-      this.$get('/cos/staff-info/page', {
+      this.$get('/cos/collect-community/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

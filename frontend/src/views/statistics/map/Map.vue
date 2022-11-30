@@ -418,7 +418,7 @@
                 <br/>
                 <div style="text-align: center">
                   <a-icon type="smile" theme="twoTone" style="font-size: 75px"/>
-                  <p style="margin-top: 25px;font-size: 20px;font-family: SimHei">Great, we have done all the operations!</p>
+                  <p style="margin-top: 25px;font-size: 20px;font-family: SimHei">当前小区共有套{{ communityRent }}房源!</p>
                 </div>
               </div>
             </div>
@@ -484,6 +484,7 @@ export default {
   name: 'Map',
   data () {
     return {
+      communityRent: 0,
       rentShow: false,
       rentData: null,
       communityShow: false,
@@ -553,6 +554,11 @@ export default {
     }, 500)
   },
   methods: {
+    selectRentCountByCommunity (communityCode) {
+      this.$get(`/cos/rent-charge/rentCharge/community/${communityCode}`).then((r) => {
+        this.communityRent = r.data.data
+      })
+    },
     gisOnChange (e) {
       let key = ''
       switch (e.target.value) {
@@ -676,6 +682,7 @@ export default {
       this.communityData = row
       this.communityShow = true
       this.selectHousePriceTrend(row)
+      this.selectRentCountByCommunity(row.code)
       this.local(row)
     },
     local (data) {

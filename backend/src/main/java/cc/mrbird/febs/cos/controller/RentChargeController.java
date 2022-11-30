@@ -51,7 +51,7 @@ public class RentChargeController {
      * @param rentCharge 参数
      * @return 结果
      */
-    @GetMapping("rent/map")
+    @GetMapping("/rent/map")
     public R selectRentChargeByMap(RentChargePo rentCharge) {
         return R.ok();
     }
@@ -87,6 +87,17 @@ public class RentChargeController {
     @GetMapping("/rentCharge/staff")
     public R selectRentChargeByStaff(@RequestParam(value = "staffCode", required = false) String staffCode) {
         return R.ok(rentChargeService.selectRentChargeByStaff(staffCode));
+    }
+
+    /**
+     * 根据小区编号获取当前房源
+     *
+     * @param communityCode 小区编号
+     * @return 结果
+     */
+    @GetMapping("/rentCharge/community/{communityCode}")
+    public R selectRentCountByCommunity(@PathVariable(value = "communityCode") String communityCode) {
+        return R.ok(rentChargeService.selectRentCountByCommunity(communityCode));
     }
 
     /**

@@ -204,10 +204,6 @@ export default {
           }
         }
       }, {
-        title: '出租要求',
-        dataIndex: 'rentalRequest',
-        scopedSlots: { customRender: 'rentalRequestShow' },
-      }, {
         title: '负责人',
         dataIndex: 'staffName',
         customRender: (text, row, index) => {

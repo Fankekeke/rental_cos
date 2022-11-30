@@ -90,4 +90,12 @@ public interface IRentChargeService extends IService<RentCharge> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectRentTopByStaff();
+
+    /**
+     * 根据小区编号获取当前房源
+     *
+     * @param communityCode 小区编号
+     * @return 结果
+     */
+    Integer selectRentCountByCommunity(String communityCode);
 }
