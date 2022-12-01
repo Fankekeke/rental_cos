@@ -46,4 +46,29 @@ public class RentInfoServiceImpl extends ServiceImpl<RentInfoMapper, RentInfo> i
     public RentCharge selectRentStatus(String rentId) {
         return rentChargeService.getOne(Wrappers.<RentCharge>lambdaQuery().eq(RentCharge::getRentId, rentId));
     }
+
+    /**
+     * 获取首页数据
+     *
+     * @return 结果
+     */
+    @Override
+    public LinkedHashMap<String, Object> selectHomeData() {
+        // 本月收入
+
+        // 新添房源
+
+        // 租出房源
+
+        // 增长比率
+
+        // 近十天收入统计
+
+        // 近十天房源省份统计
+
+        // 近十天房源省份统计
+
+
+        return null;
+    }
 }

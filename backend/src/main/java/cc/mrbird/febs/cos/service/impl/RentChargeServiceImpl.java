@@ -246,6 +246,7 @@ public class RentChargeServiceImpl extends ServiceImpl<RentChargeMapper, RentCha
                 }
             };
             if (CollectionUtil.isEmpty(rentChargeVoItem)) {
+                result.add(rentChargeItem);
                 continue;
             }
             rentChargeItem.put("rent", rentChargeVoItem);

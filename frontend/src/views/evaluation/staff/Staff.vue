@@ -36,13 +36,13 @@
             </a-tooltip>
           </template>
         </template>
-        <template slot="contentShow" slot-scope="text, record">
+        <template slot="houseAddress" slot-scope="text, record">
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.content }}
+                {{record.province + record.city + record.area}} 《{{ record.communityName }}》 {{ record.houseAddress }}
               </template>
-              {{ record.content.slice(0, 15) }} ...
+              {{ record.houseAddress.slice(0, 15) }} ...
             </a-tooltip>
           </template>
         </template>
@@ -95,38 +95,43 @@ export default {
         dataIndex: 'userName'
       }, {
         title: '头像',
+        dataIndex: 'userAvatar',
+        customRender: (text, record, index) => {
+          if (!record.userAvatar) return <a-avatar shape="square" icon="user" />
+          return <a-popover>
+          <template slot="content">
+            <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.userAvatar } />
+          </template>
+          <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.userAvatar } />
+          </a-popover>
+        }
+      }, {
+        title: '服务得分',
+        dataIndex: 'serviceScore',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '员工姓名',
+        dataIndex: 'staffName'
+      }, {
+        title: '头像',
         dataIndex: 'avatar',
         customRender: (text, record, index) => {
           if (!record.avatar) return <a-avatar shape="square" icon="user" />
           return <a-popover>
-          <template slot="content">
-            <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar } />
-          </template>
-          <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar } />
+            <template slot="content">
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar } />
+            </template>
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.avatar } />
           </a-popover>
         }
       }, {
-        title: '房屋地址',
-        dataIndex: 'houseAddress',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '所属小区',
-        dataIndex: 'communityName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '创建时间',
+        title: '评价时间',
         dataIndex: 'createDate',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -175,7 +180,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/collect-rent/' + ids).then(() => {
+          that.$delete('/cos/staff-evaluation/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -245,7 +250,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/collect-rent/page', {
+      this.$get('/cos/staff-evaluation/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

@@ -2,12 +2,12 @@
   <div>
     <a-row style="margin-top: 15px">
       <a-col :span="24">
-        <div style="background: #ECECEC; padding: 30px;font-family: SimHei">
+        <div style="background: #ECECEC; padding: 30px;">
           <a-row :gutter="16">
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px">本月收入/元</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月收入/元</a-col>
                   <a-col :span="6"><a-icon type="arrow-up" style="font-size: 20px"/></a-col>
                 </a-row>
               </a-card>
@@ -15,7 +15,7 @@
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px">新添房源【套】</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">新添房源【套】</a-col>
                   <a-col :span="6"><a-icon type="arrow-up" style="font-size: 20px"/></a-col>
                 </a-row>
               </a-card>
@@ -23,7 +23,7 @@
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px">租出房源【套】</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">租出房源【套】</a-col>
                   <a-col :span="6"><a-icon type="arrow-up" style="font-size: 20px"/></a-col>
                 </a-row>
               </a-card>
@@ -31,7 +31,7 @@
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px">增长比率（%）</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">增长比率（%）</a-col>
                   <a-col :span="6"><a-icon type="arrow-up" style="font-size: 20px"/></a-col>
                 </a-row>
               </a-card>

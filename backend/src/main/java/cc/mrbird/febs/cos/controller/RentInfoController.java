@@ -2,8 +2,12 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.CommunityInfo;
 import cc.mrbird.febs.cos.entity.RentInfo;
+import cc.mrbird.febs.cos.entity.StaffInfo;
+import cc.mrbird.febs.cos.service.ICommunityInfoService;
 import cc.mrbird.febs.cos.service.IRentInfoService;
+import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -23,6 +28,37 @@ import java.util.List;
 public class RentInfoController {
 
     private final IRentInfoService rentInfoService;
+
+    private final IStaffInfoService staffInfoService;
+
+    private final ICommunityInfoService communityInfoService;
+
+    /**
+     * 首页标题数据
+     *
+     * @return 结果
+     */
+    @GetMapping("/home/title")
+    public R selectHomeTitle() {
+        LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>() {
+            {
+                put("rent", rentInfoService.count(Wrappers.<RentInfo>lambdaQuery().eq(RentInfo::getFlag, 1)));
+                put("community", communityInfoService.count());
+                put("staff", staffInfoService.count(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStaffStatus, 1)));
+            }
+        };
+        return R.ok(result);
+    }
+
+    /**
+     * 获取首页数据
+     *
+     * @return 结果
+     */
+    @GetMapping("/home/data")
+    public R selectHomeData() {
+        return R.ok();
+    }
 
     /**
      * 分页获取出租信息信息

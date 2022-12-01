@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.CommunityInfo;
 import cc.mrbird.febs.cos.service.ICommunityInfoService;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -76,6 +77,9 @@ public class CommunityInfoController {
      */
     @PostMapping
     public R save(CommunityInfo communityInfo) {
+        if (StrUtil.isNotEmpty(communityInfo.getProvince())) {
+            communityInfo.setProvince(communityInfo.getCity());
+        }
         communityInfo.setCode("CMUT-" + System.currentTimeMillis());
         communityInfo.setDelFlag(0);
         communityInfo.setCreateDate(DateUtil.formatDateTime(new Date()));

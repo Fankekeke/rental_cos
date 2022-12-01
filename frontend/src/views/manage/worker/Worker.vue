@@ -191,9 +191,9 @@ export default {
         dataIndex: 'staffStatus',
         customRender: (text, row, index) => {
           switch (text) {
-            case 0:
-              return <a-tag color="green">正常</a-tag>
             case 1:
+              return <a-tag color="green">正常</a-tag>
+            case 0:
               return <a-tag color="red">离职</a-tag>
             default:
               return '- -'

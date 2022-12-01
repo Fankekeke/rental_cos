@@ -65,6 +65,7 @@
         hi.longitude,
         hi.latitude,
         ri.rent_price AS rentPrice,
+        ri.flag,
         YEAR(rc.check_date) AS checkYear,
         MONTH(rc.check_date) AS checkMonth
         FROM rent_charge rc

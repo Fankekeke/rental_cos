@@ -36,13 +36,13 @@
             </a-tooltip>
           </template>
         </template>
-        <template slot="contentShow" slot-scope="text, record">
+        <template slot="houseAddress" slot-scope="text, record">
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.content }}
+                {{record.province + record.city + record.area}} 《{{ record.communityName }}》 {{ record.houseAddress }}
               </template>
-              {{ record.content.slice(0, 15) }} ...
+              {{ record.houseAddress.slice(0, 15) }} ...
             </a-tooltip>
           </template>
         </template>
@@ -108,6 +108,10 @@ export default {
       }, {
         title: '房屋地址',
         dataIndex: 'houseAddress',
+        scopedSlots: {customRender: 'houseAddress'}
+      }, {
+        title: '环境得分',
+        dataIndex: 'environmentScore',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -116,8 +120,8 @@ export default {
           }
         }
       }, {
-        title: '所属小区',
-        dataIndex: 'communityName',
+        title: '设施得分',
+        dataIndex: 'facilityScore',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -126,7 +130,57 @@ export default {
           }
         }
       }, {
-        title: '创建时间',
+        title: '房间得分',
+        dataIndex: 'deviceScore',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '交通得分',
+        dataIndex: 'trafficScore',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '噪音得分',
+        dataIndex: 'noiseScore',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '租金得分',
+        dataIndex: 'priceScore',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '综合得分',
+        dataIndex: 'overallScore',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '评价时间',
         dataIndex: 'createDate',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -175,7 +229,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/collect-rent/' + ids).then(() => {
+          that.$delete('/cos/rent-evaluation/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -245,7 +299,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/collect-rent/page', {
+      this.$get('/cos/rent-evaluation/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

@@ -88,7 +88,7 @@ public class StaffInfoController {
     @PostMapping
     public R save(StaffInfo staffInfo) {
         staffInfo.setStaffCode("STAFF-" + System.currentTimeMillis());
-        staffInfo.setStaffStatus(0);
+        staffInfo.setStaffStatus(1);
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(staffInfoService.save(staffInfo));
     }
