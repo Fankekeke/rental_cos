@@ -1,5 +1,7 @@
 package cc.mrbird.febs.cos.service.impl;
 
+import cc.mrbird.febs.cos.dao.PaymentRecordMapper;
+import cc.mrbird.febs.cos.entity.PaymentRecord;
 import cc.mrbird.febs.cos.entity.RentCharge;
 import cc.mrbird.febs.cos.entity.RentInfo;
 import cc.mrbird.febs.cos.dao.RentInfoMapper;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 /**
@@ -23,6 +26,10 @@ import java.util.LinkedHashMap;
 public class RentInfoServiceImpl extends ServiceImpl<RentInfoMapper, RentInfo> implements IRentInfoService {
 
     private final IRentChargeService rentChargeService;
+
+    private final PaymentRecordMapper paymentRecordMapper;
+
+    private final RentInfoMapper rentInfoMapper;
 
     /**
      * 分页获取出租信息信息
@@ -55,20 +62,20 @@ public class RentInfoServiceImpl extends ServiceImpl<RentInfoMapper, RentInfo> i
     @Override
     public LinkedHashMap<String, Object> selectHomeData() {
         // 本月收入
-
+        paymentRecordMapper.selectAmount();
         // 新添房源
-
+        rentInfoMapper.selectRentCountByMonth();
         // 租出房源
-
-        // 增长比率
-
+        paymentRecordMapper.selectRentStartByMonth();
+        // 总收益
+        BigDecimal all = paymentRecordMapper.selectList(Wrappers.<PaymentRecord>lambdaQuery()).stream().map(PaymentRecord::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
         // 近十天收入统计
 
         // 近十天房源省份统计
 
         // 近十天房源省份统计
 
-
+        // 近十天房屋合租类型统计
         return null;
     }
 }

@@ -94,4 +94,9 @@
         <include refid="baseParam"/>
         ORDER BY ri.create_date DESC
     </select>
+
+    <!-- 本月新添房源数量 -->
+    <select id="selectRentCountByMonth">
+        SELECT COUNT(1) FROM rent_info ri WHERE DATE_FORMAT( ri.create_date, '%Y%m' ) = DATE_FORMAT(CURDATE(),'%Y%m')
+    </select>
 </mapper>

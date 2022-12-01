@@ -37,4 +37,19 @@
         <include refid="baseParam"/>
         ORDER BY pr.create_date DESC
     </select>
+
+    <!-- 本月收入 -->
+    <select id="selectAmount" resultType="java.math.BigDecimal">
+        SELECT
+        IFNULL(SUM( pr.amount ), 0)
+        FROM
+        payment_record pr
+        WHERE
+        DATE_FORMAT( pr.create_date, '%Y%m' ) = DATE_FORMAT(CURDATE(),'%Y%m')
+    </select>
+
+    <!-- 查询本月押金交付次数 -->
+    <select id="selectRentStartByMonth">
+        SELECT COUNT(1) FROM payment_record pr WHERE DATE_FORMAT( pr.create_date, '%Y%m' ) = DATE_FORMAT(CURDATE(),'%Y%m') AND pr.payment_type = '2'
+    </select>
 </mapper>

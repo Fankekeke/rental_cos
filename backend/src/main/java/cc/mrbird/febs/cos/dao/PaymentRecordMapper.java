@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 /**
@@ -21,4 +22,18 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectRecordPage(Page<PaymentRecord> page, @Param("paymentRecord") PaymentRecord paymentRecord);
+
+    /**
+     * 本月收入
+     *
+     * @return 结果
+     */
+    BigDecimal selectAmount();
+
+    /**
+     * 查询本月押金交付次数
+     *
+     * @return 结果
+     */
+    Integer selectRentStartByMonth();
 }

@@ -16,9 +16,16 @@ public interface RentInfoMapper extends BaseMapper<RentInfo> {
     /**
      * 分页获取出租信息信息
      *
-     * @param page 分页对象
+     * @param page     分页对象
      * @param rentInfo 出租信息信息
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectRentPage(Page<RentInfo> page, @Param("rentInfo") RentInfo rentInfo);
+
+    /**
+     * 本月新添房源数量
+     *
+     * @return 结果
+     */
+    Integer selectRentCountByMonth();
 }
