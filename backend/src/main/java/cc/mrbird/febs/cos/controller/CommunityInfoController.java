@@ -77,7 +77,7 @@ public class CommunityInfoController {
      */
     @PostMapping
     public R save(CommunityInfo communityInfo) {
-        if (StrUtil.isNotEmpty(communityInfo.getProvince())) {
+        if (StrUtil.isEmpty(communityInfo.getProvince())) {
             communityInfo.setProvince(communityInfo.getCity());
         }
         communityInfo.setCode("CMUT-" + System.currentTimeMillis());

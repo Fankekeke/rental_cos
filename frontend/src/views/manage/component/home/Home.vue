@@ -8,7 +8,8 @@
               <a-card hoverable>
                 <a-row>
                   <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月收入/元</a-col>
-                  <a-col :span="6"><a-icon type="arrow-up" style="font-size: 20px"/></a-col>
+                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 20px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 18px;font-weight: 500;font-family: SimHei">{{ titleData.monthAmount }}</a-col>
                 </a-row>
               </a-card>
             </a-col>
@@ -16,7 +17,8 @@
               <a-card hoverable>
                 <a-row>
                   <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">新添房源【套】</a-col>
-                  <a-col :span="6"><a-icon type="arrow-up" style="font-size: 20px"/></a-col>
+                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 20px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 18px;font-weight: 500;font-family: SimHei">{{ titleData.monthRent }}</a-col>
                 </a-row>
               </a-card>
             </a-col>
@@ -24,15 +26,17 @@
               <a-card hoverable>
                 <a-row>
                   <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">租出房源【套】</a-col>
-                  <a-col :span="6"><a-icon type="arrow-up" style="font-size: 20px"/></a-col>
+                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 20px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 18px;font-weight: 500;font-family: SimHei">{{ titleData.monthRentOut }}</a-col>
                 </a-row>
               </a-card>
             </a-col>
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">增长比率（%）</a-col>
-                  <a-col :span="6"><a-icon type="arrow-up" style="font-size: 20px"/></a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">总收益（元）</a-col>
+                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 20px;margin-top: 3px"/></a-col>
+                  <a-col :span="18" style="font-size: 18px;font-weight: 500;font-family: SimHei">{{ titleData.allAmount }}</a-col>
                 </a-row>
               </a-card>
             </a-col>
@@ -76,14 +80,23 @@ export default {
   name: 'Home',
   data () {
     return {
+      titleData: {
+        monthAmount: 0,
+        monthRent: 0,
+        monthRentOut: 0,
+        allAmount: 0
+      },
       loading: false,
       series: [{
-        data: [34, 44, 54, 21, 12, 43, 33, 23, 66, 66, 58]
+        data: []
       }],
       chartOptions: {
         chart: {
           type: 'line',
           height: 300
+        },
+        xaxis: {
+          categories: [],
         },
         stroke: {
           curve: 'stepline',
@@ -101,23 +114,14 @@ export default {
           }
         }
       },
-      series1: [{
-        name: 'Net Profit',
-        data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-      }, {
-        name: 'Revenue',
-        data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-      }, {
-        name: 'Free Cash Flow',
-        data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-      }],
+      series1: [],
       chartOptions1: {
         chart: {
           type: 'bar',
           height: 300
         },
         title: {
-          text: '近十天收入统计',
+          text: '近十天房源省份统计',
           align: 'left'
         },
         plotOptions: {
@@ -135,7 +139,7 @@ export default {
           colors: ['transparent']
         },
         xaxis: {
-          categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+          categories: [],
         },
         yaxis: {
           title: {
@@ -153,14 +157,15 @@ export default {
           }
         }
       },
-      series2: [44, 55, 41, 17, 15],
+      series2: [],
       chartOptions2: {
         chart: {
           type: 'donut',
           height: 300
         },
+        labels: ['整租', '合租'],
         title: {
-          text: '近十天收入统计',
+          text: '近十天房屋合租类型统计',
           align: 'left'
         },
         responsive: [{
@@ -217,12 +222,41 @@ export default {
   },
   mounted() {
     this.loading = true
+    this.selectHomeData()
     setTimeout(() => {
       this.loading = false
     }, 200)
   },
   methods: {
-
+    selectHomeData () {
+      this.$get('/cos/rent-info/home/data').then((r) => {
+        this.titleData.monthAmount = r.data.monthAmount
+        this.titleData.monthRent = r.data.monthRent
+        this.titleData.monthRentOut = r.data.monthRentOut
+        this.titleData.allAmount = r.data.allAmount
+        let values = []
+        Object.keys(r.data.provinceRent).forEach(e => {
+          if (this.chartOptions1.xaxis.categories.length === 0) {
+            this.chartOptions1.xaxis.categories = r.data.provinceRent[e].map(obj => {return obj.days})
+          }
+          let itemData = { name: e, data: r.data.provinceRent[e].map(obj => {return obj.count}) }
+          values.push(itemData)
+        })
+        this.series1 = values
+        this.series[0].data = r.data.rentPayment.map(obj => {return obj.price})
+        this.chartOptions.xaxis.categories = r.data.rentPayment.map(obj => {return obj.days})
+        let type1 = 0
+        let type2 = 0
+        r.data.typeList.forEach(e => {
+          if (e.rentType === 1) {
+            type1 = e.count
+          } else {
+            type2 = e.count
+          }
+        })
+        this.series2 = [type1, type2]
+      })
+    }
   }
 }
 </script>

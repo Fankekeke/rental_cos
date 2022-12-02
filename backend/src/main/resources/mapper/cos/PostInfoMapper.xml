@@ -103,4 +103,5 @@
         ORDER BY pi.create_date DESC
         LIMIT 4
     </select>
+
 </mapper>

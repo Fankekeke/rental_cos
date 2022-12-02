@@ -179,6 +179,10 @@ public class DeliveryReviewServiceImpl extends ServiceImpl<DeliveryReviewMapper,
         rent.setCreateDate(deliveryReview.getCreateDate());
         rent.setRentUserCode(deliveryReview.getRentUserCode());
         rent.setStartDate(deliveryReview.getStartLive());
+
+        // 修改租房状态
+        rentChargeService.update(Wrappers.<RentCharge>lambdaUpdate().set(RentCharge::getPlanStatus, "2").set(RentCharge::getCheckDate, DateUtil.formatDateTime(new Date())).eq(RentCharge::getId, deliveryReview.getChargeId()));
+
         // 租金缴费记录
         rent.setPaymentType("1");
         if ("1".equals(deliveryReview.getPayType())) {

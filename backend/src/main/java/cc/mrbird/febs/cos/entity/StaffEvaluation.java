@@ -44,5 +44,13 @@ public class StaffEvaluation implements Serializable {
      */
     private String createDate;
 
+    public StaffEvaluation(String staffCode, Integer rentId, BigDecimal serviceScore, String userCode, String createDate) {
+        this.staffCode = staffCode;
+        this.rentId = rentId;
+        this.serviceScore = serviceScore;
+        this.userCode = userCode;
+        this.createDate = createDate;
+    }
 
+    public StaffEvaluation() {}
 }

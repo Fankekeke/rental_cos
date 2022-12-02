@@ -49,7 +49,42 @@
     </select>
 
     <!-- 查询本月押金交付次数 -->
-    <select id="selectRentStartByMonth">
+    <select id="selectRentStartByMonth" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM payment_record pr WHERE DATE_FORMAT( pr.create_date, '%Y%m' ) = DATE_FORMAT(CURDATE(),'%Y%m') AND pr.payment_type = '2'
+    </select>
+
+    <!-- 近十天收入统计 -->
+    <select id="selectLastRentPayment" resultType="java.util.LinkedHashMap">
+        SELECT
+        DATE_FORMAT( spo.days, '%m-%d' ) AS days,
+        IFNULL( SUM( pr.amount ), 0 ) AS price
+        FROM
+        (
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 0 DAY ) days UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 1 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 2 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 3 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 4 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 5 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 6 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 7 DAY ) UNION
+        SELECT
+            DATE_SUB( curdate(), INTERVAL + 8 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 9 DAY )) spo
+        LEFT JOIN payment_record pr ON (
+        DATE_FORMAT( pr.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' ))
+        GROUP BY
+        days
+        ORDER BY
+        days ASC
     </select>
 </mapper>

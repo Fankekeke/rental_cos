@@ -57,7 +57,7 @@ public class RentInfoController {
      */
     @GetMapping("/home/data")
     public R selectHomeData() {
-        return R.ok();
+        return R.ok(rentInfoService.selectHomeData());
     }
 
     /**

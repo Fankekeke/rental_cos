@@ -7,6 +7,7 @@ import cc.mrbird.febs.cos.entity.RentInfo;
 import cc.mrbird.febs.cos.dao.RentInfoMapper;
 import cc.mrbird.febs.cos.service.IRentChargeService;
 import cc.mrbird.febs.cos.service.IRentInfoService;
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author FanK
@@ -61,21 +65,31 @@ public class RentInfoServiceImpl extends ServiceImpl<RentInfoMapper, RentInfo> i
      */
     @Override
     public LinkedHashMap<String, Object> selectHomeData() {
+        LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>();
         // 本月收入
-        paymentRecordMapper.selectAmount();
+        result.put("monthAmount", paymentRecordMapper.selectAmount());
         // 新添房源
-        rentInfoMapper.selectRentCountByMonth();
+        result.put("monthRent", rentInfoMapper.selectRentCountByMonth());
         // 租出房源
-        paymentRecordMapper.selectRentStartByMonth();
+        result.put("monthRentOut", paymentRecordMapper.selectRentStartByMonth());
         // 总收益
         BigDecimal all = paymentRecordMapper.selectList(Wrappers.<PaymentRecord>lambdaQuery()).stream().map(PaymentRecord::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        result.put("allAmount", all);
         // 近十天收入统计
-
+        List<LinkedHashMap<String, Object>> rentPayment = paymentRecordMapper.selectLastRentPayment();
+        result.put("rentPayment", rentPayment);
         // 近十天房源省份统计
-
-        // 近十天房源省份统计
-
+        List<String> list = rentInfoMapper.selectProvinceList();
+        LinkedHashMap<String, Object> provinceRent = new LinkedHashMap<>();
+        if (CollectionUtil.isNotEmpty(list)) {
+            list.forEach(item -> provinceRent.put(item, rentInfoMapper.selectRentProvince(item)));
+            result.put("provinceRent", provinceRent);
+        } else {
+            result.put("provinceRent", null);
+        }
         // 近十天房屋合租类型统计
-        return null;
+        List<LinkedHashMap<String, Object>> typeList = rentInfoMapper.selectRentType();
+        result.put("typeList", typeList);
+        return result;
     }
 }

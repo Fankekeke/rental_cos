@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author FanK
@@ -28,4 +29,26 @@ public interface RentInfoMapper extends BaseMapper<RentInfo> {
      * @return 结果
      */
     Integer selectRentCountByMonth();
+
+    /**
+     * 十天房源省份统计
+     *
+     * @return 结果
+     */
+    List<String> selectProvinceList();
+
+    /**
+     * 近十天房源省份统计
+     *
+     * @param province 省份
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectRentProvince(@Param("province") String province);
+
+    /**
+     * 近十天房屋合租类型统计
+     *
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectRentType();
 }

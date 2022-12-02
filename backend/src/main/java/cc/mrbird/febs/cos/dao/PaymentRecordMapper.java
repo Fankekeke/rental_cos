@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author FanK
@@ -36,4 +37,11 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
      * @return 结果
      */
     Integer selectRentStartByMonth();
+
+    /**
+     * 近十天收入统计
+     *
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectLastRentPayment();
 }

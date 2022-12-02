@@ -74,5 +74,19 @@ public class RentEvaluation implements Serializable {
      */
     private String createDate;
 
+    public RentEvaluation(Integer rentId, String houseCode, BigDecimal environmentScore, BigDecimal facilityScore, BigDecimal deviceScore, BigDecimal trafficScore, BigDecimal noiseScore, BigDecimal priceScore, BigDecimal overallScore, String userCode, String createDate) {
+        this.rentId = rentId;
+        this.houseCode = houseCode;
+        this.environmentScore = environmentScore;
+        this.facilityScore = facilityScore;
+        this.deviceScore = deviceScore;
+        this.trafficScore = trafficScore;
+        this.noiseScore = noiseScore;
+        this.priceScore = priceScore;
+        this.overallScore = overallScore;
+        this.userCode = userCode;
+        this.createDate = createDate;
+    }
 
+    public RentEvaluation() {}
 }

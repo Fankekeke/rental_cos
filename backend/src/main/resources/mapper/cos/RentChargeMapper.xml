@@ -101,4 +101,22 @@
         WHERE 1 = 1
         AND rc.id = #{chargeId}
     </select>
+
+    <!-- 查询未评价数据 -->
+    <select id="selectLastRentEvaluation" resultType="cc.mrbird.febs.cos.entity.vo.RentChargeEvaluationVo">
+        SELECT
+        rc.rent_id AS rentId,
+        rc.staff_code AS staffCode,
+        ri.house_code AS houseCode,
+        dr.rent_user_code AS userCode
+        FROM
+        rent_charge rc
+        LEFT JOIN rent_info ri ON ( ri.id = rc.rent_id )
+        LEFT JOIN delivery_review dr ON ( dr.charge_id = rc.id )
+        WHERE
+        rc.plan_status = 2
+        AND dr.rent_user_code IS NOT NULL
+        AND DATE_SUB( CURDATE(), INTERVAL 1 DAY ) = date( rc.check_date )
+        GROUP BY rc.rent_id
+    </select>
 </mapper>
