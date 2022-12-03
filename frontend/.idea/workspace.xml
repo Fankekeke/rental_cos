@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e4814a30-dc28-4c26-9f55-eeebcc85010f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../web/static/css/1362.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../web/static/css/lib.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../web/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Vue Single File Component" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="2" />
+  </component>
+  <component name="ProjectId" id="2GJ6c2hS2d4dQteGTXUaWF7tYgh" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../web" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Project\房屋租赁系统\rental_cos\frontend\src\views\staff\sale" />
+      <recent name="E:\Project\房屋租赁系统\rental_cos\frontend\src\views\collect\rent" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Project\房屋租赁系统\rental_cos\frontend\src\views\staff" />
+      <recent name="E:\Project\房屋租赁系统\rental_cos\frontend\src\views\evaluation\staff" />
+      <recent name="E:\Project\房屋租赁系统\rental_cos\frontend\src\views\evaluation\rent" />
+      <recent name="E:\Project\房屋租赁系统\rental_cos\frontend\src\views\collect\community" />
+      <recent name="E:\Project\房屋租赁系统\rental_cos\frontend\src\views\task\record" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e4814a30-dc28-4c26-9f55-eeebcc85010f" name="Default Changelist" comment="" />
+      <created>1666094426179</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1666094426179</updated>
+      <workItem from="1666094429275" duration="5912000" />
+      <workItem from="1666180988288" duration="1207000" />
+      <workItem from="1666188370104" duration="1611000" />
+      <workItem from="1666271569381" duration="5396000" />
+      <workItem from="1666353701793" duration="3148000" />
+      <workItem from="1666398959595" duration="4247000" />
+      <workItem from="1666485462122" duration="10879000" />
+      <workItem from="1666699389689" duration="594000" />
+      <workItem from="1667043725568" duration="2872000" />
+      <workItem from="1667224572992" duration="3570000" />
+      <workItem from="1667573306016" duration="1024000" />
+      <workItem from="1667656785917" duration="1186000" />
+      <workItem from="1667701727899" duration="5736000" />
+      <workItem from="1667718529727" duration="2252000" />
+      <workItem from="1667827435329" duration="2281000" />
+      <workItem from="1667917164601" duration="2256000" />
+      <workItem from="1668230634068" duration="7514000" />
+      <workItem from="1668306484770" duration="3617000" />
+      <workItem from="1668344281698" duration="2128000" />
+      <workItem from="1668601675325" duration="1005000" />
+      <workItem from="1668686263368" duration="5236000" />
+      <workItem from="1668828083998" duration="620000" />
+      <workItem from="1668858037916" duration="5324000" />
+      <workItem from="1668905398837" duration="11287000" />
+      <workItem from="1669034044293" duration="2978000" />
+      <workItem from="1669120664094" duration="4494000" />
+      <workItem from="1669164403591" duration="19501000" />
+      <workItem from="1669269364526" duration="6357000" />
+      <workItem from="1669294535432" duration="2107000" />
+      <workItem from="1669336166247" duration="4947000" />
+      <workItem from="1669425100408" duration="7398000" />
+      <workItem from="1669467404108" duration="5644000" />
+      <workItem from="1669514057903" duration="25112000" />
+      <workItem from="1669594346156" duration="3917000" />
+      <workItem from="1669683335616" duration="696000" />
+      <workItem from="1669769254350" duration="13736000" />
+      <workItem from="1669855578480" duration="14211000" />
+      <workItem from="1669942821574" duration="6692000" />
+      <workItem from="1669984761336" duration="2053000" />
+      <workItem from="1670039176996" duration="8573000" />
+    </task>
+    <task id="LOCAL-00001" summary="fix -小区添加地图">
+      <created>1666533544997</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1666533544997</updated>
+    </task>
+    <task id="LOCAL-00002" summary="fix- 房屋模块添加小区检索组件">
+      <created>1667749814339</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1667749814339</updated>
+    </task>
+    <task id="LOCAL-00003" summary="fix -业主选择组件">
+      <created>1667833831703</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1667833831703</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix -小区添加地图" />
+    <MESSAGE value="fix- 房屋模块添加小区检索组件" />
+    <MESSAGE value="fix -业主选择组件" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix -业主选择组件" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="823" y="415" key="#ESLint" timestamp="1666274774813">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="823" y="415" key="#ESLint/0.0.1920.1050@0.0.1920.1050" timestamp="1666274774813" />
+    <state x="92" y="92" width="1736" height="866" key="DiffContextDialog" timestamp="1669126235798">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="92" y="92" width="1736" height="866" key="DiffContextDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1669126235798" />
+    <state x="740" y="279" key="FileChooserDialogImpl" timestamp="1670074592387">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="740" y="279" key="FileChooserDialogImpl/0.0.1920.1050@0.0.1920.1050" timestamp="1670074592387" />
+    <state x="552" y="257" key="Vcs.Push.Dialog.v2" timestamp="1667833836576">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="552" y="257" key="Vcs.Push.Dialog.v2/0.0.1920.1050@0.0.1920.1050" timestamp="1667833836576" />
+    <state x="764" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1666183587954">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="764" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1050@0.0.1920.1050" timestamp="1666183587954" />
+    <state x="661" y="167" width="935" height="626" key="find.popup" timestamp="1670065465217">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="661" y="167" width="935" height="626" key="find.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1670065465217" />
+    <state x="616" y="243" key="run.anything.popup" timestamp="1670069437241">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="616" y="243" key="run.anything.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1670069437241" />
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1669207761908">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1669207761908" />
+  </component>
+</project>
