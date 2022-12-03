@@ -15,7 +15,7 @@
         </a-col>
         <a-col :span="12">
           <div>
-            <a-row class="more-info">
+            <a-row class="more-info" v-if="user.roleId != 75">
               <a-col :span="4"></a-col>
               <a-col :span="4"></a-col>
               <a-col :span="4"></a-col>
@@ -33,8 +33,8 @@
         </a-col>
       </a-card>
     </a-row>
-    <home></home>
-    <a-row :gutter="8" style="margin-top: 15px">
+    <home  v-if="user.roleId != 75"></home>
+    <a-row :gutter="8" style="margin-top: 15px"  v-show="user.roleId != 75">
       <a-col :span="12">
         <a-card hoverable :bordered="false">
           <apexchart ref="count" type=bar height=300 :options="chartOptions" :series="series" />

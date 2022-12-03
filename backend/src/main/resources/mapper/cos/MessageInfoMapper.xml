@@ -50,7 +50,27 @@
         FROM message_info mi
         LEFT JOIN user_info ui1 ON ( ui1.code = mi.send_user )
         WHERE 1 = 1
-        AND mi.to_user = #{userCode}
+        <if test="userCode != null and userCode != ''">
+            AND mi.to_user = #{userCode}
+        </if>
+        <if test="userCode == null">
+            AND mi.to_user IS NULL
+        </if>
+        AND mi.del_flag = '0'
+        ORDER BY mi.create_date DESC
+    </select>
+
+    <!-- 根据用户编号获取消息信息 -->
+    <select id="selectMessageList" resultType="java.util.LinkedHashMap">
+        SELECT <include refid="baseResult"/>
+        FROM message_info mi
+        WHERE 1 = 1
+        <if test="userCode != null and userCode != ''">
+            AND mi.to_user = #{userCode}
+        </if>
+        <if test="userCode == null">
+            AND mi.to_user IS NULL
+        </if>
         AND mi.del_flag = '0'
         ORDER BY mi.create_date DESC
     </select>

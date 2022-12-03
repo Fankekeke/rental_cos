@@ -46,6 +46,11 @@ public class StaffInfoController {
         return R.ok(staffInfoService.list());
     }
 
+    @GetMapping("/staff/{userId}")
+    public R selectStaffByUserId(@PathVariable("userId") Integer userId) {
+        return R.ok(staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getSysUserId, userId)));
+    }
+
     /**
      * 获取员工详细信息
      *

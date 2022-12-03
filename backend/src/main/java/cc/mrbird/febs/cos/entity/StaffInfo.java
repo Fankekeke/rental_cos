@@ -78,6 +78,8 @@ public class StaffInfo implements Serializable {
      */
     private Integer staffStatus;
 
+    private Integer sysUserId;
+
     /**
      * 待售出数量
      */

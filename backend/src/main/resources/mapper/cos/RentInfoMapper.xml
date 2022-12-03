@@ -67,6 +67,9 @@
         <if test="rentInfo.roomType != null">
             AND ri.room_type = #{rentInfo.roomType}
         </if>
+        <if test="rentInfo.userId != null">
+            AND si.sys_user_id = #{rentInfo.userId}
+        </if>
     </sql>
 
     <!-- 分页获取出租信息信息 -->

@@ -67,5 +67,6 @@ public class UserInfo implements Serializable {
      */
     private String createDate;
 
+    private Integer sysUserId;
 
 }

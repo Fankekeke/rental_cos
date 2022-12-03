@@ -37,6 +37,18 @@ public class MessageInfoController {
     }
 
     /**
+     * 根据用户获取未读消息
+     *
+     * @param userId 用户ID
+     * @param roleId 角色ID
+     * @return 结果
+     */
+    @GetMapping("/message/list")
+    public R selectMessageList(@RequestParam("userId") Integer userId, @RequestParam("roleId") Integer roleId) {
+        return R.ok(messageInfoService.selectMessageList(userId, roleId));
+    }
+
+    /**
      * 设置消息已读
      *
      * @param messageId 消息ID
