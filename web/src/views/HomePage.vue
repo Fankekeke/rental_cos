@@ -1,13 +1,75 @@
 <template>
   <div :class="[multipage === true ? 'multi-page':'single-page', 'not-menu-page', 'home-page']">
     <div>
-      <div style="height: 300px;background-image: url(../../static/img/living-room-1853203_1920.jpg);"></div>
-      <div style="width: 1200px;margin: 0 auto;height: 520px">
-        <a-row :gutter="8" class="count-info">
-          <a-col :span="12" class="visit-count-wrapper">
-            <a-card class="visit-count">
-              <apexchart ref="count" type=bar height=300 :options="chartOptions" :series="series" />
+      <div style="height: 500px;">
+        <div style="height: 350px;background-image: url(../../static/img/living-room-1853203_1920.jpg);padding: 50px">
+          <div style="font-size: 35px;font-weight: 500;color: white;font-family: SimHei">安居客 全房源</div>
+          <div style="font-size: 22px;font-weight: 500;color: white;font-family: SimHei">让您找房更轻松</div>
+          <div style="height: 250px;margin-top: 100px">
+            <a-card :bordered="false" hoverable style="height: 100%;box-shadow: 3px 3px 3px rgba(0, 0, 0, .2);color:#fff">
+              <a-row style="padding: 50px;margin: 0 auto">
+                <a-col :span="16">
+                  <a-input placeholder="请输入小区名称 地址" />
+                </a-col>
+                <a-col :span="6" :offset="2">
+                  <a-button type="primary">
+                    查找
+                  </a-button>
+                </a-col>
+              </a-row>
             </a-card>
+          </div>
+        </div>
+      </div>
+      <div style="width: 1200px;margin: 0 auto;font-family: SimHei">
+        <a-row style="padding-left: 24px;padding-right: 24px;margin-top: 15px" :gutter="20">
+          <a-col style="margin-bottom: 15px"><span style="font-size: 18px;font-weight: 600;color: #000c17">精选小区</span></a-col>
+          <a-col :span="8" v-for="(item, index) in communityList" :key="index">
+            <div style="width: 100%;margin-bottom: 15px;text-align: left">
+              <a-divider orientation="left">
+                <span style="font-size: 12px;font-family: SimHei;">{{item.province}}{{item.city}}{{item.area}} - {{item.code}}</span>
+              </a-divider>
+              <a-card :bordered="false" @click="communityDetail(item)" hoverable>
+                <a-card-meta :title="item.communityName" :description="item.address.slice(0, 50)+'...'"></a-card-meta>
+                <div style="font-size: 12px;font-family: SimHei;margin-top: 8px">
+                  <span v-if="item.propertyType == 1">公寓住宅 |</span>
+                  <span v-if="item.propertyType == 2">商业物业 |</span>
+                  <span v-if="item.propertyType == 3">工业物业 |</span>
+                  <span style="margin-left: 2px" v-if="item.tenureCategory == 1">商品房住宅 |</span>
+                  <span style="margin-left: 2px" v-if="item.tenureCategory == 2">央产房 |</span>
+                  <span style="margin-left: 2px" v-if="item.tenureCategory == 3">军产房 |</span>
+                  <span style="margin-left: 2px" v-if="item.tenureCategory == 4">小产权房 |</span>
+                  <span style="margin-left: 2px" v-if="item.tenureCategory == 5">自建房 |</span>
+                  {{ item.propertyTenure }}年
+                  <a style=" font-size: 13px;float: right">详情</a>
+                </div>
+              </a-card>
+            </div>
+          </a-col>
+        </a-row>
+        <a-row style="padding-left: 24px;padding-right: 24px;margin-top: 15px" :gutter="20">
+          <a-col style="margin-bottom: 15px"><span style="font-size: 18px;font-weight: 600;color: #000c17">热门租房</span></a-col>
+          <a-col :span="8" v-for="(item, index) in rentList" :key="index">
+            <div style="width: 100%;margin-bottom: 15px;text-align: left">
+              <a-divider orientation="left">
+                <span style="font-size: 12px;font-family: SimHei;">{{item.province}}{{item.city}}{{item.area}} - {{item.communityName}}</span>
+              </a-divider>
+              <a-card :bordered="false" @click="rentDetail(item)" hoverable>
+                <a-carousel autoplay style="height: 150px;" v-if="item.roomPictures !== undefined && item.roomPictures !== ''">
+                  <div style="width: 100%;height: 150px" v-for="(item, index) in item.roomPictures.split(',')" :key="index">
+                    <img :src="'http://127.0.0.1:9527/imagesWeb/'+item" style="width: 100%;height: 100%">
+                  </div>
+                </a-carousel>
+                <a-card-meta :title="item.houseAddress" :description="item.rentalRequest.slice(0, 25)+'...'" style="margin-top: 10px"></a-card-meta>
+                <div style="font-size: 12px;font-family: SimHei;margin-top: 8px">
+                  <span>{{ item.towards }}</span> |
+                  <span style="margin-left: 2px">{{ item.roomNumber }}室{{ item.livingRoomNumber }}厅</span> |
+                  <span style="margin-left: 2px" v-if="item.rentType == 1">整租</span>
+                  <span style="margin-left: 2px" v-if="item.rentType == 2">合租</span>
+                  <span style="color: #f5222d; font-size: 13px;float: right">{{ item.rentPrice }}元</span>
+                </div>
+              </a-card>
+            </div>
           </a-col>
         </a-row>
       </div>
@@ -54,40 +116,15 @@ export default {
 
         }
       },
-      projects: [
-        {
-          name: 'FEBS-Shiro',
-          des: 'Spring Boot 2.0.4 & Shiro1.4.0 权限管理系统。',
-          avatar: 'F'
-        },
-        {
-          name: 'FEBS-Security',
-          des: 'Spring Boot 2.0.4 & Spring Security 5.0.7 权限管理系统。',
-          avatar: 'F'
-        },
-        {
-          name: 'SpringAll',
-          des: '循序渐进学习Spring Boot、Spring Cloud与Spring Security。',
-          avatar: 'S'
-        },
-        {
-          name: 'FEBS-Shiro-Vue',
-          des: 'FEBS-Shiro前后端分离版本，前端架构采用Vue全家桶。',
-          avatar: 'F'
-        },
-        {
-          name: 'FEBS-Actuator',
-          des: '使用Spring Boot Admin 2.0.2构建，用于监控FEBS。',
-          avatar: 'F'
-        }
-      ],
       todayIp: '',
       todayVisitCount: '',
       totalVisitCount: '',
       userRole: '',
       userDept: '',
       lastLoginTime: '',
-      welcomeMessage: ''
+      welcomeMessage: '',
+      communityList: [],
+      rentList: []
     }
   },
   computed: {
@@ -100,190 +137,48 @@ export default {
     }
   },
   methods: {
-    welcome () {
-      const date = new Date()
-      const hour = date.getHours()
-      let time = hour < 6 ? '早上好' : (hour <= 11 ? '上午好' : (hour <= 13 ? '中午好' : (hour <= 18 ? '下午好' : '晚上好')))
-      let welcomeArr = [
-        '喝杯咖啡休息下吧☕',
-        '要不要和朋友打局LOL',
-        '要不要和朋友打局王者荣耀',
-        '几天没见又更好看了呢😍',
-        '今天又写了几个Bug🐞呢',
-        '今天在群里吹水了吗',
-        '今天吃了什么好吃的呢',
-        '今天您微笑了吗😊',
-        '今天帮助别人解决问题了吗',
-        '准备吃些什么呢',
-        '周末要不要去看电影？'
-      ]
-      let index = Math.floor((Math.random() * welcomeArr.length))
-      return `${time}，${this.user.username}，${welcomeArr[index]}`
+    getRentList () {
+      this.$get('/cos/rent-info/page').then((r) => {
+        this.rentList = r.data.data.records
+      })
+    },
+    getCommunityList () {
+      this.$get('/cos/community-info/page').then((r) => {
+        this.communityList = r.data.data.records.splice(0, 3)
+      })
     }
   },
   mounted () {
-    this.welcomeMessage = this.welcome()
-    this.$get(`index/${this.user.username}`).then((r) => {
-      let data = r.data.data
-      this.todayIp = data.todayIp
-      this.todayVisitCount = data.todayVisitCount
-      this.totalVisitCount = data.totalVisitCount
-      let sevenVisitCount = []
-      let dateArr = []
-      for (let i = 6; i >= 0; i--) {
-        let time = moment().subtract(i, 'days').format('MM-DD')
-        let contain = false
-        for (let o of data.lastSevenVisitCount) {
-          if (o.days === time) {
-            contain = true
-            sevenVisitCount.push(o.count)
-          }
-        }
-        if (!contain) {
-          sevenVisitCount.push(0)
-        }
-        dateArr.push(time)
-      }
-      let sevenUserVistCount = []
-      for (let i = 6; i >= 0; i--) {
-        let time = moment().subtract(i, 'days').format('MM-DD')
-        let contain = false
-        for (let o of data.lastSevenUserVisitCount) {
-          if (o.days === time) {
-            contain = true
-            sevenUserVistCount.push(o.count)
-          }
-        }
-        if (!contain) {
-          sevenUserVistCount.push(0)
-        }
-      }
-      this.$refs.count.updateSeries([
-        {
-          name: '您',
-          data: sevenUserVistCount
-        },
-        {
-          name: '总数',
-          data: sevenVisitCount
-        }
-      ], true)
-      this.$refs.count.updateOptions({
-        xaxis: {
-          categories: dateArr
-        },
-        title: {
-          text: '近七日系统访问记录',
-          align: 'left'
-        }
-      }, true, true)
-    }).catch((r) => {
-      console.error(r)
-      this.$message.error('获取首页信息失败')
-    })
+    this.getCommunityList()
+    this.getRentList()
   }
 }
 </script>
-<style lang="less">
-  .home-page {
-    .head-info {
-      margin-bottom: .5rem;
-      .head-info-card {
-        padding: .5rem;
-        border-color: #f1f1f1;
-        .head-info-avatar {
-          display: inline-block;
-          float: left;
-          margin-right: 1rem;
-          img {
-            width: 5rem;
-            border-radius: 2px;
-          }
-        }
-        .head-info-count {
-          display: inline-block;
-          float: left;
-          .head-info-welcome {
-            font-size: 1.05rem;
-            margin-bottom: .1rem;
-          }
-          .head-info-desc {
-            color: rgba(0, 0, 0, 0.45);
-            font-size: .8rem;
-            padding: .2rem 0;
-            p {
-              margin-bottom: 0;
-            }
-          }
-          .head-info-time {
-            color: rgba(0, 0, 0, 0.45);
-            font-size: .8rem;
-            padding: .2rem 0;
-          }
-        }
-      }
-    }
-    .count-info {
-      .visit-count-wrapper {
-        padding-left: 0 !important;
-        .visit-count {
-          padding: .5rem;
-          border-color: #f1f1f1;
-          .ant-card-body {
-            padding: .5rem 1rem !important;
-          }
-        }
-      }
-      .project-wrapper {
-        padding-right: 0 !important;
-        .project-card {
-          border: none !important;
-          .ant-card-head {
-            border-left: 1px solid #f1f1f1 !important;
-            border-top: 1px solid #f1f1f1 !important;
-            border-right: 1px solid #f1f1f1 !important;
-          }
-          .ant-card-body {
-            padding: 0 !important;
-            table {
-              width: 100%;
-              td {
-                width: 50%;
-                border: 1px solid #f1f1f1;
-                padding: .6rem;
-                .project-avatar-wrapper {
-                  display:inline-block;
-                  float:left;
-                  margin-right:.7rem;
-                  .project-avatar {
-                    color: #42b983;
-                    background-color: #d6f8b8;
-                  }
-                }
-              }
-            }
-          }
-          .project-detail {
-            display:inline-block;
-            float:left;
-            text-align:left;
-            width: 78%;
-            .project-name {
-              font-size:.9rem;
-              margin-top:-2px;
-              font-weight:600;
-            }
-            .project-desc {
-              color:rgba(0, 0, 0, 0.45);
-              p {
-                margin-bottom:0;
-                font-size:.6rem;
-                white-space:normal;
-              }
-            }
-          }
-        }
-      }
-    }
+<style scoped>
+  >>> .ant-card-meta-title {
+    font-size: 13px;
+    font-family: SimHei;
+  }
+  >>> .ant-card-meta-description {
+    font-size: 12px;
+    font-family: SimHei;
+  }
+  >>> .ant-divider-with-text-left {
+    margin: 0;
+  }
+
+  >>> .ant-card-head-title {
+    font-size: 13px;
+    font-family: SimHei;
+  }
+  >>> .ant-card-extra {
+    font-size: 13px;
+    font-family: SimHei;
+  }
+  .ant-carousel >>> .slick-slide {
+    text-align: center;
+    height: 150px;
+    line-height: 150px;
+    overflow: hidden;
   }
 </style>
