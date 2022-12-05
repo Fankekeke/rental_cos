@@ -9,12 +9,35 @@
             <a-card :bordered="false" hoverable style="height: 100%;box-shadow: 3px 3px 3px rgba(0, 0, 0, .2);color:#fff">
               <a-row style="padding: 50px;margin: 0 auto">
                 <a-col :span="16">
-                  <a-input placeholder="请输入小区名称 地址" />
+                  <a-row>
+                    <a-col :span="18"><a-input placeholder="请输入小区名称 地址" /></a-col>
+                    <a-col :span="4" :offset="2">
+                      <a-button type="primary">
+                        查找
+                      </a-button>
+                    </a-col>
+                    <a-col :span="24"></a-col>
+                    <a-col :span="24" style="font-size: 15px;font-family: SimHei">
+                      <div style="margin-top: 10px">
+                        <a style="margin-right: 15px">北京</a>
+                        <a style="margin-right: 15px">上海</a>
+                        <a style="margin-right: 15px">广州</a>
+                        <a style="margin-right: 15px">深圳</a>
+                        <a style="margin-right: 15px">杭州</a>
+                        <a style="margin-right: 15px">天津</a>
+                        <a style="margin-right: 15px">石家庄</a>
+                        <a style="margin-right: 15px">青岛</a>
+                        <a style="margin-right: 15px">福州</a>
+                      </div>
+                      <a-col :span="24" style="font-size: 15px;font-family: SimHei">
+                        <div style="margin-top: 10px">
+
+                        </div>
+                      </a-col>
+                    </a-col>
+                  </a-row>
                 </a-col>
                 <a-col :span="6" :offset="2">
-                  <a-button type="primary">
-                    查找
-                  </a-button>
                 </a-col>
               </a-row>
             </a-card>
