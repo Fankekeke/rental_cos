@@ -21,4 +21,20 @@ public interface IRentEvaluationService extends IService<RentEvaluation> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectRentEvaluationPage(Page<RentEvaluation> page, RentEvaluation rentEvaluation);
+
+    /**
+     * 获取房屋评价信息
+     *
+     * @param houseCode 房屋编号
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectEvaluationByHouse(String houseCode);
+
+    /**
+     * 获取小区评价信息
+     *
+     * @param communityCode 小区编号
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectEvaluationByCommunity(String communityCode);
 }

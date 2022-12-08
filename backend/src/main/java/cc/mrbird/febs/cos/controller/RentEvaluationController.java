@@ -20,19 +20,41 @@ import java.util.List;
 @RequestMapping("/cos/rent-evaluation")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RentEvaluationController {
-    
+
     private final IRentEvaluationService rentEvaluationService;
 
     /**
      * 分页获取租房评价信息
      *
-     * @param page 分页对象
+     * @param page           分页对象
      * @param rentEvaluation 租房评价信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<RentEvaluation> page, RentEvaluation rentEvaluation) {
         return R.ok(rentEvaluationService.selectRentEvaluationPage(page, rentEvaluation));
+    }
+
+    /**
+     * 获取房屋评价信息
+     *
+     * @param houseCode 房屋编号
+     * @return 结果
+     */
+    @GetMapping("/house/{houseCode}")
+    public R selectEvaluationByHouse(@PathVariable("houseCode") String houseCode) {
+        return R.ok();
+    }
+
+    /**
+     * 获取小区评价信息
+     *
+     * @param communityCode 小区编号
+     * @return 结果
+     */
+    @GetMapping("/community/{communityCode}")
+    public R selectEvaluationByCommunity(@PathVariable("communityCode") String communityCode) {
+        return R.ok();
     }
 
     /**
