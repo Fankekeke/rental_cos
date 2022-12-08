@@ -30,4 +30,11 @@ public interface IRentInfoService extends IService<RentInfo> {
      * @return 结果
      */
     RentCharge selectRentStatus(String rentId);
+
+    /**
+     * 获取首页数据
+     *
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectHomeData();
 }

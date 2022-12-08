@@ -32,7 +32,7 @@
                 <a-select v-model="queryParams.flag" allowClear>
                   <a-select-option value="1">上架</a-select-option>
                   <a-select-option value="2">下架</a-select-option>
-                  <a-select-option value="2">已被出租</a-select-option>
+                  <a-select-option value="3">已被出租</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -105,6 +105,8 @@
         <template slot="operation" slot-scope="text, record">
           <a-icon v-if="record.flag === 1" type="caret-down" @click="audit(record.id, 2)" title="下 架" style="margin-right: 10px"></a-icon>
           <a-icon v-if="record.flag === 2" type="caret-up" @click="audit(record.id, 1)" title="上 架" style="margin-right: 10px"></a-icon>
+          <a-icon v-if="record.flag === 1 && record.chargeId !== null" type="pushpin" @click="pushpin(record)" title="办 理" style="margin-right: 10px"></a-icon>
+          <a-icon v-if="record.flag !== 3"  type="retweet" @click="checkStaff(record)" title="分 配" style="margin-right: 10px"></a-icon>
           <a-icon type="bulb" @click="view(record)" title="详 情" style="margin-right: 10px"></a-icon>
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
         </template>
@@ -123,6 +125,8 @@
       :rentEditVisiable="rentEdit.visiable">
     </rent-edit>
     <rent-view :rentShow="rentView.visiable" :rentData="rentView.data" @close="rentView.visiable = false"></rent-view>
+    <check-worker :rentData="rentView.data" :childrenDrawerShow="userDrawer" @handlerClosed="handlerUserClosed"></check-worker>
+    <delivery-add :rentAddVisiable="rentPushpin.visiable" :chargeId="rentPushpin.chargeId" @close="rentPushpinClose" @success="rentPushpinSuccess"></delivery-add>
   </a-card>
 </template>
 
@@ -133,11 +137,13 @@ import rentEdit from './RentEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
 import RentView from "./RentView";
+import CheckWorker from '../worker/CheckWorker'
+import DeliveryAdd from '../delivery/DeliveryAdd'
 moment.locale('zh-cn')
 
 export default {
   name: 'rent',
-  components: {RentView, rentAdd, rentEdit, RangeDate},
+  components: {CheckWorker, RentView, rentAdd, rentEdit, RangeDate, DeliveryAdd},
   data () {
     return {
       advanced: false,
@@ -150,6 +156,10 @@ export default {
       rentView: {
         visiable: false,
         data: null
+      },
+      rentPushpin: {
+        visiable: false,
+        chargeId: ''
       },
       queryParams: {},
       filteredInfo: null,
@@ -166,7 +176,8 @@ export default {
         showSizeChanger: true,
         showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`
       },
-      userList: []
+      userDrawer: false,
+      staff: null
     }
   },
   computed: {
@@ -193,9 +204,15 @@ export default {
           }
         }
       }, {
-        title: '出租要求',
-        dataIndex: 'rentalRequest',
-        scopedSlots: { customRender: 'rentalRequestShow' },
+        title: '负责人',
+        dataIndex: 'staffName',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '暂无负责人'
+          }
+        }
       }, {
         title: '房间类型',
         dataIndex: 'roomType',
@@ -277,6 +294,27 @@ export default {
     this.fetch()
   },
   methods: {
+    handlerUserClosed () {
+      this.userDrawer = false
+      this.search()
+    },
+    rentPushpinClose () {
+      this.rentPushpin.visiable = false
+      this.search()
+    },
+    rentPushpinSuccess () {
+      this.rentPushpin.visiable = false
+      this.$message.success('成功添加合同')
+      this.search()
+    },
+    checkStaff (rent) {
+      this.userDrawer = true
+      this.rentView.data = rent
+    },
+    pushpin (rent) {
+      this.rentPushpin.visiable = true
+      this.rentPushpin.chargeId = rent.chargeId
+    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
@@ -294,9 +332,9 @@ export default {
       this.$message.success('新增租房信息成功')
       this.search()
     },
-    audit (record, status) {
+    audit (rentId, status) {
       this.$get(`/cos/rent-info/setStatus`, {
-        rentId: record.id,
+        rentId,
         status
       }).then((r) => {
         this.$message.success('更新状态成功')

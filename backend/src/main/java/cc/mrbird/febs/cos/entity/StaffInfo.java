@@ -64,14 +64,21 @@ public class StaffInfo implements Serializable {
     private String phone;
 
     /**
+     * 邮箱
+     */
+    private String email;
+
+    /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private String createDate;
 
     /**
      * 员工状态（0.离职 1.在岗）
      */
     private Integer staffStatus;
+
+    private Integer sysUserId;
 
     /**
      * 待售出数量

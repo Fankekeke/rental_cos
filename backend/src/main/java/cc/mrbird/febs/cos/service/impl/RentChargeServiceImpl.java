@@ -246,6 +246,7 @@ public class RentChargeServiceImpl extends ServiceImpl<RentChargeMapper, RentCha
                 }
             };
             if (CollectionUtil.isEmpty(rentChargeVoItem)) {
+                result.add(rentChargeItem);
                 continue;
             }
             rentChargeItem.put("rent", rentChargeVoItem);
@@ -288,5 +289,21 @@ public class RentChargeServiceImpl extends ServiceImpl<RentChargeMapper, RentCha
             result.add(rentChargeItem);
         }
         return result;
+    }
+
+    /**
+     * 根据小区编号获取当前房源
+     *
+     * @param communityCode 小区编号
+     * @return 结果
+     */
+    @Override
+    public Integer selectRentCountByCommunity(String communityCode) {
+        RentChargePo param = new RentChargePo();
+        if (StrUtil.isNotEmpty(communityCode)) {
+            param.setCommunityCode(communityCode);
+        }
+        List<RentChargeVo> rentChargeVoList = baseMapper.selectRentChargeList(param);
+        return rentChargeVoList.size();
     }
 }

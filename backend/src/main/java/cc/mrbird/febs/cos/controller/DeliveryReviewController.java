@@ -60,13 +60,35 @@ public class DeliveryReviewController {
     }
 
     /**
+     * 合同审核通过
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    @GetMapping("/auditAdopt/{code}")
+    public R auditAdopt(@PathVariable("code") String contractCode) {
+        return R.ok(deliveryReviewService.auditAdopt(contractCode));
+    }
+
+    /**
+     * 合同审核驳回
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    @GetMapping("/auditReject/{code}")
+    public R auditReject(@PathVariable("code") String contractCode) {
+        return R.ok(deliveryReviewService.auditReject(contractCode));
+    }
+
+    /**
      * 添加交付审核信息
      *
      * @param deliveryReview 交付审核信息
      * @return 结果
      */
     @PostMapping
-    public R save(@RequestBody DeliveryReview deliveryReview) {
+    public R save(DeliveryReview deliveryReview) {
         return R.ok(deliveryReviewService.saveDeliveryReview(deliveryReview));
     }
 
@@ -77,7 +99,7 @@ public class DeliveryReviewController {
      * @return 结果
      */
     @PutMapping
-    public R edit(@RequestBody DeliveryReview deliveryReview) {
+    public R edit(DeliveryReview deliveryReview) {
         return R.ok(deliveryReviewService.updateById(deliveryReview));
     }
 

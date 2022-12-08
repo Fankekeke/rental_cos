@@ -35,6 +35,16 @@ public class BulletinInfoController {
         return R.ok(bulletinInfoService.getBulletinByPage(page, bulletinInfo));
     }
 
+    @GetMapping("/{id}")
+    public R detail(@PathVariable("id") Integer id) {
+        return R.ok(bulletinInfoService.getById(id));
+    }
+
+    @GetMapping("/list")
+    public R list() {
+        return R.ok(bulletinInfoService.list());
+    }
+
     /**
      * 新增公告信息
      *

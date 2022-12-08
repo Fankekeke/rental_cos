@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.HouseInfo;
 import cc.mrbird.febs.cos.service.IHouseInfoService;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -76,6 +77,9 @@ public class HouseInfoController {
      */
     @PostMapping
     public R save(HouseInfo houseInfo) {
+        if (StrUtil.isEmpty(houseInfo.getProvince())) {
+            houseInfo.setProvince(houseInfo.getCity());
+        }
         houseInfo.setCode("HOUSE-" + System.currentTimeMillis());
         houseInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         houseInfo.setDelFlag(0);

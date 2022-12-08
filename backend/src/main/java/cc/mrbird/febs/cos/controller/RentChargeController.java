@@ -6,6 +6,7 @@ import cc.mrbird.febs.cos.controller.po.RentChargePo;
 import cc.mrbird.febs.cos.entity.RentCharge;
 import cc.mrbird.febs.cos.service.IRentChargeService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class RentChargeController {
      * @param rentCharge 参数
      * @return 结果
      */
-    @GetMapping("rent/map")
+    @GetMapping("/rent/map")
     public R selectRentChargeByMap(RentChargePo rentCharge) {
         return R.ok();
     }
@@ -86,6 +87,17 @@ public class RentChargeController {
     @GetMapping("/rentCharge/staff")
     public R selectRentChargeByStaff(@RequestParam(value = "staffCode", required = false) String staffCode) {
         return R.ok(rentChargeService.selectRentChargeByStaff(staffCode));
+    }
+
+    /**
+     * 根据小区编号获取当前房源
+     *
+     * @param communityCode 小区编号
+     * @return 结果
+     */
+    @GetMapping("/rentCharge/community/{communityCode}")
+    public R selectRentCountByCommunity(@PathVariable(value = "communityCode") String communityCode) {
+        return R.ok(rentChargeService.selectRentCountByCommunity(communityCode));
     }
 
     /**
@@ -127,7 +139,12 @@ public class RentChargeController {
      * @return 结果
      */
     @PostMapping
-    public R save(@RequestBody RentCharge rentCharge) {
+    public R save(RentCharge rentCharge) {
+        RentCharge last = rentChargeService.getOne(Wrappers.<RentCharge>lambdaQuery().eq(RentCharge::getRentId, rentCharge.getRentId()));
+        if (last != null) {
+            last.setStaffCode(rentCharge.getStaffCode());
+            return R.ok(rentChargeService.updateById(last));
+        }
         rentCharge.setPlanStatus(1);
         rentCharge.setCreateDate(DateUtil.formatDate(new Date()));
         return R.ok(rentChargeService.save(rentCharge));
@@ -140,7 +157,7 @@ public class RentChargeController {
      * @return 结果
      */
     @PutMapping
-    public R edit(@RequestBody RentCharge rentCharge) {
+    public R edit(RentCharge rentCharge) {
         return R.ok(rentChargeService.updateById(rentCharge));
     }
 

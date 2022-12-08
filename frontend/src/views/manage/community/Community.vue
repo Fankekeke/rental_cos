@@ -26,7 +26,7 @@
                 label="物业类型"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.propertyType">
+                <a-select v-model="queryParams.propertyType" allowClear>
                   <a-select-option value="1">公寓住宅</a-select-option>
                   <a-select-option value="2">商业物业</a-select-option>
                   <a-select-option value="3">工业物业</a-select-option>
@@ -38,7 +38,7 @@
                 label="权属类别"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.tenureCategory">
+                <a-select v-model="queryParams.tenureCategory" allowClear>
                   <a-select-option value="1">商品房住宅</a-select-option>
                   <a-select-option value="2">央产房</a-select-option>
                   <a-select-option value="3">军产房</a-select-option>
@@ -53,7 +53,7 @@
                   label="建筑类型"
                   :labelCol="{span: 5}"
                   :wrapperCol="{span: 18, offset: 1}">
-                  <a-select v-model="queryParams.buildingType">
+                  <a-select v-model="queryParams.buildingType" allowClear>
                     <a-select-option value="1">居住建筑</a-select-option>
                     <a-select-option value="2">公共建筑</a-select-option>
                     <a-select-option value="3">工业建筑</a-select-option>
@@ -67,7 +67,7 @@
                   label="统一供暖"
                   :labelCol="{span: 5}"
                   :wrapperCol="{span: 18, offset: 1}">
-                  <a-select v-model="queryParams.unifiedHeating">
+                  <a-select v-model="queryParams.unifiedHeating" allowClear>
                     <a-select-option value="1">是</a-select-option>
                     <a-select-option value="2">否</a-select-option>
                   </a-select>
@@ -78,7 +78,7 @@
                   label="供水供电"
                   :labelCol="{span: 5}"
                   :wrapperCol="{span: 18, offset: 1}">
-                  <a-select v-model="queryParams.waterSupply">
+                  <a-select v-model="queryParams.waterSupply" allowClear>
                     <a-select-option value="1">民用</a-select-option>
                     <a-select-option value="2">商用</a-select-option>
                   </a-select>

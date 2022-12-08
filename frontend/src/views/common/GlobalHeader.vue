@@ -11,9 +11,31 @@
         <i-menu style="height: 64px; line-height: 64px;" class="system-top-menu" :theme="theme" mode="horizontal" :menuData="menuData" @select="onSelect"/>
       </div>
       <div :class="['global-header-right', theme]">
-          <header-avatar class="header-item"/>
+        <a-badge :count="messageList.length" @click="visible = true" v-if="currentUser.roleId != 75">
+          <a-icon type="bell" style="font-size: 18px"/>
+        </a-badge>
+        <header-avatar class="header-item"/>
       </div>
     </div>
+    <a-drawer
+      title="消息通知"
+      placement="right"
+      :closable="false"
+      :visible="visible"
+      width="450"
+      @close="onClose"
+    >
+      <a-card :bordered="false" hoverable v-for="(item, index) in messageList" :key="index" style="margin-bottom: 10px">
+        <a slot="extra" href="#" @click="checkMessage(item.id)" style="font-size: 13px;font-family: SimHei">确认</a>
+        <span slot="title">
+          <b style="font-size: 14px;font-family: SimHei">{{ item.title }}</b>
+        </span>
+        <div style="font-size: 13px;font-family: SimHei">{{ item.content }}</div>
+        <a-col :span="24" style="font-size: 13px;margin-top: 10px;text-align: right">
+          <span>{{ item.createDate }}</span>
+        </a-col>
+      </a-card>
+    </a-drawer>
   </a-layout-header>
 </template>
 
@@ -32,13 +54,37 @@ export default {
       layout: state => state.setting.layout,
       systemName: state => state.setting.systemName,
       sidebarOpened: state => state.setting.sidebar.opened,
-      fixHeader: state => state.setting.fixHeader
+      fixHeader: state => state.setting.fixHeader,
+      currentUser: state => state.account.user
     }),
     theme () {
       return this.layout === 'side' ? 'light' : this.$store.state.setting.theme
     }
   },
+  data () {
+    return {
+      visible: false,
+      messageList: []
+    }
+  },
+  mounted() {
+    this.selectMessageList()
+  },
   methods: {
+    checkMessage (id) {
+      this.$get(`/cos/message-info/setStatus/${id}`).then((r) => {
+        this.selectMessageList()
+      })
+    },
+    selectMessageList () {
+      this.$get('/cos/message-info/message/list', { userId: this.currentUser.userId, roleId: this.currentUser.roleId }).then((r) => {
+        this.messageList = r.data.data
+        console.log(JSON.stringify(this.messageList))
+      })
+    },
+    onClose () {
+      this.visible = false
+    },
     toggleCollapse () {
       this.$emit('toggleCollapse')
     },
@@ -50,6 +96,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .ant-card-head-title {
+    padding: 0;
+  }
   .trigger {
     font-size: 20px;
     line-height: 64px;

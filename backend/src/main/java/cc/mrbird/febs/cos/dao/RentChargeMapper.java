@@ -3,6 +3,7 @@ package cc.mrbird.febs.cos.dao;
 import cc.mrbird.febs.cos.controller.po.RentChargePo;
 import cc.mrbird.febs.cos.entity.RentCharge;
 import cc.mrbird.febs.cos.entity.vo.RentChargeDetailVo;
+import cc.mrbird.febs.cos.entity.vo.RentChargeEvaluationVo;
 import cc.mrbird.febs.cos.entity.vo.RentChargeVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -37,4 +38,11 @@ public interface RentChargeMapper extends BaseMapper<RentCharge> {
      * @return 结果
      */
     RentChargeDetailVo selectChargeDetail(@Param("chargeId") Integer chargeId);
+
+    /**
+     * 查询未评价数据
+     *
+     * @return 结果
+     */
+    List<RentChargeEvaluationVo> selectLastRentEvaluation();
 }

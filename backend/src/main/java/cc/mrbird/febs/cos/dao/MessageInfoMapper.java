@@ -30,4 +30,12 @@ public interface MessageInfoMapper extends BaseMapper<MessageInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectMessageByUser(@Param("userCode") String userCode);
+
+    /**
+     * 根据用户编号获取消息信息
+     *
+     * @param userCode 用户编号
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectMessageList(@Param("userCode") String userCode);
 }

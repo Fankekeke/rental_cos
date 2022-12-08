@@ -44,4 +44,6 @@ public class RentChargeVo extends RentCharge implements Serializable {
 
     private String checkMonth;
 
+    private Integer flag;
+
 }

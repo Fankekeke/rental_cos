@@ -2,15 +2,11 @@
   <div>
     <a-dropdown style="display: inline-block; height: 100%; vertical-align: initial">
       <span style="cursor: pointer">
-        <a-avatar class="avatar" size="small" shape="circle"
+        <a-avatar class="avatar" size="small" shape="square"
                   :src="avatar"/>
         <span class="curr-user">{{user.username}}</span>
       </span>
       <a-menu style="width: 150px" slot="overlay">
-        <a-menu-item @click="openProfile">
-          <a-icon type="user"/>
-          <span>个人中心</span>
-        </a-menu-item>
         <a-menu-item @click="updatePassword">
           <a-icon type="key"/>
           <span>密码修改</span>

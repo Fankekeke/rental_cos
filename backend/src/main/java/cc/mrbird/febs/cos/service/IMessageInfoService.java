@@ -30,4 +30,13 @@ public interface IMessageInfoService extends IService<MessageInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectMessageByUser(String userCode);
+
+    /**
+     * 根据用户获取未读消息
+     *
+     * @param userId 用户ID
+     * @param roleId 角色ID
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectMessageList(Integer userId, Integer roleId);
 }

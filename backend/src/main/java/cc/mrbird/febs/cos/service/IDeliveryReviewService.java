@@ -48,4 +48,20 @@ public interface IDeliveryReviewService extends IService<DeliveryReview> {
      * @return 结果
      */
     ContractVo exportContract(String contractCode);
+
+    /**
+     * 合同审核通过
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    boolean auditAdopt(String contractCode);
+
+    /**
+     * 合同审核驳回
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    boolean auditReject(String contractCode);
 }

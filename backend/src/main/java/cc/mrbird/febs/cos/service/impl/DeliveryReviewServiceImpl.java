@@ -1,16 +1,10 @@
 package cc.mrbird.febs.cos.service.impl;
 
-import cc.mrbird.febs.cos.entity.DeliveryReview;
+import cc.mrbird.febs.cos.entity.*;
 import cc.mrbird.febs.cos.dao.DeliveryReviewMapper;
-import cc.mrbird.febs.cos.entity.MessageInfo;
-import cc.mrbird.febs.cos.entity.PaymentRecord;
-import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.entity.vo.ContractVo;
 import cc.mrbird.febs.cos.entity.vo.DeliveryReviewVo;
-import cc.mrbird.febs.cos.service.IDeliveryReviewService;
-import cc.mrbird.febs.cos.service.IMessageInfoService;
-import cc.mrbird.febs.cos.service.IPaymentRecordService;
-import cc.mrbird.febs.cos.service.IUserInfoService;
+import cc.mrbird.febs.cos.service.*;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -39,6 +33,10 @@ public class DeliveryReviewServiceImpl extends ServiceImpl<DeliveryReviewMapper,
     private final IUserInfoService userInfoService;
 
     private final IMessageInfoService messageInfoService;
+
+    private final IRentInfoService rentInfoService;
+
+    private final IRentChargeService rentChargeService;
 
     /**
      * 分页获取交付审核信息
@@ -126,6 +124,9 @@ public class DeliveryReviewServiceImpl extends ServiceImpl<DeliveryReviewMapper,
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean saveDeliveryReview(DeliveryReview deliveryReview) {
+        RentCharge rentCharge = rentChargeService.getById(deliveryReview.getChargeId());
+        // 修改租房状态
+        rentInfoService.update(Wrappers.<RentInfo>lambdaUpdate().set(RentInfo::getFlag, "3").eq(RentInfo::getId, rentCharge.getRentId()));
         // 默认审核状态
         deliveryReview.setStep("1");
         // 合同状态
@@ -137,36 +138,7 @@ public class DeliveryReviewServiceImpl extends ServiceImpl<DeliveryReviewMapper,
         }
         // 计算居住结束时间
         deliveryReview.setEndLive(DateUtil.formatDate(DateUtil.offsetMonth(DateUtil.parse(deliveryReview.getStartLive(), "yyyy-MM-dd"), deliveryReview.getRentDay())));
-        // 添加缴费记录
-        PaymentRecord deposit = new PaymentRecord();
-        deposit.setContractCode(deliveryReview.getContractCode());
-        deposit.setCreateDate(deliveryReview.getCreateDate());
-        deposit.setRentUserCode(deliveryReview.getRentUserCode());
-        deposit.setStartDate(deliveryReview.getCreateDate());
-        // 租金缴费记录
-        deposit.setAmount(deliveryReview.getContractPrice());
-        deposit.setPaymentType("2");
-        List<PaymentRecord> paymentRecordList = new ArrayList<>();
-        // 房租缴费记录
-        PaymentRecord rent = new PaymentRecord();
-        rent.setContractCode(deliveryReview.getContractCode());
-        rent.setCreateDate(deliveryReview.getCreateDate());
-        rent.setRentUserCode(deliveryReview.getRentUserCode());
-        rent.setStartDate(deliveryReview.getCreateDate());
-        // 租金缴费记录
-        rent.setPaymentType("1");
-        if ("1".equals(deliveryReview.getPayType())) {
-            rent.setRentDay(1);
-            rent.setAmount(deliveryReview.getContractPrice());
-            rent.setEndDate(DateUtil.formatDate(DateUtil.offsetMonth(new Date(), 1)));
-        } else {
-            rent.setRentDay(3);
-            rent.setAmount(deliveryReview.getContractPrice().multiply(BigDecimal.valueOf(3)));
-            rent.setEndDate(DateUtil.formatDate(DateUtil.offsetMonth(new Date(), 3)));
-        }
-        paymentRecordList.add(deposit);
-        paymentRecordList.add(rent);
-        paymentRecordService.saveBatch(paymentRecordList);
+
         return this.save(deliveryReview);
     }
 
@@ -179,5 +151,72 @@ public class DeliveryReviewServiceImpl extends ServiceImpl<DeliveryReviewMapper,
     @Override
     public ContractVo exportContract(String contractCode) {
         return baseMapper.exportContract(contractCode);
+    }
+
+    /**
+     * 合同审核通过
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean auditAdopt(String contractCode) {
+        DeliveryReview deliveryReview = this.getOne(Wrappers.<DeliveryReview>lambdaQuery().eq(DeliveryReview::getContractCode, contractCode));
+        // 添加缴费记录
+        PaymentRecord deposit = new PaymentRecord();
+        deposit.setContractCode(deliveryReview.getContractCode());
+        deposit.setCreateDate(deliveryReview.getCreateDate());
+        deposit.setRentUserCode(deliveryReview.getRentUserCode());
+        deposit.setStartDate(deliveryReview.getStartLive());
+        // 租金缴费记录
+        deposit.setAmount(deliveryReview.getContractPrice());
+        deposit.setPaymentType("2");
+        List<PaymentRecord> paymentRecordList = new ArrayList<>();
+        // 房租缴费记录
+        PaymentRecord rent = new PaymentRecord();
+        rent.setContractCode(deliveryReview.getContractCode());
+        rent.setCreateDate(deliveryReview.getCreateDate());
+        rent.setRentUserCode(deliveryReview.getRentUserCode());
+        rent.setStartDate(deliveryReview.getStartLive());
+
+        // 修改租房状态
+        rentChargeService.update(Wrappers.<RentCharge>lambdaUpdate().set(RentCharge::getPlanStatus, "2").set(RentCharge::getCheckDate, DateUtil.formatDateTime(new Date())).eq(RentCharge::getId, deliveryReview.getChargeId()));
+
+        // 租金缴费记录
+        rent.setPaymentType("1");
+        if ("1".equals(deliveryReview.getPayType())) {
+            rent.setRentDay(1);
+            rent.setAmount(deliveryReview.getContractPrice());
+            rent.setEndDate(DateUtil.formatDate(DateUtil.offsetMonth(DateUtil.parseDate(rent.getStartDate()), 1)));
+        } else {
+            rent.setRentDay(3);
+            rent.setAmount(deliveryReview.getContractPrice().multiply(BigDecimal.valueOf(3)));
+            rent.setEndDate(DateUtil.formatDate(DateUtil.offsetMonth(DateUtil.parseDate(rent.getStartDate()), 3)));
+        }
+        paymentRecordList.add(deposit);
+        paymentRecordList.add(rent);
+        paymentRecordService.saveBatch(paymentRecordList);
+        deliveryReview.setContractStatus("1");
+        deliveryReview.setStep("2");
+        return this.updateById(deliveryReview);
+    }
+
+    /**
+     * 合同审核驳回
+     *
+     * @param contractCode 合同编号
+     * @return 结果
+     */
+    @Override
+    public boolean auditReject(String contractCode) {
+        DeliveryReview delivery = this.getOne(Wrappers.<DeliveryReview>lambdaQuery().eq(DeliveryReview::getContractCode, contractCode));
+        // 修改租房状态
+        RentCharge rentCharge = rentChargeService.getById(delivery.getChargeId());
+        rentInfoService.update(Wrappers.<RentInfo>lambdaUpdate().set(RentInfo::getFlag, "3").eq(RentInfo::getId, rentCharge.getRentId()));
+        // 修改合同状态
+        delivery.setContractStatus("2");
+        delivery.setStep("3");
+        return this.updateById(delivery);
     }
 }

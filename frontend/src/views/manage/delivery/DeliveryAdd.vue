@@ -10,6 +10,48 @@
     </template>
     <div style="font-size: 13px;font-family: SimHei" v-if="rentData !== null && houseInfo !== null && community !== null">
       <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-form :form="form" layout="vertical">
+          <a-row :gutter="20">
+            <a-col :span="8">
+              <a-form-item label='租房人' v-bind="formItemLayout">
+                <a-select
+                  show-search
+                  :value="delivery.rentUserCode"
+                  placeholder="input search text"
+                  style="width: 100%"
+                  :default-active-first-option="false"
+                  :show-arrow="false"
+                  :filter-option="false"
+                  :not-found-content="null"
+                  @search="handleSearch"
+                  @change="handleChange"
+                >
+                  <a-select-option v-for="d in userList" :key="d.code">
+                    {{ d.userName }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label='缴费方式' v-bind="formItemLayout">
+                <a-select v-model="delivery.payType">
+                  <a-select-option value="1">押一付一</a-select-option>
+                  <a-select-option value="2">押一付三</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label='居住时间（月）'>
+                <a-input-number style="width: 100%" :min="1" :step="1" v-model="delivery.rentDay"/>
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item label='入住时间'>
+                <a-date-picker :default-value="moment(new Date(), 'YYYY-MM-DD')" @change="onDateChange" style="width: 100%"/>
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </a-form>
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">出租信息</span></a-col>
         <a-col :span="16"><b>出租标题：</b>
           {{ rentData.title !== null ? rentData.title : '- -' }}
@@ -178,10 +220,10 @@
           {{ houseInfo.floor !== null ? houseInfo.floor : '- -' }}
         </a-col>
         <a-col :span="8"><b>房屋类型：</b>
-          <span v-if="houseInfo.rentType === 1">普通住宅</span>
-          <span v-if="houseInfo.rentType === 2">高层楼</span>
-          <span v-if="houseInfo.rentType === 3">别墅</span>
-          <span v-if="houseInfo.rentType === 3">大平层</span>
+          <span v-if="houseInfo.houseType == 1">普通住宅</span>
+          <span v-if="houseInfo.houseType == 2">高层楼</span>
+          <span v-if="houseInfo.houseType == 3">别墅</span>
+          <span v-if="houseInfo.houseType == 3">大平层</span>
         </a-col>
       </a-row>
       <br/>
@@ -261,40 +303,18 @@
           {{ community.developer !== null ? community.developer : '- -' }}
         </a-col>
         <a-col :span="8"><b>位置：</b>
-          {{  rentData.province + rentData.city + rentData.area }}
+          {{  community.province + community.city + community.area }}
         </a-col>
       </a-row>
       <br/>
       <br/>
     </div>
-    <a-form :form="form" layout="vertical">
-      <a-row :gutter="20">
-        <a-col :span="12">
-          <a-form-item label='公告标题' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'title',
-            { rules: [{ required: true, message: '请输入名称!' }] }
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='公告状态' v-bind="formItemLayout">
-            <a-select v-decorator="[
-              'rackUp',
-              { rules: [{ required: true, message: '请输入公告状态!' }] }
-              ]">
-              <a-select-option value="0">下架</a-select-option>
-              <a-select-option value="1">已发布</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-      </a-row>
-    </a-form>
   </a-modal>
 </template>
 
 <script>
 import {mapState} from 'vuex'
+import moment from 'moment'
 function getBase64 (file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -308,14 +328,12 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: 'BulletinAdd',
+  name: 'rentAdd',
   props: {
-    bulletinAddVisiable: {
+    rentAddVisiable: {
       default: false
     },
-    chargeId: {
-      type: Number
-    }
+    chargeId: {}
   },
   computed: {
     ...mapState({
@@ -323,15 +341,21 @@ export default {
     }),
     show: {
       get: function () {
-        return this.bulletinAddVisiable
+        return this.rentAddVisiable
       },
       set: function () {
       }
     }
   },
   watch: {
-    bulletinAddVisiable: function (value) {
+    rentAddVisiable: function (value) {
       if (value) {
+        this.delivery.startLive = moment().format('YYYY-MM-DD')
+        this.delivery.staffCode = ''
+        this.delivery.rentUserCode = ''
+        this.delivery.contractPrice = ''
+        this.delivery.ownerUserCode = ''
+        this.delivery.houseCode = ''
         this.getChargeDetail(this.chargeId)
       }
     }
@@ -344,16 +368,46 @@ export default {
       fileList: [],
       previewVisible: false,
       previewImage: '',
-      rentInfo: null,
+      rentData: null,
       chargeInfo: null,
       community: null,
-      houseInfo: null
+      houseInfo: null,
+      userList: [],
+      delivery: {
+        rentUserCode: '',
+        rentDay: 12,
+        payType: '2',
+        contractPrice: 0,
+        chargeId: '',
+        staffCode: '',
+        ownerUserCode: '',
+        houseCode: '',
+        startLive: ''
+      }
     }
   },
   methods: {
+    moment,
+    onDateChange (date) {
+      this.delivery.startLive = moment(date).format('YYYY-MM-DD')
+      console.log(this.delivery.startLive)
+    },
+    handleSearch (value) {
+      this.userList = []
+      if (value !== '' && value !== null) {
+        this.$get(`/cos/user-info/remote/${value}`).then((r) => {
+          this.userList = r.data.data
+        })
+      }
+    },
+    handleChange (value) {
+      this.delivery.rentUserCode = value;
+    },
     getChargeDetail (chargeId) {
       this.$get(`/cos/rent-charge/detail/${chargeId}`).then((r) => {
         this.chargeInfo = r.data.data
+        this.delivery.chargeId = chargeId
+        this.delivery.staffCode = this.chargeInfo.staffCode
         this.getHouseInfo(this.chargeInfo.houseCode)
         this.getRentInfo(this.chargeInfo.rentId)
       })
@@ -366,12 +420,15 @@ export default {
     getHouseInfo (houseCode) {
       this.$get(`/cos/house-info/detail/${houseCode}`).then((r) => {
         this.houseInfo = r.data.data
+        this.delivery.ownerUserCode = this.houseInfo.ownerCode
+        this.delivery.houseCode = this.houseInfo.code
         this.getCommunity(this.houseInfo.communityCode)
       })
     },
     getRentInfo (rentId) {
       this.$get(`/cos/rent-info/detail/${rentId}`).then((r) => {
-        this.rentInfo = r.data.data
+        this.rentData = r.data.data
+        this.delivery.contractPrice = this.rentData.rentPrice
       })
     },
     handleCancel () {
@@ -396,13 +453,15 @@ export default {
       this.$emit('close')
     },
     handleSubmit () {
+      if (this.delivery.rentUserCode === '') {
+        this.$message.error('请选择租住用户')
+        return false
+      }
       this.form.validateFields((err, values) => {
+        console.log(this.delivery)
         if (!err) {
-          values.publisher = this.currentUser.userId
           this.loading = true
-          this.$post('/cos/delivery-review', {
-            ...values
-          }).then((r) => {
+          this.$post('/cos/delivery-review', this.delivery).then((r) => {
             this.reset()
             this.$emit('success')
           }).catch(() => {

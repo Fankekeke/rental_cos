@@ -17,7 +17,7 @@ public interface PostInfoMapper extends BaseMapper<PostInfo> {
     /**
      * 分页获取发帖记录信息
      *
-     * @param page 分页对象
+     * @param page     分页对象
      * @param postInfo 发帖记录信息
      * @return 结果
      */
@@ -52,4 +52,5 @@ public interface PostInfoMapper extends BaseMapper<PostInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> getPostListHot();
+
 }

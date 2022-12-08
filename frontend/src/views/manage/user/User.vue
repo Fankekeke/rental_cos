@@ -76,7 +76,7 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="reconciliation" @click="view(record)" title="详 情"></a-icon>
+<!--          <a-icon type="reconciliation" @click="view(record)" title="详 情"></a-icon>-->
         </template>
       </a-table>
     </div>

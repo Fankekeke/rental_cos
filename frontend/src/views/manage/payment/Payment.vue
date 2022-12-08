@@ -162,9 +162,9 @@ export default {
         dataIndex: 'paymentType',
         customRender: (text, row, index) => {
           switch (text) {
-            case 1:
+            case '1':
               return <a-tag>房租</a-tag>
-            case 2:
+            case '2':
               return <a-tag>押金</a-tag>
             default:
               return '- -'
@@ -335,7 +335,7 @@ export default {
       if (params.paymentType === undefined) {
         delete params.paymentType
       }
-      this.$get('/cos/payment-info/page', {
+      this.$get('/cos/payment-record/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

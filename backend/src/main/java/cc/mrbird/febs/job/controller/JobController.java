@@ -87,7 +87,6 @@ public class JobController extends BaseController {
         }
     }
 
-    @Log("执行定时任务")
     @GetMapping("run/{jobId}")
     @RequiresPermissions("job:run")
     public void runJob(@NotBlank(message = "{required}") @PathVariable String jobId) throws FebsException {
