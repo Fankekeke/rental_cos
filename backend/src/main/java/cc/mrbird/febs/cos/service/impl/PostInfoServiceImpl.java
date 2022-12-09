@@ -73,4 +73,5 @@ public class PostInfoServiceImpl extends ServiceImpl<PostInfoMapper, PostInfo> i
     public List<LinkedHashMap<String, Object>> getPostListHot() {
         return baseMapper.getPostListHot();
     }
+
 }

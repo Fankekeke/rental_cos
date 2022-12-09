@@ -43,7 +43,7 @@ public class RentEvaluationController {
      */
     @GetMapping("/house/{houseCode}")
     public R selectEvaluationByHouse(@PathVariable("houseCode") String houseCode) {
-        return R.ok();
+        return R.ok(rentEvaluationService.selectEvaluationByHouse(houseCode));
     }
 
     /**
@@ -54,7 +54,7 @@ public class RentEvaluationController {
      */
     @GetMapping("/community/{communityCode}")
     public R selectEvaluationByCommunity(@PathVariable("communityCode") String communityCode) {
-        return R.ok();
+        return R.ok(rentEvaluationService.selectEvaluationByCommunity(communityCode));
     }
 
     /**

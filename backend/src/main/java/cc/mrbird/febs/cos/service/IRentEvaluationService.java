@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 /**
@@ -28,7 +29,7 @@ public interface IRentEvaluationService extends IService<RentEvaluation> {
      * @param houseCode 房屋编号
      * @return 结果
      */
-    LinkedHashMap<String, Object> selectEvaluationByHouse(String houseCode);
+    LinkedHashMap<String, BigDecimal> selectEvaluationByHouse(String houseCode);
 
     /**
      * 获取小区评价信息
@@ -36,5 +37,5 @@ public interface IRentEvaluationService extends IService<RentEvaluation> {
      * @param communityCode 小区编号
      * @return 结果
      */
-    LinkedHashMap<String, Object> selectEvaluationByCommunity(String communityCode);
+    LinkedHashMap<String, BigDecimal> selectEvaluationByCommunity(String communityCode);
 }
