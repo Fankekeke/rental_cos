@@ -109,6 +109,38 @@ public class TreeUtil {
         router.setMeta(new RouterMeta(true, false));
         topRoutes.add(router);
 
+        router = new VueRouter<>();
+        router.setPath("/personal");
+        router.setName("个人信息");
+        router.setComponent("user/personal/Personal");
+        router.setIcon("none");
+        router.setMeta(new RouterMeta(true, false));
+        topRoutes.add(router);
+
+        router = new VueRouter<>();
+        router.setPath("/message");
+        router.setName("我的消息");
+        router.setComponent("user/message/Message");
+        router.setIcon("none");
+        router.setMeta(new RouterMeta(true, false));
+        topRoutes.add(router);
+
+        router = new VueRouter<>();
+        router.setPath("/message");
+        router.setName("我的消息");
+        router.setComponent("user/message/Message");
+        router.setIcon("none");
+        router.setMeta(new RouterMeta(true, false));
+        topRoutes.add(router);
+
+        router = new VueRouter<>();
+        router.setPath("/news");
+        router.setName("资讯中心");
+        router.setComponent("news/News");
+        router.setIcon("none");
+        router.setMeta(new RouterMeta(true, false));
+        topRoutes.add(router);
+
         ArrayList<VueRouter<T>> list = new ArrayList<>();
         VueRouter<T> root = new VueRouter<>();
         root.setName("主页");
