@@ -1,11 +1,12 @@
 <template>
   <div v-if="newsInfo != null">
-    <a-page-header
-      :title="newsInfo.messTitle"
-      :sub-title="newsInfo.sendDate"
-      @back="back"
-    />
-    <div v-html="newsInfo.content" style="padding: 23px;font-family: SimHei;"></div>
+    <a-card :bordered="false">
+      <div @click="back" slot="title">
+        <a @click="back" href="#">返回</a>
+        <span style="margin-left: 10px">{{ newsInfo.title }}</span>
+      </div>
+      <div v-html="newsInfo.content" style="padding: 23px;font-family: SimHei;"></div>
+    </a-card>
   </div>
 </template>
 
@@ -45,6 +46,10 @@ export default {
 <style scoped>
   /deep/ .ant-page-header-heading-title {
     letter-spacing: 1px;
+    font-family: SimHei;
+  }
+  /deep/ .ant-card-head-title {
+    font-size: 14px;
     font-family: SimHei;
   }
 </style>

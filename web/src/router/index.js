@@ -4,7 +4,6 @@ import MenuView from '@/views/common/MenuView'
 import PageView from '@/views/common/PageView'
 import LoginView from '@/views/login/Common'
 import Map from '@/views/map/Map'
-import News from '@/views/news/News'
 import EmptyPageView from '@/views/common/EmptyPageView'
 import HomePageView from '@/views/HomePage'
 import db from 'utils/localstorage'
@@ -27,11 +26,6 @@ let constRouter = [
     path: '/map',
     name: '地图找房',
     component: Map
-  },
-  {
-    path: '/news',
-    name: '公告中心',
-    component: News
   }
 ]
 
