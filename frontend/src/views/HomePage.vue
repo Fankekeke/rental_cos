@@ -33,7 +33,7 @@
         </a-col>
       </a-card>
     </a-row>
-    <home  v-if="user.roleId != 75"></home>
+    <home v-if="user.roleId != 75"></home>
     <a-row :gutter="8" style="margin-top: 15px"  v-show="user.roleId != 75">
       <a-col :span="12">
         <a-card hoverable :bordered="false">

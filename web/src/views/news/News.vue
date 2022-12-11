@@ -27,6 +27,26 @@
           </div>
         </div>
       </a-col>
+      <a-col :span="8">
+        <p style="margin-bottom: 15px;font-size: 16px;font-weight: 600;font-family: SimHei;margin-left: 8px;margin-top: 15px">热门房源</p>
+        <div style="width: 100%;margin-bottom: 15px;text-align: left" v-for="(item, index) in rentList" :key="index">
+          <a-card :bordered="false" @click="rentDetail(item)" hoverable>
+            <a-carousel autoplay style="height: 150px;" v-if="item.roomPictures !== undefined && item.roomPictures !== ''">
+              <div style="width: 100%;height: 150px" v-for="(item, index) in item.roomPictures.split(',')" :key="index">
+                <img :src="'http://127.0.0.1:9527/imagesWeb/'+item" style="width: 100%;height: 100%">
+              </div>
+            </a-carousel>
+            <a-card-meta :title="item.houseAddress" :description="item.rentalRequest.slice(0, 25)+'...'" style="margin-top: 10px"></a-card-meta>
+            <div style="font-size: 12px;font-family: SimHei;margin-top: 8px">
+              <span>{{ item.towards }}</span> |
+              <span style="margin-left: 2px">{{ item.roomNumber }}室{{ item.livingRoomNumber }}厅</span> |
+              <span style="margin-left: 2px" v-if="item.rentType == 1">整租</span>
+              <span style="margin-left: 2px" v-if="item.rentType == 2">合租</span>
+              <span style="color: #f5222d; font-size: 13px;float: right">{{ item.rentPrice }}元</span>
+            </div>
+          </a-card>
+        </div>
+      </a-col>
     </a-row>
   </a-card>
 </template>
@@ -47,6 +67,7 @@ export default {
   data () {
     return {
       listData: [],
+      rentList: [],
       noticeId: null,
       detailFlag: false,
       pagination: {
@@ -56,8 +77,14 @@ export default {
   },
   mounted () {
     this.getNews()
+    this.getRentList()
   },
   methods: {
+    getRentList () {
+      this.$get('/cos/rent-info/page').then((r) => {
+        this.rentList = r.data.data.records.splice(0, 3)
+      })
+    },
     detailInit (noticeId) {
       this.noticeId = noticeId
       this.detailFlag = true
@@ -80,5 +107,27 @@ export default {
   .messageContent {
     line-height: 1.8;
     font-family: SimHei;
+  }
+  >>> .ant-card-meta-title {
+    font-size: 13px;
+    font-family: SimHei;
+  }
+  >>> .ant-card-meta-description {
+    font-size: 12px;
+    font-family: SimHei;
+  }
+  >>> .ant-card-head-title {
+    font-size: 13px;
+    font-family: SimHei;
+  }
+  >>> .ant-card-extra {
+    font-size: 13px;
+    font-family: SimHei;
+  }
+  .ant-carousel >>> .slick-slide {
+    text-align: center;
+    height: 150px;
+    line-height: 150px;
+    overflow: hidden;
   }
 </style>

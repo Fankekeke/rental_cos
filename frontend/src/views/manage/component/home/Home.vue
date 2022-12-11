@@ -235,26 +235,33 @@ export default {
         this.titleData.monthRentOut = r.data.monthRentOut
         this.titleData.allAmount = r.data.allAmount
         let values = []
-        Object.keys(r.data.provinceRent).forEach(e => {
-          if (this.chartOptions1.xaxis.categories.length === 0) {
-            this.chartOptions1.xaxis.categories = r.data.provinceRent[e].map(obj => {return obj.days})
-          }
-          let itemData = { name: e, data: r.data.provinceRent[e].map(obj => {return obj.count}) }
-          values.push(itemData)
-        })
-        this.series1 = values
+        if (r.data.provinceRent !== null) {
+          Object.keys(r.data.provinceRent).forEach(e => {
+            if (this.chartOptions1.xaxis.categories.length === 0) {
+              this.chartOptions1.xaxis.categories = r.data.provinceRent[e].map(obj => {return obj.days})
+            }
+            let itemData = { name: e, data: r.data.provinceRent[e].map(obj => {return obj.count}) }
+            values.push(itemData)
+          })
+          this.series1 = values
+        }
         this.series[0].data = r.data.rentPayment.map(obj => {return obj.price})
         this.chartOptions.xaxis.categories = r.data.rentPayment.map(obj => {return obj.days})
         let type1 = 0
         let type2 = 0
-        r.data.typeList.forEach(e => {
-          if (e.rentType === 1) {
-            type1 = e.count
-          } else {
-            type2 = e.count
-          }
-        })
-        this.series2 = [type1, type2]
+        if (r.data.typeList.length === 0) {
+          this.series2 = [type1, type2]
+          console.log(this.series2)
+        } else {
+          r.data.typeList.forEach(e => {
+            if (e.rentType === 1) {
+              type1 = e.count
+            } else {
+              type2 = e.count
+            }
+          })
+          this.series2 = [type1, type2]
+        }
       })
     }
   }
