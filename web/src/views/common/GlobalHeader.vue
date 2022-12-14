@@ -14,7 +14,7 @@
         <a-menu v-model="current" mode="horizontal" style="height: 85px; line-height: 85px;" class="system-top-menu">
           <a-menu-item key="home" style="color: #303133;letter-spacing: 2px;font-family: SimHei" @click="$router.push('/')">首页</a-menu-item>
           <a-menu-item key="map" style="color: #303133;letter-spacing: 2px;font-family: SimHei" @click="$router.push('/map')">地图找房</a-menu-item>
-          <a-menu-item key="product" style="color: #303133;letter-spacing: 2px;font-family: SimHei" @click="$router.push('/product')">租房</a-menu-item>
+          <a-menu-item key="product" style="color: #303133;letter-spacing: 2px;font-family: SimHei" @click="$router.push('/rent')">租房</a-menu-item>
           <a-menu-item key="message" style="color: #303133;letter-spacing: 2px;font-family: SimHei" @click="$router.push('/news')">公告中心</a-menu-item>
         </a-menu>
         <!--        <i-menu style="height: 85px; line-height: 85px;" class="system-top-menu" :theme="theme" mode="horizontal" :menuData="menuData" @select="onSelect"/>-->

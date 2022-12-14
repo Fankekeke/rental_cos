@@ -141,6 +141,14 @@ public class TreeUtil {
         router.setMeta(new RouterMeta(true, false));
         topRoutes.add(router);
 
+        router = new VueRouter<>();
+        router.setPath("/rent");
+        router.setName("资讯中心");
+        router.setComponent("rent/Rent");
+        router.setIcon("none");
+        router.setMeta(new RouterMeta(true, false));
+        topRoutes.add(router);
+
         ArrayList<VueRouter<T>> list = new ArrayList<>();
         VueRouter<T> root = new VueRouter<>();
         root.setName("主页");

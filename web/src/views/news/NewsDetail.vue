@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <div @click="back" slot="title">
         <a @click="back" href="#">返回</a>
-        <span style="margin-left: 10px">{{ newsInfo.title }}</span>
+        <span style="margin-left: 10px;font-size: 16px;font-weight: 600">{{ newsInfo.title }}</span>
       </div>
       <div v-html="newsInfo.content" style="padding: 23px;font-family: SimHei;"></div>
     </a-card>

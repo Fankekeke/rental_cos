@@ -12,9 +12,6 @@
                 <a-menu-item key="1" style="font-size: 13px;font-family: SimHei">
                   <a @click="openMessage"><a-icon type="message" />我的消息</a>
                 </a-menu-item>
-                <a-menu-item key="2" style="font-size: 13px;font-family: SimHei">
-                  <a @click="openOrder"><a-icon type="desktop" />我的房间</a>
-                </a-menu-item>
                 <a-menu-item key="3" style="font-size: 13px;font-family: SimHei">
                   <a @click="openApartment"><a-icon type="apartment" />我的租房</a>
                 </a-menu-item>
