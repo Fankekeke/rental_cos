@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,10 +23,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4814a30-dc28-4c26-9f55-eeebcc85010f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../web/static/css/1362.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../web/static/css/lib.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../web/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../web/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/views/rent/Rent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/views/rent/Rent.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,19 +51,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../web" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.standard" value="true" />
-    <property name="node.js.path.for.package.eslint" value="project" />
-    <property name="node.js.path.for.package.standard" value="project" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.standard" value="" />
-    <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="vue.rearranger.settings.migration" value="true" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/Project/房屋租赁系统/rental_cos/web&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\Project\房屋租赁系统\rental_cos\frontend\src\views\staff\sale" />
@@ -123,6 +126,44 @@
       <workItem from="1669942821574" duration="6692000" />
       <workItem from="1669984761336" duration="2053000" />
       <workItem from="1670039176996" duration="8573000" />
+      <workItem from="1670123268735" duration="5111000" />
+      <workItem from="1670203468663" duration="2010000" />
+      <workItem from="1670289016224" duration="586000" />
+      <workItem from="1670374823121" duration="584000" />
+      <workItem from="1670501174749" duration="604000" />
+      <workItem from="1670586773594" duration="3913000" />
+      <workItem from="1670642490183" duration="2038000" />
+      <workItem from="1670727504109" duration="738000" />
+      <workItem from="1670934303558" duration="950000" />
+      <workItem from="1670939532540" duration="81000" />
+      <workItem from="1671024338702" duration="680000" />
+      <workItem from="1671175793725" duration="13000" />
+      <workItem from="1671857994660" duration="641000" />
+      <workItem from="1672237477098" duration="725000" />
+      <workItem from="1672317168064" duration="931000" />
+      <workItem from="1672399076429" duration="588000" />
+      <workItem from="1672454647897" duration="66000" />
+      <workItem from="1672454950023" duration="636000" />
+      <workItem from="1672491744878" duration="35000" />
+      <workItem from="1672572519320" duration="27000" />
+      <workItem from="1672586426996" duration="131000" />
+      <workItem from="1672586634076" duration="30000" />
+      <workItem from="1672637417998" duration="696000" />
+      <workItem from="1672839458345" duration="239000" />
+      <workItem from="1673015388796" duration="366000" />
+      <workItem from="1673073013149" duration="70000" />
+      <workItem from="1675172677330" duration="691000" />
+      <workItem from="1675599849039" duration="679000" />
+      <workItem from="1676464554196" duration="638000" />
+      <workItem from="1677502167869" duration="1191000" />
+      <workItem from="1678282867465" duration="266000" />
+      <workItem from="1678466120416" duration="613000" />
+      <workItem from="1680267366400" duration="453000" />
+      <workItem from="1685192388061" duration="50000" />
+      <workItem from="1685192585042" duration="601000" />
+      <workItem from="1685233781704" duration="592000" />
+      <workItem from="1686313514550" duration="591000" />
+      <workItem from="1701953566969" duration="3257000" />
     </task>
     <task id="LOCAL-00001" summary="fix -小区添加地图">
       <created>1666533544997</created>
@@ -161,46 +202,11 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fix -小区添加地图" />
     <MESSAGE value="fix- 房屋模块添加小区检索组件" />
     <MESSAGE value="fix -业主选择组件" />
     <option name="LAST_COMMIT_MESSAGE" value="fix -业主选择组件" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="823" y="415" key="#ESLint" timestamp="1666274774813">
-      <screen x="0" y="0" width="1920" height="1050" />
-    </state>
-    <state x="823" y="415" key="#ESLint/0.0.1920.1050@0.0.1920.1050" timestamp="1666274774813" />
-    <state x="92" y="92" width="1736" height="866" key="DiffContextDialog" timestamp="1669126235798">
-      <screen x="0" y="0" width="1920" height="1050" />
-    </state>
-    <state x="92" y="92" width="1736" height="866" key="DiffContextDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1669126235798" />
-    <state x="740" y="279" key="FileChooserDialogImpl" timestamp="1670074592387">
-      <screen x="0" y="0" width="1920" height="1050" />
-    </state>
-    <state x="740" y="279" key="FileChooserDialogImpl/0.0.1920.1050@0.0.1920.1050" timestamp="1670074592387" />
-    <state x="552" y="257" key="Vcs.Push.Dialog.v2" timestamp="1667833836576">
-      <screen x="0" y="0" width="1920" height="1050" />
-    </state>
-    <state x="552" y="257" key="Vcs.Push.Dialog.v2/0.0.1920.1050@0.0.1920.1050" timestamp="1667833836576" />
-    <state x="764" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1666183587954">
-      <screen x="0" y="0" width="1920" height="1050" />
-    </state>
-    <state x="764" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1050@0.0.1920.1050" timestamp="1666183587954" />
-    <state x="661" y="167" width="935" height="626" key="find.popup" timestamp="1670065465217">
-      <screen x="0" y="0" width="1920" height="1050" />
-    </state>
-    <state x="661" y="167" width="935" height="626" key="find.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1670065465217" />
-    <state x="616" y="243" key="run.anything.popup" timestamp="1670069437241">
-      <screen x="0" y="0" width="1920" height="1050" />
-    </state>
-    <state x="616" y="243" key="run.anything.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1670069437241" />
-    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1669207761908">
-      <screen x="0" y="0" width="1920" height="1050" />
-    </state>
-    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1669207761908" />
   </component>
 </project>

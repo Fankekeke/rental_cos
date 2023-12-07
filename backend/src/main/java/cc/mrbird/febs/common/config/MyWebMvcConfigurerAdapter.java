@@ -9,7 +9,7 @@ public class MyWebMvcConfigurerAdapter implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/imagesWeb/**").addResourceLocations("file:E:/Project/房屋租赁系统/file/");
+        registry.addResourceHandler("/imagesWeb/**").addResourceLocations("file:G:/Project/房屋租赁系统/file/");
         WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 }

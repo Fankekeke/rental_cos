@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,15 +23,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01b5057b-b863-401d-b82c-a19d776edca2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/static/css/1362.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/lib.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/rent/Rent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/rent/Rent.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Vue Single File Component" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -36,24 +45,34 @@
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="2" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="2IPE0IrimwqBm64Rchu8PtWQRQt" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/static" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.path.for.package.eslint" value="project" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="vue.rearranger.settings.migration" value="true" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "G:/Project/房屋租赁系统/rental_cos/web/src/views/user",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\Project\房屋租赁系统\rental_cos\web\src\views\user" />
+      <recent name="E:\Project\房屋租赁系统\rental_cos\web\src\views" />
+      <recent name="E:\Project\房屋租赁系统\rental_cos\web\src\utils" />
       <recent name="E:\Project\房屋租赁系统\rental_cos\web\static" />
     </key>
   </component>
@@ -65,8 +84,45 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1670074593959</updated>
-      <workItem from="1670074595030" duration="4158000" />
+      <workItem from="1670074595030" duration="4780000" />
+      <workItem from="1670123266426" duration="6073000" />
+      <workItem from="1670203478771" duration="5854000" />
+      <workItem from="1670289010962" duration="594000" />
+      <workItem from="1670374825606" duration="583000" />
+      <workItem from="1670501170844" duration="588000" />
+      <workItem from="1670586806561" duration="4717000" />
+      <workItem from="1670642486416" duration="1908000" />
+      <workItem from="1670679311217" duration="598000" />
+      <workItem from="1670727506884" duration="809000" />
+      <workItem from="1670934277656" duration="589000" />
+      <workItem from="1670939417070" duration="192000" />
+      <workItem from="1671024432042" duration="4014000" />
+      <workItem from="1671175791637" duration="98000" />
+      <workItem from="1671251124840" duration="1475000" />
+      <workItem from="1671362097688" duration="1078000" />
+      <workItem from="1671847885690" duration="2736000" />
+      <workItem from="1671856365014" duration="594000" />
+      <workItem from="1672059860837" duration="592000" />
+      <workItem from="1672143480708" duration="594000" />
+      <workItem from="1672228432098" duration="2364000" />
+      <workItem from="1672317182125" duration="583000" />
+      <workItem from="1672399062057" duration="586000" />
+      <workItem from="1672586392568" duration="25000" />
+      <workItem from="1672839279258" duration="169000" />
+      <workItem from="1678466149508" duration="614000" />
+      <workItem from="1683882356551" duration="1203000" />
+      <workItem from="1684066001231" duration="653000" />
+      <workItem from="1685192305602" duration="63000" />
+      <workItem from="1701954072924" duration="5306000" />
     </task>
+    <task id="LOCAL-00001" summary="fix -门户端样式好难搞">
+      <created>1670078987089</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1670078987089</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -83,10 +139,8 @@
       </map>
     </option>
   </component>
-  <component name="WindowStateProjectService">
-    <state x="661" y="257" width="598" height="536" key="find.popup" timestamp="1670078728873">
-      <screen x="0" y="0" width="1920" height="1050" />
-    </state>
-    <state x="661" y="257" width="598" height="536" key="find.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1670078728873" />
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix -门户端样式好难搞" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix -门户端样式好难搞" />
   </component>
 </project>
