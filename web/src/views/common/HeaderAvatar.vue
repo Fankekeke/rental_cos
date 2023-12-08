@@ -7,7 +7,7 @@
             <div style="font-size: 12px">
               <a-menu slot="overlay">
                 <a-menu-item key="0" style="font-size: 13px;font-family: SimHei">
-                  <a @click="openPersonal"><a-icon type="user" />个人信息</a>
+                  <a @click="openProfile"><a-icon type="user" />个人信息</a>
                 </a-menu-item>
                 <a-menu-item key="1" style="font-size: 13px;font-family: SimHei">
                   <a @click="openMessage"><a-icon type="message" />我的消息</a>
@@ -63,7 +63,13 @@ export default {
       this.setSettingBar(!this.settingBar)
     },
     openProfile () {
-      this.$router.push('/profile')
+      this.$router.push('/personal')
+    },
+    openMessage () {
+      this.$router.push('/message')
+    },
+    openApartment () {
+      this.$router.push('/rent')
     },
     updatePassword () {
       this.updatePasswordModelVisible = true

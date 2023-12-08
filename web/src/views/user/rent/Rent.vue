@@ -125,8 +125,6 @@
       :rentEditVisiable="rentEdit.visiable">
     </rent-edit>
     <rent-view :rentShow="rentView.visiable" :rentData="rentView.data" @close="rentView.visiable = false"></rent-view>
-    <check-worker :rentData="rentView.data" :childrenDrawerShow="userDrawer" @handlerClosed="handlerUserClosed"></check-worker>
-    <delivery-add :rentAddVisiable="rentPushpin.visiable" :chargeId="rentPushpin.chargeId" @close="rentPushpinClose" @success="rentPushpinSuccess"></delivery-add>
   </a-card>
 </template>
 
@@ -136,14 +134,12 @@ import rentAdd from './RentAdd'
 import rentEdit from './RentEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
-import RentView from "./RentView";
-import CheckWorker from '../worker/CheckWorker'
-import DeliveryAdd from '../delivery/DeliveryAdd'
+import RentView from './RentView'
 moment.locale('zh-cn')
 
 export default {
   name: 'rent',
-  components: {CheckWorker, RentView, rentAdd, rentEdit, RangeDate, DeliveryAdd},
+  components: {RentView, rentAdd, rentEdit, RangeDate},
   data () {
     return {
       advanced: false,

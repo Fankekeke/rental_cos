@@ -134,6 +134,22 @@ public class TreeUtil {
         topRoutes.add(router);
 
         router = new VueRouter<>();
+        router.setPath("/personal");
+        router.setName("个人信息");
+        router.setComponent("user/personal/Personal");
+        router.setIcon("none");
+        router.setMeta(new RouterMeta(true, false));
+        topRoutes.add(router);
+
+        router = new VueRouter<>();
+        router.setPath("/rent");
+        router.setName("我的租房");
+        router.setComponent("user/rent/Rent");
+        router.setIcon("none");
+        router.setMeta(new RouterMeta(true, false));
+        topRoutes.add(router);
+
+        router = new VueRouter<>();
         router.setPath("/news");
         router.setName("资讯中心");
         router.setComponent("news/News");

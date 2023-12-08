@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class UserInfoController {
     @GetMapping("/page")
     public R page(Page<UserInfo> page, UserInfo userInfo) {
         return R.ok(userInfoService.getUserInfoByPage(page, userInfo));
+    }
+
+    @GetMapping("/user/{id}")
+    public R detail(@PathVariable("id") Integer userId) {
+        return R.ok(userInfoService.getOne(Wrappers.<UserInfo> lambdaQuery().eq(UserInfo::getSysUserId, userId)));
     }
 
     /**

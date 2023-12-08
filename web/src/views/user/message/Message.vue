@@ -77,7 +77,7 @@
               <template slot="title">
                 {{ record.content }}
               </template>
-              {{ record.content.slice(0, 30) }} ...
+              {{ record.content.slice(0, 50) }} ...
             </a-tooltip>
           </template>
         </template>
@@ -138,26 +138,6 @@ export default {
         title: '消息内容',
         dataIndex: 'content',
         scopedSlots: { customRender: 'contentShow' }
-      }, {
-        title: '发送人',
-        dataIndex: 'sendUserName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '管理员'
-          }
-        }
-      }, {
-        title: '接收人',
-        dataIndex: 'toUserName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
       }, {
         title: '已读状态',
         dataIndex: 'delFlag',

@@ -1,6 +1,6 @@
 <template>
-  <a-row :gutter="20">
-    <a-col :span="6">
+  <a-row :gutter="20" style="margin-top: 50px">
+    <a-col :span="12">
       <a-card :loading="loading" :bordered="false">
         <a-form :form="form" layout="vertical">
           <a-row :gutter="20">
@@ -21,7 +21,7 @@
             <a-col :span="12">
               <a-form-item label='用户名称' v-bind="formItemLayout">
                 <a-input v-decorator="[
-                'name',
+                'userName',
                 { rules: [{ required: true, message: '请输入用户名称!' }] }
                 ]"/>
               </a-form-item>
@@ -29,7 +29,7 @@
             <a-col :span="12">
               <a-form-item label='邮箱地址' v-bind="formItemLayout">
                 <a-input v-decorator="[
-                'mail'
+                'email'
                 ]"/>
               </a-form-item>
             </a-col>
@@ -41,31 +41,14 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label='省份' v-bind="formItemLayout">
-                <a-input v-decorator="[
-                'province'
-                ]"/>
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label='市' v-bind="formItemLayout">
-                <a-input v-decorator="[
-                'city'
-                ]"/>
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label='区' v-bind="formItemLayout">
-                <a-input v-decorator="[
-                'area'
-                ]"/>
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label='联系地址' v-bind="formItemLayout">
-                <a-input v-decorator="[
-                'address'
-                ]"/>
+              <a-form-item label='性别' v-bind="formItemLayout">
+                <a-select v-decorator="[
+                  'sex',
+                  { rules: [{ required: true, message: '请输入性别!' }] }
+                  ]">
+                  <a-select-option value="1">男</a-select-option>
+                  <a-select-option value="2">女</a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
             <a-col :span="24">
@@ -97,20 +80,18 @@
         </a-button>
       </a-card>
     </a-col>
-    <a-col :span="18">
-      <div style="background:#ECECEC; padding:30px;margin-top: 30px">
-        <a-card :bordered="false">
-          <a-spin :spinning="dataLoading">
-            <a-calendar>
-              <ul slot="dateCellRender" slot-scope="value" class="events">
-                <li v-for="item in getListData(value)" :key="item.content">
-                  <a-badge :status="item.type" :text="item.content" />
-                </li>
-              </ul>
-            </a-calendar>
-          </a-spin>
-        </a-card>
-      </div>
+    <a-col :span="12">
+      <a-card :bordered="false">
+        <a-spin :spinning="dataLoading">
+          <a-calendar>
+            <ul slot="dateCellRender" slot-scope="value" class="events">
+              <li v-for="item in getListData(value)" :key="item.content">
+                <a-badge :status="item.type" :text="item.content" />
+              </li>
+            </ul>
+          </a-calendar>
+        </a-spin>
+      </a-card>
     </a-col>
   </a-row>
 </template>
@@ -176,9 +157,8 @@ export default {
     getExpertInfo (userId) {
       this.dataLoading = true
       this.$get(`/cos/user-info/user/${userId}`).then((r) => {
-        this.expertInfo = r.data.user
+        this.expertInfo = r.data.data
         this.setFormValues(this.expertInfo)
-        this.courseInfo = r.data.order
         this.dataLoading = false
       })
     },
@@ -206,12 +186,15 @@ export default {
     },
     setFormValues ({...expert}) {
       this.rowId = expert.id
-      let fields = ['code', 'name', 'phone', 'province', 'city', 'area', 'mail', 'images', 'address', 'createDate']
+      let fields = ['code', 'userName', 'phone', 'email', 'sex', 'createDate']
       let obj = {}
       Object.keys(expert).forEach((key) => {
-        if (key === 'images') {
+        if (key === 'avatar') {
           this.fileList = []
-          this.imagesInit(expert['images'])
+          this.imagesInit(expert['avatar'])
+        }
+        if (key === 'sex' || key === 'sex') {
+          expert[key] = expert[key].toString()
         }
         if (fields.indexOf(key) !== -1) {
           this.form.getFieldDecorator(key)
