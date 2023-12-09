@@ -16,6 +16,9 @@ Idea 编译器 [https://blog.csdn.net/weixin_44505194/article/details/104452880]
 
 WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
 
+协同消息，公告信息，小区管理，房屋管理，房价走势，发帖记录，房屋出租，消息回复，城市管理，用户管理，地图看板，综合统计，消息模板，发送记录，员工管理，消息通知，缴费记录，交付审批，我的任务，房屋出租，已售房屋，用户收藏，房屋收藏，小区收藏，用户评价，租房评价，员工评价
+
+
 #### 采用技术及功能
 
 后端：SpringBoot、MybatisPlus、MySQL、Redis、
